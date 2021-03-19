@@ -5,8 +5,13 @@ An augmented reality directional system made specifically for an area
 - Python 3.3 and above
 - python3 venv
 - Flask 
+- Node.js
+- Vue 
+- Vue-cli
 
-## How to setup environment
+## Getting Started 
+
+### Setup environment
 ```
 python -m venv venv
 ```
@@ -17,12 +22,21 @@ source venv/bin/activate (linux)
 
 venv\Scripts\activate (Windows)
 ```
-## How to install
+### install Flask Requirements
 ```
 pip install -r requirements.txt 
 ```
 
-## Run app
+### Run services
+Run both services in two separate terminals
+
+**Run Flask backend app**
 ```
 python run.py
+```
+
+**Run Node frontend app**
+```
+cd front-ar-maps
+npm run serve
 ```
