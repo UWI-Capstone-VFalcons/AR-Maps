@@ -1,6 +1,8 @@
 from flask import Flask
 from flask_wtf.csrf import CSRFProtect 
 from flask_sqlalchemy import SQLAlchemy
+import pymysql
+
 
 app = Flask(__name__)
 
@@ -13,15 +15,15 @@ app.config['SECRET_KEY'] = "x9NgYaKf+&-Vr8rFN_e22UTX&GVS-T=bY5+k9p2uhQh6wTSZEPYd
 # format (mysql://username:password@server/db)
 
 # local databse 
-# app.config ['SQLALCHEMY_DATABASE_URI'] = "mysql://armaps:armaps@localhost/armaps"
+app.config ['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://armaps:armaps@localhost/armaps"
 
 # cloud database
-app.config ['SQLALCHEMY_DATABASE_URI'] = "postgresql://lhsqdwpcjxoewh:77ec8b70eb208802953747792eecea748a9c32faff7e9d27281e6b6f443553f2@ec2-3-91-127-228.compute-1.amazonaws.com:5432/d9gsa1neap28mn"  
+# app.config ['SQLALCHEMY_DATABASE_URI'] = "postgresql://lhsqdwpcjxoewh:77ec8b70eb208802953747792eecea748a9c32faff7e9d27281e6b6f443553f2@ec2-3-91-127-228.compute-1.amazonaws.com:5432/d9gsa1neap28mn"  
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # added just to suppress a warning
 
 # files for storing
 app.config['IMAGE_FOLDER'] = './app/static/images'
-profile_photo_folder = app.config['IMAGE_FOLDER']
+image_folder = app.config['IMAGE_FOLDER']
 
 app.config.from_object(__name__)
 
@@ -30,4 +32,4 @@ db = SQLAlchemy(app)
 csrf = CSRFProtect(app)  # used for forms and database
 
 # import the views for flask
-from app import views
+from app import views, models

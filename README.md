@@ -26,6 +26,10 @@ venv\Scripts\activate (Windows)
 ```
 pip install -r requirements.txt 
 ```
+- If a new python package is added refresh the requirments filr with 
+```
+pip freeze > requirements.txt
+```
 
 ### Run services
 Run both services in two separate terminals
@@ -38,5 +42,6 @@ python run.py
 **Run Node frontend app**
 ```
 cd front-ar-maps
+npm install
 npm run serve
 ```
