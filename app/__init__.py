@@ -1,10 +1,12 @@
 from flask import Flask
 from flask_wtf.csrf import CSRFProtect 
 from flask_sqlalchemy import SQLAlchemy
+from flask_qrcode import QRcode
 import pymysql
 
 
 app = Flask(__name__)
+
 
 # Configurations
 
@@ -30,6 +32,9 @@ app.config.from_object(__name__)
 # Setup db variable and CSRf token
 db = SQLAlchemy(app)
 csrf = CSRFProtect(app)  # used for forms and database
+
+# qrcode setup
+qrcode = QRcode(app)
 
 # import the views for flask
 from app import views, models

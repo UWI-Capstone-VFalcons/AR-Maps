@@ -45,3 +45,24 @@ cd front-ar-maps
 npm install
 npm run serve
 ```
+
+## Flask commands
+
+### run migration on databse
+
+This is necessary in order to update the databse whenever a change is made to it
+
+```
+./miigrate.sh
+```
+
+### run tests
+
+```
+pytest -v
+
+or for specific tests
+
+pytest test-folder -v
+
+```

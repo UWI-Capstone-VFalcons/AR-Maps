@@ -11,15 +11,15 @@ class Building(db.Model):
     name = db.Column(db.String(200), unique=True, nullable=False)
     b_type = db.Column(db.String(20), nullable=False)
     info = db.Column(db.Text, nullable=False)
-    lattitude = db.Column(db.Float(10,6), nullable=False)
-    longtitude =  db.Column(db.Float(10, 6), nullable=False)
+    lattitude = db.Column(db.Float(10,20), nullable=False)
+    longitude =  db.Column(db.Float(10, 20), nullable=False)
 
-    def __init__(self, name, b_type, info, lattitude, longtitude):
+    def __init__(self, name, b_type, info, lattitude, longitude):
         self.name = name
         self.b_type = b_type
         self.info = info
         self.lattitude = lattitude
-        self.longtitude = longtitude
+        self.longitude = longitude
 
     def __repr__(self):
         return '<Building %r>' % self.id
