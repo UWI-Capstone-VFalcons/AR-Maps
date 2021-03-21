@@ -31,4 +31,3 @@ csrf = CSRFProtect(app)  # used for forms and database
 
 # import the views for flask
 from app import views
-from app import sqlconnector
