@@ -66,3 +66,7 @@ or for specific tests
 pytest test-folder -v
 
 ```
+### To add heroku app remote 
+```
+heroku git:remote -a uwi-ar-maps
+```
