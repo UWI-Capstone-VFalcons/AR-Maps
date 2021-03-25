@@ -12,7 +12,7 @@ from app import qrcode
 
 @app.route('/')
 def home():
-    return jsonify({"test":"hello-world"})
+    return jsonify({"test":"Its working"})
 
 @app.route('/api/buildingQR/<building_id>', methods=['GET'])
 def building_qr(building_id):
