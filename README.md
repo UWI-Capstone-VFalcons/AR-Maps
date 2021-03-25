@@ -11,6 +11,11 @@ An augmented reality directional system made specifically for an area
 
 ## Getting Started 
 
+### change to the backend directory
+```
+cd back-ar-maps
+```
+
 ### Setup environment
 ```
 python -m venv venv
