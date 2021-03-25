@@ -2,6 +2,7 @@ from flask import Flask
 from flask_wtf.csrf import CSRFProtect 
 from flask_sqlalchemy import SQLAlchemy
 from flask_qrcode import QRcode
+from flask_cors import CORS
 import pymysql
 
 
@@ -27,6 +28,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # added just to suppress a 
 app.config['IMAGE_FOLDER'] = './app/static/images'
 image_folder = app.config['IMAGE_FOLDER']
 
+# add configuration to app
 app.config.from_object(__name__)
 
 # Setup db variable and CSRf token
@@ -35,6 +37,9 @@ csrf = CSRFProtect(app)  # used for forms and database
 
 # qrcode setup
 qrcode = QRcode(app)
+
+# enable CORS
+CORS(app, resources={r'/*': {'origins': '*'}})
 
 # import the views for flask
 from app import views, models
