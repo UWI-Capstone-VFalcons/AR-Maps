@@ -1,4 +1,2 @@
-release: python flask-migrate.py db init
-release: python flask-migrate.py db migrate
-release: python flask-migrate.py db upgrade --directory migrations
+release: python flask-migrate.py db init && python flask-migrate.py db migrate && python flask-migrate.py db upgrade --directory migrations
 web: gunicorn -w 4 -b "0.0.0.0:$PORT" app:app
