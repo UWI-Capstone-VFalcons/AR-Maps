@@ -29,6 +29,7 @@ pip install -r requirements.txt
 - If a new python package is added refresh the requirments filr with 
 ```
 pip freeze > requirements.txt
+pipenv update
 ```
 
 ### Run services
