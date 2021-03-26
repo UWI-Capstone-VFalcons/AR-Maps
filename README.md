@@ -76,3 +76,36 @@ pytest test-folder -v
 ```
 heroku git:remote -a uwi-ar-maps
 ```
+
+## Docker Image
+
+### Build image for heroku registry
+```
+docker build -t registry.heroku.com/uwi-ar-maps/web .
+```
+### Test Image locally
+
+**Start the docker iamge**
+```
+docker-compose up
+
+or
+
+docker-compose up -d (in background)
+```
+
+**stop the docker image**
+```
+docker-compose down
+```
+
+### deploy image to heroku
+
+```
+heroku container:login
+
+docker push registry.heroku.com/uwi-ar-maps/web
+
+heroku container:release --app uwi-ar-maps web
+
+```
