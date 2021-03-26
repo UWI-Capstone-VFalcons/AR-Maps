@@ -107,5 +107,5 @@ heroku container:login
 docker push registry.heroku.com/uwi-ar-maps/web
 
 heroku container:release --app uwi-ar-maps web
-
 ```
+
