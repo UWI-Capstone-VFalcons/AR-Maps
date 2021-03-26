@@ -7,7 +7,6 @@ on:
       - prime_release
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     env:
