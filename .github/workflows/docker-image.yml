@@ -24,3 +24,9 @@ jobs:
         
       - name: Push image to registry
         run: docker push ${{env.HEROKU_REGISTRY_IMAGE}}
+      
+      - name: activate release file
+        run: chmod +x ./release.sh
+
+      - name: run release
+        run: ./release.sh
