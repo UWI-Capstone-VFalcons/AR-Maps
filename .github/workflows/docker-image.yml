@@ -23,4 +23,4 @@ jobs:
         run: docker login -u _ -p ${{ secrets.HEROKU_AUTH_TOKEN }} registry.heroku.com
         
       - name: Push image to registry
-        run: docker push env.HEROKU_REGISTRY_IMAGE
+        run: docker push ${{env.HEROKU_REGISTRY_IMAGE}}
