@@ -10,7 +10,7 @@ from app import qrcode
 
 
 
-@app.route('/')
+@app.route('/api/test')
 def home():
     return jsonify({"test":"Its working"})
 

@@ -11,6 +11,11 @@ An augmented reality directional system made specifically for an area
 
 ## Getting Started 
 
+### change to the backend directory
+```
+cd back-ar-maps
+```
+
 ### Setup environment
 ```
 python -m venv venv
@@ -70,4 +75,36 @@ pytest test-folder -v
 ### To add heroku app remote 
 ```
 heroku git:remote -a uwi-ar-maps
+```
+
+## Docker Image
+
+### Build image for heroku registry
+```
+docker build -t registry.heroku.com/uwi-ar-maps/web .
+```
+### Test Image locally
+
+**Start the docker iamge**
+```
+docker-compose up
+
+or
+
+docker-compose up -d (in background)
+```
+
+**stop the docker image**
+```
+docker-compose down
+```
+
+### deploy image to heroku
+
+```
+heroku container:login
+
+docker push registry.heroku.com/uwi-ar-maps/web
+
+heroku container:release --app uwi-ar-maps web
 ```
