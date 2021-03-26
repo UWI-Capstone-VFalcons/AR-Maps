@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+  ar-maps:
+    build: .
+    # image: ar-maps:latest
+    ports:
+      - "8007:8765"
+    environment:
+      PORT: 8765 
