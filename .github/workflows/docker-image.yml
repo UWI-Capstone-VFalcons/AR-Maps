@@ -12,7 +12,7 @@ jobs:
     env:
       DOCKER_DRIVER: overlay
       HEROKU_APP_NAME: uwi-ar-maps
-      HEROKU_REGISTRY_IMAGE: registry.heroku.com/${{env.HEROKU_APP_NAME}}/web
+      HEROKU_REGISTRY_IMAGE: registry.heroku.com/uwi-ar-maps/web
 
     steps:
       - uses: actions/checkout@v2
