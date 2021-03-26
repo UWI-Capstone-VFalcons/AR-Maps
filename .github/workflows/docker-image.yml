@@ -9,12 +9,12 @@ jobs:
     env:
         DOCKER_DRIVER: overlay
         HEROKU_APP_NAME: uwi-ar-maps
-        HEROKU_REGISTRY_IMAGE: registry.heroku.com/
+        HEROKU_REGISTRY_IMAGE: registry.heroku.com
 
     steps:
       - uses: actions/checkout@v2
       - name: Build the Docker image
-        run: docker build --tag ${{HEROKU_REGISTRY_IMAGE}}${{HEROKU_APP_NAME}}/web --file Dockerfile "."
+        run: docker build --tag $HEROKU_REGISTRY_IMAGE/$HEROKU_APP_NAME/web --file Dockerfile "."
         
       - name: Login to registry
         run: docker login -u _ -p ${{ secrets.HEROKU_AUTH_TOKEN }} registry.heroku.com
