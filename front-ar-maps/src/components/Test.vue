@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <button type="button" class="btn btn-primary">{{ msg.test }}</button>
+    <button type="button" class="btn btn-primary">{{ msg }}</button>
   </div>
 </template>
 
@@ -16,10 +16,10 @@ export default {
   },
   methods: {
     getMessage() {
-      const path = '/api/test';
+      const path = this.$host+'/api/test';
       axios.get(path)
         .then((res) => {
-          this.msg = res.data;
+          this.msg = res.data.test;
         })
         .catch((error) => {
           // eslint-disable-next-line

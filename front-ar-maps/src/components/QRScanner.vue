@@ -26,6 +26,7 @@ export default {
         onDecode (decodedString) {
             let building_object = JSON.parse(decodedString);
             console.log(building_object.building_id);
+            alert(building_object.building_name);
         }
     }
 

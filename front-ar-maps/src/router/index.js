@@ -2,6 +2,11 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
 import QRScreen from '../views/Scanner.vue';
+import OverheadMap from '../views/OverheadMap.vue';
+import ARGuide from '../views/ARGuide.vue';
+
+
+
 Vue.use(VueRouter);
 
 const routes = [
@@ -14,7 +19,7 @@ const routes = [
   {
     path: '/map',
     name: 'Map',
-    component: Home,
+    component: OverheadMap,
   },
   {
     path: '/scan',
@@ -25,7 +30,7 @@ const routes = [
   {
     path: '/ar',
     name: 'AR-Map',
-    component: Home,
+    component: ARGuide,
   },
 ];
 
