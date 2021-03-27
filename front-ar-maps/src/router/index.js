@@ -1,8 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
-import Test from '../components/Test.vue';
-
+import QRScreen from '../views/Scanner.vue';
 Vue.use(VueRouter);
 
 const routes = [
@@ -10,19 +9,23 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
+    meta: { title: 'AR Maps' },
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    path: '/map',
+    name: 'Map',
+    component: Home,
   },
   {
-    path: '/test',
-    name: 'Test',
-    component: Test,
+    path: '/scan',
+    name: 'Scan',
+    component: QRScreen,
+    meta: { title: 'Scan' },
+  },
+  {
+    path: '/ar',
+    name: 'AR-Map',
+    component: Home,
   },
 ];
 
@@ -31,5 +34,4 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes,
 });
-
 export default router;

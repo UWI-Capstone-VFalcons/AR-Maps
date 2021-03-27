@@ -5,6 +5,7 @@ from app import db
 import os, datetime
 from flask import abort, jsonify, request, send_file
 from werkzeug.utils import secure_filename
+import json
 
 from app import qrcode
 
@@ -31,7 +32,9 @@ def building_qr(building_id):
             'building_info': building.info 
         }
 
-        return send_file(qrcode(qrcode_data, mode="raw"), mimetype="image/png")
+        qrcode_data = json.dumps(qrcode_data)
+
+        return send_file(qrcode(qrcode_data,  box_size=20, border=3, mode="raw"), mimetype="image/png")
     return errorResponse("no such building found")
 
 # Jsonify the response and add it under the data field

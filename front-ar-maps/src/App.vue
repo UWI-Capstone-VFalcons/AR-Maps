@@ -1,34 +1,51 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/test">Test</router-link>
+    <!-- Top Bar -->
+    <div id="app-bar">
+      <h2 id="v-title">{{ title }}</h2>
     </div>
-    <router-view/>
+    <!-- Main Contnent area -->
+    <div id="main-content">
+      <router-view/>
+    </div>
+    <!-- Bottom Navigation bar -->
+    <div id="bottom-nav">
+      <router-link to="/">
+        <div class="nav-el">
+          <img src="./assets/images/icons/home.svg" alt="home"/>
+        </div>
+      </router-link>
+      <router-link to="/map">
+        <div class="nav-el">
+          <img src="./assets/images/icons/map-pin.svg" alt="home"/>
+        </div>
+      </router-link>
+      <router-link to="/scan">
+        <div class="nav-el">
+          <img src="./assets/images/icons/qr-code.svg" alt="home"/>
+        </div>
+      </router-link>
+      <router-link to="/ar">
+        <div class="nav-el">
+          <img src="./assets/images/icons/ar-view.svg" alt="home"/>
+        </div>
+      </router-link>
+    </div>
   </div>
 </template>
 
+<script>
+export default {
+  data() {
+    return {
+      title: 'a title',
+    };
+  },
+  computed: {
+  },
+};
+</script>
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
+@import './assets/css/app.css';
 </style>
