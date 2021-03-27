@@ -8,6 +8,12 @@ An augmented reality directional system made specifically for an area
 - Node.js
 - Vue 
 - Vue-cli
+**deployment**
+- docker
+- docker-compose
+
+## API Documentation
+https://documenter.getpostman.com/view/8140774/TzCJfpsg
 
 ## Getting Started 
 

@@ -6,7 +6,6 @@ import OverheadMap from '../views/OverheadMap.vue';
 import ARGuide from '../views/ARGuide.vue';
 
 
-
 Vue.use(VueRouter);
 
 const routes = [
