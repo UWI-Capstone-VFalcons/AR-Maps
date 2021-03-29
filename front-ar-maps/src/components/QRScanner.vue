@@ -1,5 +1,8 @@
 <template>
-    <div>
+    <div id="qrscanner">
+        <div id="qr-overlay">
+            <div id="qr-box"></div>
+        </div>
         <qrcode-stream class="full_cam" @decode="onDecode"></qrcode-stream>
     </div>
 </template>
