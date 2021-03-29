@@ -53,15 +53,21 @@
 .nav-el{
     width: 3rem;
     height: 100%;
-    margin: 0rem 0.5rem;
+    margin: 0rem 1rem;
     padding: 0.5rem;
     display: block;
+    border-radius: 0.5rem;
+}
+
+.router-link-exact-active .nav-el{
+    background-color: #00b6bd;   
 }
 
 .nav-el img{
     width: 100%;
     height: auto;
 }
+
 
 .full_cam{
     width:  auto !important;
@@ -74,4 +80,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+/* Building info Screen */
+#v-buildinginfo{
+
 }

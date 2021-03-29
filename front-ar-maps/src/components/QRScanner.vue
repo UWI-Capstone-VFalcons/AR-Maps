@@ -8,7 +8,8 @@
 // import qr code scanner from vue qr from https://github.com/gruhn/vue-qrcode-reader
 
 // import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from 'vue-qrcode-reader'
-import { QrcodeStream} from 'vue-qrcode-reader'
+import { QrcodeStream} from 'vue-qrcode-reader';
+import router from '../router';
 
 
 export default {
@@ -25,8 +26,9 @@ export default {
     methods:{
         onDecode (decodedString) {
             let building_object = JSON.parse(decodedString);
-            console.log(building_object.building_id);
-            alert(building_object.building_name);
+            // console.log(building_object.building_id);
+            // alert(building_object.building_name);
+            router.push({name: 'BuildingInfo', params: {buildingObject: building_object} });
         }
     }
 

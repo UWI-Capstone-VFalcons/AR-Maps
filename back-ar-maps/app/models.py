@@ -9,13 +9,21 @@ class Building(db.Model):
     __tablename__ = 'buildings'
     id = db.Column('building_id', db.Integer, primary_key=True)
     name = db.Column(db.String(200), unique=True, nullable=False)
+    address1 = db.Column(db.Text)
+    address2 = db.Column(db.Text)
+    address3 = db.Column(db.Text)
+    image_url = db.Column(db.Text)
     b_type = db.Column(db.String(20), nullable=False)
     info = db.Column(db.Text, nullable=False)
     lattitude = db.Column(db.Float(10,20), nullable=False)
     longitude =  db.Column(db.Float(10, 20), nullable=False)
 
-    def __init__(self, name, b_type, info, lattitude, longitude):
+    def __init__(self, name, address1, address2, address3, image_url, b_type, info, lattitude, longitude):
         self.name = name
+        self.address1 = address1
+        self.address2 = address2
+        self.address3 = address3
+        self.image_url = image_url
         self.b_type = b_type
         self.info = info
         self.lattitude = lattitude

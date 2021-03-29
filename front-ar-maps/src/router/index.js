@@ -4,6 +4,8 @@ import Home from '../views/Home.vue';
 import QRScreen from '../views/Scanner.vue';
 import OverheadMap from '../views/OverheadMap.vue';
 import ARGuide from '../views/ARGuide.vue';
+import BuildingInfo from '../views/buildinginfo.vue';
+
 
 
 Vue.use(VueRouter);
@@ -13,12 +15,13 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
-    meta: { title: 'AR Maps' },
+    meta: { title: 'UWI AR Maps' },
   },
   {
     path: '/map',
     name: 'Map',
     component: OverheadMap,
+    meta: { title: 'Map' },
   },
   {
     path: '/scan',
@@ -30,6 +33,20 @@ const routes = [
     path: '/ar',
     name: 'AR-Map',
     component: ARGuide,
+    meta: { title: 'AR' },
+  },
+  {
+    path: '/building_info',
+    name: 'BuildingInfo',
+    component: BuildingInfo,
+    meta: { title: 'Building Info' },
+    props: true,
+  },
+  {
+    path: '*',
+    name: 'Home',
+    component: Home,
+    meta: { title: 'UWI AR Maps' },
   },
 ];
 

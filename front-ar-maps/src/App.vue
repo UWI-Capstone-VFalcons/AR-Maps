@@ -6,7 +6,7 @@
     </div>
     <!-- Main Contnent area -->
     <div id="main-content">
-      <router-view/>
+      <router-view />
     </div>
     <!-- Bottom Navigation bar -->
     <div id="bottom-nav">
@@ -35,17 +35,34 @@
 </template>
 
 <script>
+import EventBus from './event-bus';
+
 export default {
   data() {
     return {
-      title: 'a title',
+      title: ''
     };
   },
+  
+  methods:{
+    test: function(a){
+      this.$title = a;
+    }
+  },
+  
   computed: {
+  },
+  mounted() {
+    EventBus.$on("changeTitle", data =>{
+      this.title = data;
+    });
+  },
+  watch: {
+    '$route' (to, from) {
+      document.title = to.meta.title || 'UWI AR Maps'
+      this.title = to.meta.title
+      from
+    }
   },
 };
 </script>
-
-<style>
-@import './assets/css/app.css';
-</style>
