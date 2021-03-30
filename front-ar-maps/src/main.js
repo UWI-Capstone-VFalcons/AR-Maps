@@ -13,7 +13,7 @@ document.title =  'UWI AR Maps';
 Vue.prototype.$title = 'UWI AR Maps';
 
 // Vue.prototype.$host = 'http://localhost:5000/'; // Host for testing locally
-Vue.prototype.$host = ''; // Host for depoyment to production
+Vue.prototype.$host = '/'; // Host for depoyment to production
 
 new Vue({
   router,
