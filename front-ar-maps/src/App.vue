@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <!-- Top Bar -->
-    <div id="app-bar">
+    <div id="app-bar" class="translucent_bar">
       <h2 id="v-title">{{ title }}</h2>
     </div>
     <!-- Main Contnent area -->
@@ -9,7 +9,7 @@
       <router-view />
     </div>
     <!-- Bottom Navigation bar -->
-    <div id="bottom-nav">
+    <div id="bottom-nav" class="translucent_bar">
       <router-link to="/">
         <div class="nav-el">
           <img src="./assets/images/icons/home.svg" alt="home"/>
@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import EventBus from './event-bus';
+import EventBus from '@/event-bus';
 
 export default {
   data() {

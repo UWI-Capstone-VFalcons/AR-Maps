@@ -16,7 +16,7 @@
 
 // import { QrcodeStream, QrcodeDropZone, QrcodeCapture } from 'vue-qrcode-reader'
 import { QrcodeStream} from 'vue-qrcode-reader';
-import router from '../router';
+import router from '@/router';
 
 
 export default {

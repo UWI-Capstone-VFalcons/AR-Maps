@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import EventBus from '../event-bus';
-import router from '../router';
+import EventBus from '@/event-bus';
+import router from '@/router';
 
 export default {
     props: {
@@ -72,7 +72,7 @@ export default {
 
     created: function (){
         if(this.buildingObject.qrType != "building"){
-            router.push({ name: 'Scan'});
+            router.replace({ name: 'Scan'});
         }else{
             EventBus.$emit('changeTitle', this.b_name)
         }

@@ -6,22 +6,20 @@
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     color: #2c3e50;
-    display: flex;
-    flex-flow: column;
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    bottom: 0px;
-    left: 0px;
+}
+
+.translucent_bar{
+    opacity: 70%;
 }
 
 #app-bar{
     height: 3.5rem;
     width: 100%;
     background-color: #00C5CD;
-    position: relative;
+    position: absolute;
     top: 0;
     text-align: center;
+    z-index: 10;
 }
 
 #v-title{
@@ -33,10 +31,15 @@
 
 #main-content{
     width: 100%;
-    /* height: 100%; */
+    height: 100%;
     overflow-y:hidden;
     overflow-x:hidden;
-    flex-grow: 1;
+    display: block;
+    position: absolute;
+    top: 0;
+    z-index: 1;
+    padding: 3.5rem 0rem;
+    background-color: whitesmoke;
 }
 
 #bottom-nav{
@@ -47,8 +50,10 @@
     justify-content: center;
     align-items: center;
     background-color: #00C5CD;
-    position: relative;
+    position: absolute;
     bottom: 0;
+    z-index: 10;
+
 }
 
 .nav-el{
@@ -68,6 +73,46 @@
     width: 100%;
     height: auto;
 }
+
+/* ======================================= */
+/*           Home */
+/* ======================================= */
+
+#home{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-flow: column;
+    padding: 1rem 1rem;
+    display: block;
+    position: relative;
+}
+
+#home .top{
+    height: 30%;
+}
+
+#home .top img{
+    width: 100%;
+    height: 100%;
+}
+
+#home .bottom .btn-holder{
+    margin-top: 5rem;
+ 
+}
+
+#home .bottom .btn-holder .btn{
+    padding: 0.5rem 5rem;
+    border-radius: 2rem;
+}
+
+#home .bottom{
+    height: 70%;
+    width: 100%;
+    padding-top: 2rem;
+}
+
 
 /* ======================================= */
 /*           QR Scanner */
