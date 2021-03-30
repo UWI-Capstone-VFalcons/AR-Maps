@@ -55,6 +55,7 @@ python run.py
 ```
 cd front-ar-maps
 npm install
+npm update
 npm run serve
 ```
 
