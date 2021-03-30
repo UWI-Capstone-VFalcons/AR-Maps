@@ -40,7 +40,7 @@ export default {
                     building_address1:'1234 test road',
                     building_address2:'ally view',
                     building_address3:'Country 10',
-                    building_image: '/static/images/building/default_building.jpg',
+                    building_image: 'static/images/building/default_building.jpg',
                     building_latittude:98.7654,
                     building_longitude:12.3456,
                     building_info:'Just a default building',

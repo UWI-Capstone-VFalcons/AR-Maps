@@ -16,7 +16,7 @@ export default {
   },
   methods: {
     getMessage() {
-      const path = this.$host+'/api/test';
+      const path = this.$host+'api/test';
       axios.get(path)
         .then((res) => {
           this.msg = res.data.test;

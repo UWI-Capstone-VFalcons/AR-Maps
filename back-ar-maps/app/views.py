@@ -50,9 +50,9 @@ def building_qr(building_id):
 @app.route('/api/building/<building_id>', methods=['GET'])
 def get_building(building_id):
 
-    # building = Building("test", "address1", "address2", "address3", "static/images/building/test.jpg", "b_type", "The Building info", 12.3456, 98.7654)
-    # db.session.add(building)
-    # db.session.commit()
+    building = Building("test", "address1", "address2", "address3", "static/images/building/test.jpg", "b_type", "The Building info", 12.3456, 98.7654)
+    db.session.add(building)
+    db.session.commit()
      
     if (not isinstance(building_id, int) and not building_id.isnumeric()): abort(400)
     
@@ -81,22 +81,12 @@ def get_building(building_id):
 # Jsonify the response and add it under the data field
 def successResponse(message):
     return jsonify({'data':message})
+    
 # jsonify the response message with a error title
 def errorResponse(message):
     return jsonify({'error':message})
 
 
-# def shutdown_server():
-#     func = request.environ.get('werkzeug.server.shutdown')
-#     if func is None:
-#         raise RuntimeError('Not running with the Werkzeug Server')
-#     func()
 
-
-# @app.route('/shutdown', methods=['POST'])
-# def shutdown():
-#     shutdown_server()
-#     return 'Server shutting down...'
-
-if __name__ == '__main__':
-    app.run(debug=True, host="0.0.0.0", port="5000")
+# if __name__ == '__main__':
+#     app.run(debug=True, host="0.0.0.0", port="5000")
