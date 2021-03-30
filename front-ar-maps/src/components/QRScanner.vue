@@ -1,9 +1,13 @@
 <template>
-    <div id="qrscanner">
-        <div id="qr-overlay">
-            <div id="qr-box"></div>
-        </div>
-        <qrcode-stream class="full_cam" @decode="onDecode"></qrcode-stream>
+    <div id="qrscanner">  
+        <qrcode-stream id="scanner" class="full_cam" 
+        @decode="onDecode"
+        :camera="camera">
+            <div id="qr-overlay">
+                <p>Place your QR code in view</p>
+                <div id="qr-box"></div>
+            </div>
+        </qrcode-stream>
     </div>
 </template>
 
@@ -22,18 +26,50 @@ export default {
         // QrcodeDropZone,
         // QrcodeCapture
     },
+    
     props: {
     },
-    mounted () {
+    
+    data() {
+        return{
+            camera: 'auto'
+        }
     },
+    
     methods:{
         onDecode (decodedString) {
-            let building_object = JSON.parse(decodedString);
-            // console.log(building_object.building_id);
-            // alert(building_object.building_name);
-            router.push({name: 'BuildingInfo', params: {buildingObject: building_object} });
+            try{
+                let building_object = JSON.parse(decodedString);
+                if(building_object.qrType == "building"){
+                    router.push({name: 'BuildingInfo', params: {buildingObject: building_object} });
+                }else{
+                    this.camera = "off";
+                    alert("Invalid QR code used!");
+                }
+            }catch(error){
+                this.camera = "off";
+                alert("Invalid QR code used!");
+            }
         }
-    }
+    },
+
+    watch: {
+        'camera' (newval, oldval){
+            if (newval == "off"){
+                this.$nextTick(()=>{
+                    this.camera = "auto";
+                });
+            }
+            oldval
+            // console.log("from "+oldval+" to "+newval);
+        }
+    },
+
+    created(){
+    },
+
+    mounted () {
+    },
 
 }
 </script>

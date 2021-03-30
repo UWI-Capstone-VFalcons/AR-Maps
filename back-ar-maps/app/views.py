@@ -26,6 +26,7 @@ def building_qr(building_id):
     if(not building is None):
         # ceate the dictionary with the building data
         qrcode_data = {
+            'qrType':'building',
             'building_id':building.id,
             'building_name':building.name,
             'building_type':building.b_type,

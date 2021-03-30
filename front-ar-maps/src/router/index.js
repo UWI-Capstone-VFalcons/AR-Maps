@@ -44,7 +44,7 @@ const routes = [
   },
   {
     path: '*',
-    name: 'Home',
+    name: '404',
     component: Home,
     meta: { title: 'UWI AR Maps' },
   },

@@ -40,7 +40,7 @@ import EventBus from './event-bus';
 export default {
   data() {
     return {
-      title: ''
+      title: 'UWI AR Maps'
     };
   },
   

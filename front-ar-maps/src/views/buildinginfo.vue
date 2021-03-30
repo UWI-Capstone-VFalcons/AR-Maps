@@ -1,15 +1,29 @@
 <template>
     <div id="v-buildinginfo">
-        <img :src="b_image"/>
-        <h1>{{b_name}}</h1>
-        <p>{{b_type}}</p>
-        <p>{{b_info}}</p>
-        <p>{{b_address1}} {{b_address2}} {{b_address3}} </p>
+        <div class="bi-top">
+            <img :src="b_image"/>
+        </div>
+        <div class="bi-body">
+            <div class="bi-detail">
+                <h1>{{b_name}}</h1>
+                <div>
+                   <p class="bi-address">{{b_address1}}</p>    
+                    <p class="bi-address">{{b_address2}}</p>
+                    <p class="bi-address">{{b_address3}}</p> 
+                </div>
+                <p><b>Building Type:</b> {{b_type}}</p>
+                <p><b>Detail: </b> {{b_info}}</p>
+                
+                
+
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 import EventBus from '../event-bus';
+import router from '../router';
 
 export default {
     props: {
@@ -19,13 +33,14 @@ export default {
             // a factory function
             default: function () {
                 return { 
+                    qrType: 'fake',
                     building_id: -1,
                     building_name:'default',
                     building_type:'none',
                     building_address1:'1234 test road',
                     building_address2:'ally view',
                     building_address3:'Country 10',
-                    building_image: 'https://images.pexels.com/photos/1092063/pexels-photo-1092063.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260',
+                    building_image: '/static/images/building/default_building.jpg',
                     building_latittude:98.7654,
                     building_longitude:12.3456,
                     building_info:'Just a default building',
@@ -33,6 +48,7 @@ export default {
             }
         }
     },
+
     data() {
         return{
             b_id: this.buildingObject.building_id,
@@ -40,8 +56,8 @@ export default {
             b_address1: this.buildingObject.building_address1,
             b_address2: this.buildingObject.building_address2,
             b_address3: this.buildingObject.building_address3,
-            // b_image: ''+this.$host+this.buildingObject.building_image,
-            b_image: this.buildingObject.building_image,
+            b_image: ''+this.$host+this.buildingObject.building_image,
+            // b_image: this.buildingObject.building_image,
             b_type: this.buildingObject.building_type,
             b_info: this.buildingObject.building_info,
             b_longitude: this.buildingObject.building_longitude,
@@ -49,11 +65,18 @@ export default {
         }
        
     },
+
     methods: {
 
     },
+
     created: function (){
-        EventBus.$emit('changeTitle', this.b_name)
+        if(this.buildingObject.qrType != "building"){
+            router.push({ name: 'Scan'});
+        }else{
+            EventBus.$emit('changeTitle', this.b_name)
+        }
+
     }   
 }
 </script>

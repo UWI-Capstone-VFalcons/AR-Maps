@@ -6,9 +6,12 @@ import 'bootstrap/dist/css/bootstrap.css';
 import './assets/css/app.css';
 
 
-
 Vue.config.productionTip = false;
-Vue.prototype.$title = 'AR Maps';
+
+// Set the default app title
+document.title =  'UWI AR Maps';
+Vue.prototype.$title = 'UWI AR Maps';
+
 Vue.prototype.$host = 'http://localhost:5000/'; // Host for testing locally
 // Vue.prototype.$host = ''; // Host for depoyment to production
 
