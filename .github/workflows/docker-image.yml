@@ -1,0 +1,35 @@
+name: Docker Image CI
+
+on: 
+  push:
+    branches:
+      - main
+      - prime_release
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      DOCKER_DRIVER: overlay
+      HEROKU_APP_NAME: uwi-ar-maps
+      HEROKU_REGISTRY_IMAGE: registry.heroku.com/uwi-ar-maps/web
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the Docker image
+        run: docker build --tag ${{env.HEROKU_REGISTRY_IMAGE}} --file Dockerfile "."
+        
+      - name: Login to registry
+        run: docker login -u _ -p ${{ secrets.HEROKU_AUTH_TOKEN }} registry.heroku.com
+        
+      - name: Push image to registry
+        run: docker push ${{env.HEROKU_REGISTRY_IMAGE}}
+      
+      - name: activate release file
+        run: chmod +x ./release.sh
+
+      - name: run release
+        run: ./release.sh
