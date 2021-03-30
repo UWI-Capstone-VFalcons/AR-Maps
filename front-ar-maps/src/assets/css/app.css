@@ -8,8 +8,9 @@
     color: #2c3e50;
 }
 
-.translucent_bar{
-    opacity: 70%;
+.main_bar{
+    display: block;
+    /* opacity: 71%; */
 }
 
 #app-bar{

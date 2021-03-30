@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <!-- Top Bar -->
-    <div id="app-bar" class="translucent_bar">
+    <div id="app-bar" class="main_bar">
       <h2 id="v-title">{{ title }}</h2>
     </div>
     <!-- Main Contnent area -->
@@ -9,7 +9,7 @@
       <router-view />
     </div>
     <!-- Bottom Navigation bar -->
-    <div id="bottom-nav" class="translucent_bar">
+    <div id="bottom-nav" class="main_bar">
       <router-link to="/">
         <div class="nav-el">
           <img src="./assets/images/icons/home.svg" alt="home"/>
