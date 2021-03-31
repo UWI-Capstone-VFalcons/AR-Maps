@@ -1,15 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+{% extends 'base.html' %}
+
+{% block css %}
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
     <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
     <script src="https://raw.githack.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
-</head>
-<body style="margin: 0; overflow: hidden;">
+{% endblock %}
+
+{% block main %}
     <p id="current_location">
         <!-- Current location will be displayed here for testing-->
     </p>
@@ -22,7 +22,7 @@
         <a-assets>
             <a-asset-item
                 id="animated-asset"
-                src="../assets/magnemite/scene.gltf"
+                src="{{ url_for('static', filename='magnemite/scene.gltf')}}"
             ></a-asset-item>
         </a-assets>
 
@@ -37,7 +37,7 @@
         <a-assets>
             <a-asset-item
                 id="animated-asset-2"
-                src="../assets/magnemite/scene.gltf"
+                src="{{ url_for('static', filename='magnemite/scene.gltf')}}"
             ></a-asset-item>
         </a-assets>
 
@@ -51,5 +51,4 @@
 
         <a-camera gps-camera rotation-reader></a-camera>
     </a-scene>
-</body>
-</html>
+{% endblock %}

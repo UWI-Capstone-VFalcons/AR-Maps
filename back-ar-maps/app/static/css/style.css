@@ -1,0 +1,14 @@
+body {
+    padding-top: 5rem;
+}
+
+main > div{
+    position: relative;
+}
+
+#current_location{
+    color: white;
+    position: absolute;
+    z-index: 2;
+    top: 50px;
+}

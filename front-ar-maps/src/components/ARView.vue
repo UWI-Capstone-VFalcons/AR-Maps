@@ -11,6 +11,7 @@
                 id="animated-asset"
                 src="../assets/magnemite/scene.gltf"
                 response-type="arraybuffer"
+                crossorigin="anonymous"
             ></a-asset-item>
         </a-assets>
 
@@ -27,6 +28,7 @@
                 id="animated-asset-2"
                 src="../assets/magnemite/scene.gltf"
                 response-type="arraybuffer"
+                crossorigin="anonymous"
             ></a-asset-item>
         </a-assets>
 

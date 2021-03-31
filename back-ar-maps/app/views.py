@@ -3,7 +3,7 @@ from app.models import *
 from app.forms import *
 from app import db
 import os, datetime
-from flask import abort, jsonify, request, send_file
+from flask import abort, jsonify, request, send_file, render_template, redirect, url_for, flash
 from werkzeug.utils import secure_filename
 import json
 
@@ -12,6 +12,10 @@ from app import qrcode
 # crete all uncreated databases 
 db.create_all()
 
+@app.route('/nav')
+def ar():
+    """Render camera with ar experience  <19/3/2021 N.Bedassie>"""
+    return render_template("map.html")
 
 @app.route('/api/test')
 def home():
