@@ -10,6 +10,7 @@
             <a-asset-item
                 id="animated-asset"
                 src="../assets/magnemite/scene.gltf"
+                response-type="arraybuffer"
             ></a-asset-item>
         </a-assets>
 
@@ -24,7 +25,8 @@
         <a-assets>
             <a-asset-item
                 id="animated-asset-2"
-                src="@/assets/magnemite/scene.gltf"
+                src="../assets/magnemite/scene.gltf"
+                response-type="arraybuffer"
             ></a-asset-item>
         </a-assets>
 
