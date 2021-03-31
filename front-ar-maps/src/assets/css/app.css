@@ -233,3 +233,12 @@
     color: grey;
     line-height: 0.4rem;
 }
+
+/* ======================================= */
+/*           AR Guide Screen */
+/* ======================================= */
+
+#arguide{
+    overflow: hidden;
+    margin: 0;
+}

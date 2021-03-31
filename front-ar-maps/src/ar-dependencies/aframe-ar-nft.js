@@ -5193,17 +5193,17 @@ AFRAME.registerComponent('gps-entity-place', {
 /**
  * Format distances string
  *
- * @param {String} distance
- */
-function formatDistance(distance) {
-    distance = distance.toFixed(0);
+//  * @param {String} distance
+//  */
+// function formatDistance(distance) {
+//     distance = distance.toFixed(0);
 
-    if (distance >= 1000) {
-        return (distance / 1000) + ' kilometers';
-    }
+//     if (distance >= 1000) {
+//         return (distance / 1000) + ' kilometers';
+//     }
 
-    return distance + ' meters';
-};
+//     return distance + ' meters';
+// };
 /** gps-projected-camera
  *
  * based on the original gps-camera, modified by nickw 02/04/20

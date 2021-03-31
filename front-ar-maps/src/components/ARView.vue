@@ -1,63 +1,74 @@
 <template>
-    <div id="qrscanner">  
-        <qrcode-stream id="scanner" class="full_cam" 
-        @decode="onDecode"
-        :camera="camera">
-            <div id="qr-overlay">
-                <p>Place your QR code in view</p>
-                <div id="qr-box"></div>
-            </div>
-        </qrcode-stream>
+    <div id="arguide">  
+        <p id="current_location">
+        <!-- Current location will be displayed here for testing-->
+        </p>
+        <a-scene
+            renderer="logarithmicDepthBuffer: true;"
+            embedded
+            loading-screen="enabled: false;"
+            arjs="sourceType: webcam; debugUIEnabled: false;"
+        >
+            <a-assets>
+                <a-asset-item
+                    id="animated-asset"
+                    src="../assets/magnemite/scene.gltf"
+                ></a-asset-item>
+            </a-assets>
+
+            <a-entity
+                look-at="[gps-camera]"
+                animation-mixer="loop: repeat"
+                gltf-model="#animated-asset"
+                scale="0.14768864307354904 0.14768864307354904 0.14768864307354904"
+                gps-entity-place="latitude: 17.954413960210065; longitude: -76.90484832040967;"
+            ></a-entity>
+
+            <a-assets>
+                <a-asset-item
+                    id="animated-asset-2"
+                    src="../assets/magnemite/scene.gltf"
+                ></a-asset-item>
+            </a-assets>
+
+            <a-entity
+                look-at="[gps-camera]"
+                animation-mixer="loop: repeat"
+                gltf-model="#animated-asset-2"
+                scale="0.14768864307354904 0.14768864307354904 0.14768864307354904"
+                gps-entity-place="latitude: 17.954594228561096; longitude: -76.9048856513913;"
+            ></a-entity>
+
+            <a-camera gps-camera rotation-reader></a-camera>
+        </a-scene>
     </div>
 </template>
 
 <script>
-// import qr code scanner from vue qr from https://github.com/gruhn/vue-qrcode-reader
+import '../ar-dependencies/aframe-extras.loaders.min.js'
+import '../ar-dependencies/aframe-ar-nft.js'
+import '../ar-dependencies/aframe-look-at-component.min.js'
+import '../ar-dependencies/aframe.min.js'
 
 export default {
-    name: 'QRScanner',
+    name: 'ARView',
     components: {
-        QrcodeStream,
-        // QrcodeDropZone,
-        // QrcodeCapture
+        
     },
     
     props: {
+
     },
     
     data() {
-        return{
-            camera: 'auto'
-        }
     },
     
     methods:{
-        onDecode (decodedString) {
-            try{
-                let building_object = JSON.parse(decodedString);
-                if(building_object.qrType == "building"){
-                    router.push({name: 'BuildingInfo', params: {buildingObject: building_object} });
-                }else{
-                    this.camera = "off";
-                    alert("Invalid QR code used!");
-                }
-            }catch(error){
-                this.camera = "off";
-                alert("Invalid QR code used!");
-            }
-        }
+        
     },
 
     watch: {
-        'camera' (newval, oldval){
-            if (newval == "off"){
-                this.$nextTick(()=>{
-                    this.camera = "auto";
-                });
-            }
-            oldval
-            // console.log("from "+oldval+" to "+newval);
-        }
+        
     },
 
     created(){

@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import ARView from '@components/ARView.vue';
+import ARView from '@/components/ARView.vue';
 export default {
     name: 'ARGuide',
     components: {
