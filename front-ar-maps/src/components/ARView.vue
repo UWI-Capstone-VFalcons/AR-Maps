@@ -46,7 +46,7 @@
 
 <script>
 import '../ar-dependencies/aframe-extras.loaders.min.js'
-import '../ar-dependencies/aframe-ar-nft.js'
+// import '../ar-dependencies/aframe-ar-nft.js'
 import '../ar-dependencies/aframe-look-at-component.min.js'
 import '../ar-dependencies/aframe.min.js'
 
@@ -74,7 +74,12 @@ export default {
     created(){
     },
 
-    mounted () {
+    mounted() {
+      if (document.getElementById('aframe-nft')) return; // was already loaded
+      var scriptTag = document.createElement("script");
+      scriptTag.src = "https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js";
+      scriptTag.id = "aframe-nft";
+      document.getElementsByTagName('head')[0].appendChild(scriptTag);
     },
 
 }
