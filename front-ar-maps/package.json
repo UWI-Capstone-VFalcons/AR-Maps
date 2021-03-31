@@ -16,6 +16,7 @@
     "jquery": "^3.6.0",
     "popper.js": "^1.16.1",
     "register-service-worker": "^1.7.1",
+    "three": "^0.127.0",
     "vue": "^2.6.11",
     "vue-qrcode-reader": "^2.3.18",
     "vue-router": "^3.2.0"
@@ -45,7 +46,9 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {},
+    "rules": {
+      "strict": "off"
+    },
     "overrides": [
       {
         "files": [
