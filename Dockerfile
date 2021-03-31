@@ -3,9 +3,9 @@ FROM node:15.7.0-alpine3.10 as build-vue
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 COPY ./front-ar-maps/package*.json ./
+RUN npm update
 RUN npm install -g @vue/cli
 RUN npm install
-RUN npm update
 COPY ./front-ar-maps .
 RUN npm run build
 
