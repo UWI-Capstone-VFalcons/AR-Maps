@@ -14,8 +14,10 @@
     {% block css %} {% endblock%}
   </head>
   <body style="margin: 0; overflow: hidden;">
+    {% include 'header.html' %}
     {% block main %}{% endblock %}
   
     {% block js %} {% endblock%}
+    {% include 'nav.html' %}
   </body>
 </html>

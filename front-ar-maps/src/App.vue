@@ -25,11 +25,11 @@
           <img src="./assets/images/icons/qr-code.svg" alt="home"/>
         </div>
       </router-link>
-      <router-link to="/ar">
         <div class="nav-el">
-          <img src="./assets/images/icons/ar-view.svg" alt="home"/>
+          <a href="http://localhost:5000/nav">
+            <img src="./assets/images/icons/ar-view.svg" alt="home"/>
+          </a>
         </div>
-      </router-link>
     </div>
   </div>
 </template>
