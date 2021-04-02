@@ -1,4 +1,4 @@
-from app import app 
+from app import app
 from app.models import *
 from app.forms import *
 from app import db
@@ -9,13 +9,21 @@ import json
 
 from app import qrcode
 
-# crete all uncreated databases 
+# create all uncreated databases 
 db.create_all()
 
-@app.route('/nav')
+@app.route('/nav', methods=['GET'])
 def ar():
     """Render camera with ar experience  <19/3/2021 N.Bedassie>"""
-    return render_template("map.html")
+    buildings = db.session.query(Building).all()
+    return render_template("map.html", buildings=buildings)
+
+@app.route('/nav/<int:building_id>', methods=['GET'])
+def ar_find(building_id):
+    """Render camera with ar experience  <19/3/2021 N.Bedassie>"""
+    building = Building.query.get(building_id)
+
+    return render_template("map.html", building=building)
 
 @app.route('/api/test')
 def home():
