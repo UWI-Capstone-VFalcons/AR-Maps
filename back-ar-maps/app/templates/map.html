@@ -7,6 +7,7 @@
     <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
     <script src="https://raw.githack.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
+    <script src="https://rawgit.com/bryik/aframe-bmfont-text-component/master/dist/aframe-bmfont-text-component.js"></script>
 {% endblock %}
 
 {% block main %}
@@ -24,10 +25,14 @@
             </a-assets> -->
 
             <a-entity
+                position="0 0 -1"
+                lineHeight: 50; 
+                letterSpacing: 5;
                 look-at="[gps-camera]"
-                geometry="primitive: plane; width: 30; height: auto"
+                geometry="primitive: plane; width: auto; height: auto"
                 material="color: white"
-                text="color: black; align: center; width: auto; height: 10; value: {{ building.name }};"
+                bmfont-text="color: black; align: center; width: 40; text: {{ building.name }};"
+                text="color: black; align: center; width: 40; text: {{ building.name }};"
                 scale="0.14768864307354904 0.14768864307354904 0.14768864307354904"
                 gps-entity-place="latitude: {{building.lattitude}}; longitude: {{building.longitude}};"
             ></a-entity>
