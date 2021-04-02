@@ -21,7 +21,9 @@
                 <a-asset-item
                     id="animated-asset"
                     src="{{ url_for('static', filename='magnemite/scene.gltf')}}"
-                ></a-asset-item>
+                >
+                    <a-text value="{{ building.name }}" geometry="primitive:plane"></a-text>
+                </a-asset-item>
             </a-assets>
 
             <a-entity
