@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+      - sprint2
+      - ARview
   pull_request:
     branches:
       - main
