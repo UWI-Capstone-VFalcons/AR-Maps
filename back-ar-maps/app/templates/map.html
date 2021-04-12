@@ -10,6 +10,8 @@
     <script src="https://rawgit.com/bryik/aframe-bmfont-text-component/master/dist/aframe-bmfont-text-component.js"></script>
 {% endblock %}
 
+{% include 'nav.html' %}
+
 {% block main %}
     <a-scene
         renderer="logarithmicDepthBuffer: true;"
@@ -53,3 +55,5 @@
         <a-camera gps-camera rotation-reader></a-camera>
     </a-scene>
 {% endblock %}
+
+{% include 'bottom.html' %}
