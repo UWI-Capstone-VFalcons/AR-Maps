@@ -25,7 +25,8 @@ def ar():
         destinationBuilding = Building.query.filter_by(name=myDestination).first()
 
         return render_template("map.html", form=form, locationBuilding=locationBuilding,destinationBuilding=destinationBuilding)
-    return render_template("map.html",form=form)
+    buildings = db.session.query(Building).all()
+    return render_template("map.html",form=form, buildings=buildings)
     
 @app.route('/ar-find/', methods=['GET'])
 def ar_find():
