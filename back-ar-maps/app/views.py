@@ -6,7 +6,8 @@ import os, datetime
 from flask import abort, jsonify, request, send_file, render_template, redirect, url_for, flash
 from werkzeug.utils import secure_filename
 import json
-
+from app.forms import FindARDestinationForm
+from app.models import Building
 from app import qrcode
 
 # create all uncreated databases 
@@ -15,15 +16,21 @@ db.create_all()
 @app.route('/nav', methods=['GET'])
 def ar():
     """Render camera with ar experience  <19/3/2021 N.Bedassie>"""
-    buildings = db.session.query(Building).all()
-    return render_template("map.html", buildings=buildings)
+    form = FindARDestinationForm()
+    if form.validate_on_submit() and request.method == 'GET':
+        myLocation = request.form["myLocation"]
+        myDestination = request.form["myDestination"]
+       
+        locationBuilding = Building.query.filter_by(name=myLocation).first()
+        destinationBuilding = Building.query.filter_by(name=myDestination).first()
 
-@app.route('/nav/<int:building_id>', methods=['GET'])
-def ar_find(building_id):
+        return render_template("map.html", form=form, locationBuilding=locationBuilding,destinationBuilding=destinationBuilding)
+    return render_template("map.html",form=form)
+    
+@app.route('/ar-find/', methods=['GET'])
+def ar_find():
     """Render camera with ar experience  <19/3/2021 N.Bedassie>"""
-    building = Building.query.get(building_id)
-
-    return render_template("map.html", building=building)
+    return render_template("map.html")
 
 @app.route('/api/test')
 def home():
@@ -88,7 +95,6 @@ def get_building(building_id):
 
         return successResponse(qrcode_data)
     return errorResponse("no such building found")
-
 
 # Jsonify the response and add it under the data field
 def successResponse(message):

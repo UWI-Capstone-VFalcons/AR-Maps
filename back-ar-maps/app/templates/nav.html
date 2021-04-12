@@ -1,21 +1,44 @@
-<div id="bottom-nav" class="main_bar">
-      <div class="nav-el">
-        <a href="https://uwi-ar-maps.herokuapp.com/home">
-          <img src="../static/icons/home.svg" alt="home"/></a>
-      </div>
-      <div class="nav-el">
-        <a href="https://uwi-ar-maps.herokuapp.com/map">
-          <img src="../static/icons/map-pin.svg" alt="map"/>
-        </a> 
-      </div>
-      <div class="nav-el">
-        <a href="https://uwi-ar-maps.herokuapp.com/scan">
-          <img src="../static/icons/qr-code.svg" alt="scan"/>
-        </a> 
-      </div>
-      <div class="nav-el">
-        <a href="https://uwi-ar-maps.herokuapp.com/nav">
-          <img src="../static/icons/ar-view.svg" alt="ar"/>
-        </a> 
-      </div>
+<body>
+
+  <div id="overlay">
+    <p> < Swipe to go back</p><br>
+    <form action="{{ url_for('ar_find') }}" method="GET" enctype="multipart/form-data">
+      {{ form.csrf_token }}
+        <div class="form-element">
+            <h6 class="form-text">{{ form.myLocation.label }} </h6>
+            {{ form.myLocation }}
+        </div><br>
+        <div class="form-element">
+          <h6 class="form-text">{{ form.myDestination.label }} </h6>
+          <p>Enter Destination</p>
+            {{ form.myDestination }}
+        </div><br>
+        <button type="submit" class="searchBtn">Search</button>
+
+    </form>
   </div>
+
+  <div id="bottom-nav" class="main_bar">
+    <div class="nav-el">
+      <a href="https://uwi-ar-maps.herokuapp.com/home">
+        <img src="../static/icons/home.svg" alt="home"/></a>
+    </div>
+    <div class="nav-el">
+      <a href="https://uwi-ar-maps.herokuapp.com/map">
+        <img src="../static/icons/map-pin.svg" alt="map"/>
+      </a> 
+    </div>
+    <div class="nav-el">
+      <a href="https://uwi-ar-maps.herokuapp.com/scan">
+        <img src="../static/icons/qr-code.svg" alt="scan"/>
+      </a> 
+    </div>
+    <div class="nav-el">
+      <a href="https://uwi-ar-maps.herokuapp.com/nav">
+        <img src="../static/icons/ar-view.svg" alt="ar"/>
+      </a> 
+    </div>
+</div>
+
+</body>
+
