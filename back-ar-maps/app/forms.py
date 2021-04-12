@@ -7,6 +7,6 @@ from wtforms import TextField
 
 class FindARDestinationForm(FlaskForm):
     csrf = CSRFProtect(app)
-    myLocation = TextField('Location', u'Enter Location', validators=[DataRequired()])
-    myDestination = TextField('Destination', u'Enter Destination', validators=[DataRequired()])
+    myLocation = TextField('Location', description = 'Enter Location', validators=[DataRequired()])
+    myDestination = TextField('Destination', description = 'Enter Description', validators=[DataRequired()])
 

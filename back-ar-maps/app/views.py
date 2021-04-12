@@ -17,15 +17,16 @@ db.create_all()
 def ar():
     """Render camera with ar experience  <19/3/2021 N.Bedassie>"""
     form = FindARDestinationForm()
-    if form.validate_on_submit() and request.method == 'POST':
+    if form.validate_on_submit() and request.method == 'GET':
         myLocation = request.form["myLocation"]
         myDestination = request.form["myDestination"]
        
         locationBuilding = Building.query.filter_by(name=myLocation).first()
         destinationBuilding = Building.query.filter_by(name=myDestination).first()
 
-    return render_template("map.html", locationBuilding=locationBuilding,destinationBuilding=destinationBuilding)
-
+        return render_template("map.html", form=form, locationBuilding=locationBuilding,destinationBuilding=destinationBuilding)
+    return render_template("map.html",form=form)
+    
 @app.route('/ar-find/', methods=['GET'])
 def ar_find():
     """Render camera with ar experience  <19/3/2021 N.Bedassie>"""
