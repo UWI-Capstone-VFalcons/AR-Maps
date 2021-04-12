@@ -55,6 +55,7 @@ body{
     bottom: 0;
     padding: .1rem;
     z-index: 10;
+    opacity: .8;
 }
 
 .nav-el{
