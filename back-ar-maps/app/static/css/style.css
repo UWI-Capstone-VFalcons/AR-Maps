@@ -150,3 +150,8 @@ body{
     filter: drop-shadow( 1px 1px 1px rgba(27, 27, 27, 0.7));
 }
 
+.nav-el a{
+    -webkit-filter: drop-shadow( 1px 1px 1px rgba(27, 27, 27, 0.7));
+    filter: drop-shadow( 1px 1px 1px rgba(27, 27, 27, 0.7)); 
+}
+
