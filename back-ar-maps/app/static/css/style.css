@@ -59,6 +59,8 @@ body{
     bottom: 0;
     padding: .1rem;
     z-index: 10;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .nav-el{
@@ -93,6 +95,8 @@ body{
     z-index: 2;
     cursor: pointer;
     text-shadow: 1px 1px 1px rgb(49, 49, 49);
+    margin-left: 0;
+    margin-right: 0;
   }
 
 #overlay > form{
@@ -148,5 +152,10 @@ body{
     vertical-align: text-bottom;
     -webkit-filter: drop-shadow( 1px 1px 1px rgba(27, 27, 27, 0.7));
     filter: drop-shadow( 1px 1px 1px rgba(27, 27, 27, 0.7));
+}
+
+.nav-el a{
+    -webkit-filter: drop-shadow( 1px 1px 1px rgba(27, 27, 27, 0.7));
+    filter: drop-shadow( 1px 1px 1px rgba(27, 27, 27, 0.7)); 
 }
 
