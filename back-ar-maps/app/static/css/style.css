@@ -100,19 +100,20 @@ body{
     flex-direction: column;
 }
 
-  .searchBtn{
+.searchBtn{
     background-color: #163881;
     color: #ffffff;
     border: 1px;
     transition: all .2s ease-in;
-      padding: 10px;
-      text-align: center;
-      text-decoration: none;
-      display: inline-block;
-      font-size: 16px;
-      margin: 4px 30rem 2px 30rem;
-      cursor: pointer;
-      border-radius: 8px;
+    padding: 10px;
+    width: 200px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 30rem 2px 30rem;
+    cursor: pointer;
+    border-radius: 8px;
 }
 
 .searchBtn:hover{
