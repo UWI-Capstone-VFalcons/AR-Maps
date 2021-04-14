@@ -23,14 +23,13 @@
             <a-assets>
                 <a-asset-item
                     id="animated-asset-{{building.id}}"
-                    src="{{ url_for('static', filename='sign.glb')}}"
+                    src="{{ url_for('static', filename='sign.gltf')}}"
                 ></a-asset-item>
             </a-assets>
 
             <a-entity
                 look-at="[gps-camera]"
                 gltf-model="#animated-asset-{{building.id}}"
-                scale="10 10 10"
                 gps-entity-place="latitude: {{building.latitude}}; longitude: {{building.longitude}};"
             ></a-entity>
         {% endfor %}
