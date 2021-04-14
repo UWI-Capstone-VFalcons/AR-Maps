@@ -36,8 +36,9 @@
             >
                 <a-entity
                 look-at="[gps-camera]"
-                position="2 10 1"
-                text="height:10; value: {{building.name}}; color:black;"
+                geometry="primitive: plane; height: auto; width: auto"
+                material="color: white"
+                text="width: 4; value: {{building.name}}; color:black;"
                 gps-entity-place="latitude: {{building.latitude}}; longitude: {{building.longitude}};"
                 animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
                 >
