@@ -23,7 +23,8 @@ def ar():
        
         locationBuilding = Building.query.filter_by(name=myLocation).first()
         destinationBuilding = Building.query.filter_by(name=myDestination).first()
-
+        print(locationBuilding.lattitude)
+        print(destinationBuilding.lattitude)
         return render_template("map.html", form=form, locationBuilding=locationBuilding,destinationBuilding=destinationBuilding)
     return render_template("map.html",form=form)
     
