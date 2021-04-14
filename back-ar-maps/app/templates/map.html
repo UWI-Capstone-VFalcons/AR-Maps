@@ -27,20 +27,22 @@
                 ></a-asset-item>
             </a-assets>
 
-            <a-entity>
+            <a-entity
+                look-at="[gps-camera]"
+                gltf-model="#animated-asset-{{building.id}}"
+                scale="3 3 3"
+                gps-entity-place="latitude: {{building.latitude}}; longitude: {{building.longitude}};"
+                animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
+            >
                 <a-entity
-                    look-at="[gps-camera]"
-                    gltf-model="#animated-asset-{{building.id}}"
-                    scale="3 3 3"
-                    gps-entity-place="latitude: {{building.latitude}}; longitude: {{building.longitude}};"
-                    animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
+                look-at="[gps-camera]"
+                position="2 10 1"
+                text="height:10; value: {{building.name}}; color:black;"
+                gps-entity-place="latitude: {{building.latitude}}; longitude: {{building.longitude}};"
+                animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
                 >
-                <a-text value="{{building.name}}"
-                   color="black"
-                   scale="2 2 1" 
-                   position="4 10 0"
-                   opacity="1"></a-text>
-                </a-entity>
+
+                </a-entity>    
             </a-entity>
 
         {% endfor %}
