@@ -23,13 +23,12 @@
             <a-assets>
                 <a-asset-item
                     id="animated-asset-{{building.id}}"
-                    src="{{ url_for('static', filename='magnemite/scene.gltf')}}"
+                    src="{{ url_for('static', filename='sign.glb')}}"
                 ></a-asset-item>
             </a-assets>
 
             <a-entity
                 look-at="[gps-camera]"
-                animation-mixer="loop: repeat"
                 gltf-model="#animated-asset-{{building.id}}"
                 scale="1 1 1"
                 gps-entity-place="latitude: {{building.latitude}}; longitude: {{building.longitude}};"
