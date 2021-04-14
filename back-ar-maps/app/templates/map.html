@@ -30,7 +30,9 @@
             <a-entity>
                 <a-entity
                     look-at="[gps-camera]"
+                    text="value: {{building.name}}; color:black;"
                     gltf-model="#animated-asset-{{building.id}}"
+                    scale="3 3 3"
                     gps-entity-place="latitude: {{building.latitude}}; longitude: {{building.longitude}};"
                     animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
                 ></a-entity>
