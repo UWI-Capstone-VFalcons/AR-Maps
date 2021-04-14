@@ -20,17 +20,20 @@
         arjs="sourceType: webcam; debugUIEnabled: false;"
     >
         {% for building in buildings %}
-            <a-box look-at="[gps-camera]" position='0 0.5 0' material='opacity: 0.5;' scale="5 5 5"
-            gps-entity-place="latitude: {{building.latitude}}; longitude: {{building.longitude}};"
-            >
-                <a-entity
-                position="1 1 1"
+            <a-assets>
+                <a-asset-item
+                    id="animated-asset-{{building.id}}"
+                    src="{{ url_for('static', filename='sign.glb')}}"
+                ></a-asset-item>
+            </a-assets>
+
+            <a-entity
                 look-at="[gps-camera]"
-                bmfont-text="text: {{building.name}}; color: #fff"
-                scale="5 5 5"
+                animation-mixer="loop: repeat"
+                gltf-model="#animated-asset-{{building.id}}"
+                scale="1 1 1"
                 gps-entity-place="latitude: {{building.latitude}}; longitude: {{building.longitude}};"
-                ></a-entity>
-            </a-box>
+            ></a-entity>
         {% endfor %}
 
         <!-- <a-assets>
