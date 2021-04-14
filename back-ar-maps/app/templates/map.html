@@ -23,15 +23,19 @@
             <a-assets>
                 <a-asset-item
                     id="animated-asset-{{building.id}}"
-                    src="{{ url_for('static', filename='magnemite/scene.gltf')}}"
+                    src="{{ url_for('static', filename='sign.gltf')}}"
                 ></a-asset-item>
             </a-assets>
 
-            <a-entity
-                look-at="[gps-camera]"
-                gltf-model="#animated-asset-{{building.id}}"
-                gps-entity-place="latitude: {{building.latitude}}; longitude: {{building.longitude}};"
-            ></a-entity>
+            <a-entity>
+                <a-entity
+                    look-at="[gps-camera]"
+                    gltf-model="#animated-asset-{{building.id}}"
+                    gps-entity-place="latitude: {{building.latitude}}; longitude: {{building.longitude}};"
+                    animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
+                ></a-entity>
+            </a-entity>
+
         {% endfor %}
 
         <!-- <a-assets>
