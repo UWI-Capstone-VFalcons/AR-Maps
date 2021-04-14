@@ -17,7 +17,6 @@
     <GmapMap
   :center="centre"
   :zoom="17"
-  map-type-id="terrain"
   style="width: 1000px; height: 600px"
 >
   <GmapMarker
