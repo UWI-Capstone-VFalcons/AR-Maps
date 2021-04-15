@@ -32,13 +32,12 @@
                 gltf-model="#animated-asset-{{building.id}}"
                 scale="1 1 1"
                 text="value: {{building.name}}; color:black; side:double; width: 5;"
-                wrap-count="15"
                 gps-entity-place="latitude: {{building.latitude}}; longitude: {{building.longitude}};"
-                animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
             >
             </a-entity>
 
         {% endfor %}
+        <!-- animation="property: rotation; to: 0 360 0; loop: true; dur: 10000" -->
 
         <!-- <a-assets>
             <a-asset-item
