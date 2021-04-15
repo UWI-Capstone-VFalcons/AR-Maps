@@ -31,7 +31,8 @@
                 look-at="[gps-camera]"
                 gltf-model="#animated-asset-{{building.id}}"
                 scale="2 2 2"
-                text="value: {{building.name}}; color:black; side:double;"
+                text="value: {{building.name}}; color:black; side:double; width: 10;"
+                wrap-count="20"
                 gps-entity-place="latitude: {{building.latitude}}; longitude: {{building.longitude}};"
                 animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
             >
