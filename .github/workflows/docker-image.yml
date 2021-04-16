@@ -6,6 +6,7 @@ on:
       - main
       - sprint2
       - ARview
+      - ar_implementation
   pull_request:
     branches:
       - main
