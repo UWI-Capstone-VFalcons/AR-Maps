@@ -22,14 +22,14 @@
         {% for building in buildings %}
             <a-assets>
                 <a-asset-item
-                    id="animated-asset-{{building.id}}"
+                    id="building-{{building.id}}"
                     src="{{ url_for('static', filename='sign.gltf')}}"
                 ></a-asset-item>
             </a-assets>
 
             <a-entity
                 look-at="[gps-camera]"
-                gltf-model="#animated-asset-{{building.id}}"
+                gltf-model="#building-{{building.id}}"
                 scale="1 1 1"
                 text="value: {{building.name}}; color:black; side:double; width: 5;"
                 gps-entity-place="latitude: {{building.latitude}}; longitude: {{building.longitude}};"
@@ -40,14 +40,14 @@
         {% for node in nodes %}
             <a-assets>
                 <a-asset-item
-                    id="animated-asset-{{node.id}}"
+                    id="node-{{node.id}}"
                     src="{{ url_for('static', filename='arrow.gltf')}}"
                 ></a-asset-item>
             </a-assets>
 
             <a-entity
                 look-at="[gps-camera]"
-                gltf-model="#animated-asset-{{node.id}}"
+                gltf-model="#node-{{node.id}}"
                 scale="1 1 1"
                 gps-entity-place="latitude: {{node.latitude}}; longitude: {{node.longitude}};"
             >
