@@ -47,7 +47,7 @@
             </a-assets>
 
             <a-entity
-                look-at="[gps-camera]"
+                look-at="{{node.look_at}}"
                 gltf-model="#node-{{node.id}}"
                 scale="0.25 0.25 0.25"
                 gps-entity-place="latitude: {{node.latitude}}; longitude: {{node.longitude}};"
