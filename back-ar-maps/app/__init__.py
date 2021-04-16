@@ -18,10 +18,10 @@ app.config['SECRET_KEY'] = "x9NgYaKf+&-Vr8rFN_e22UTX&GVS-T=bY5+k9p2uhQh6wTSZEPYd
 # format (mysql://username:password@server/db)
 
 # local databse 
-# app.config ['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://armaps:armaps@localhost/armaps"
+app.config ['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://armaps:armaps@localhost/armaps"
 
 # cloud database
-app.config ['SQLALCHEMY_DATABASE_URI'] = "postgresql://lhsqdwpcjxoewh:77ec8b70eb208802953747792eecea748a9c32faff7e9d27281e6b6f443553f2@ec2-3-91-127-228.compute-1.amazonaws.com:5432/d9gsa1neap28mn"  
+# app.config ['SQLALCHEMY_DATABASE_URI'] = "postgresql://lhsqdwpcjxoewh:77ec8b70eb208802953747792eecea748a9c32faff7e9d27281e6b6f443553f2@ec2-3-91-127-228.compute-1.amazonaws.com:5432/d9gsa1neap28mn"  
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False # added just to suppress a warning
 
 # files for storing
@@ -40,6 +40,9 @@ qrcode = QRcode(app)
 
 # enable CORS
 CORS(app, resources={r'/*': {'origins': '*'}})
+
+# Google API Keys
+Google_API_Key = "AIzaSyB5QmIo_yG56_KI-WC91I1mmsyZ9cOZF9s"
 
 # import the views for flask
 from app import views, models

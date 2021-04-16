@@ -54,5 +54,3 @@ class Event(db.Model):
 
     def __repr__(self):
         return '<Event %r>' % self.id
-
-
