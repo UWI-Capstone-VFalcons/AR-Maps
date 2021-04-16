@@ -7,7 +7,7 @@ from flask import abort, jsonify, request, send_file, render_template, redirect,
 from werkzeug.utils import secure_filename
 import json
 from app.forms import FindARDestinationForm
-from app.models import Building
+from app.models import Building, Node
 from app import qrcode
 from flask import jsonify
 from flask_simple_geoip import SimpleGeoIP
@@ -32,7 +32,8 @@ def ar():
         
         return render_template("map.html", form=form, currentLocation = currentLocation, locationBuilding=locationBuilding,destinationBuilding=destinationBuilding)
     buildings = db.session.query(Building).all()
-    return render_template("map.html",form=form, buildings=buildings)
+    nodes = db.session.query(Node).all()
+    return render_template("map.html",form=form, buildings=buildings, nodes=nodes)
     
 @app.route('/ar-find/', methods=['GET'])
 def ar_find():
