@@ -17,7 +17,23 @@ function dynamicallyLoadPlaces(position) {
 
     // CORS Proxy to avoid CORS problems
     const corsProxy = 'https://cors-anywhere.herokuapp.com/';
-
+    
+    (function() {
+        var cors_api_host = 'cors-anywhere.herokuapp.com';
+        var cors_api_url = 'https://' + cors_api_host + '/';
+        var slice = [].slice;
+        var origin = window.location.protocol + '//' + window.location.host;
+        var open = XMLHttpRequest.prototype.open;
+        XMLHttpRequest.prototype.open = function() {
+            var args = slice.call(arguments);
+            var targetOrigin = /^https?:\/\/([^\/]+)/i.exec(args[1]);
+            if (targetOrigin && targetOrigin[0].toLowerCase() !== origin &&
+                targetOrigin[1] !== cors_api_host) {
+                args[1] = cors_api_url + args[1];
+            }
+            return open.apply(this, args);
+        };
+    })();
     // Foursquare API (limit param: number of maximum places to fetch)
     const endpoint = `${corsProxy}https://api.foursquare.com/v2/venues/search?intent=checkin
         &ll=${position.latitude},${position.longitude}
@@ -121,7 +137,6 @@ function renderPlaces(places) {
 
        let model = document.createElement('a-link');
        model.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
-       model.setAttribute('gltf-model', './assets/magnemite/scene.gltf');
        placeText.setAttribute('title', places.name);
        placeText.setAttribute('scale', '15 15 15');
 
