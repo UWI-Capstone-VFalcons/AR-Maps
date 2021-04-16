@@ -9,13 +9,19 @@ import json
 from app.forms import FindARDestinationForm
 from app.models import Building
 from app import qrcode
+from flask import jsonify
+from flask_simple_geoip import SimpleGeoIP
 
 # create all uncreated databases 
 db.create_all()
 
+# Initialize the extension
+simple_geoip = SimpleGeoIP(app)
+
 @app.route('/nav', methods=['GET'])
 def ar():
     """Render camera with ar experience  <19/3/2021 N.Bedassie>"""
+    currentLocation = fetchCurrentLocation()
     form = FindARDestinationForm()
     if form.validate_on_submit() and request.method == 'GET':
         myLocation = request.form["myLocation"]
@@ -23,9 +29,8 @@ def ar():
        
         locationBuilding = Building.query.filter_by(name=myLocation).first()
         destinationBuilding = Building.query.filter_by(name=myDestination).first()
-        print(locationBuilding.lattitude)
-        print(destinationBuilding.lattitude)
-        return render_template("map.html", form=form, locationBuilding=locationBuilding,destinationBuilding=destinationBuilding)
+        
+        return render_template("map.html", form=form, currentLocation = currentLocation, locationBuilding=locationBuilding,destinationBuilding=destinationBuilding)
     buildings = db.session.query(Building).all()
     return render_template("map.html",form=form, buildings=buildings)
     
@@ -107,6 +112,8 @@ def errorResponse(message):
     return jsonify({'error':message})
 
 
+def fetchCurrentLocation():
+    # Retrieve geoip data for the given requester
+    geoip_data = simple_geoip.get_geoip_data()
 
-# if __name__ == '__main__':
-#     app.run(debug=True, host="0.0.0.0", port="5000")
+    return jsonify(data=geoip_data)

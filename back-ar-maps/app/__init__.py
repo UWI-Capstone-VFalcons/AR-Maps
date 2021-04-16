@@ -11,6 +11,9 @@ app = Flask(__name__)
 
 # Configurations
 
+# flask-simple-geoip - get user current location
+app.config.update(GEOIPIFY_API_KEY='at_Y4pp3IJV57Cz9cWhuFUPEHQRaFCXD')
+
 # random string for secret
 app.config['SECRET_KEY'] = "x9NgYaKf+&-Vr8rFN_e22UTX&GVS-T=bY5+k9p2uhQh6wTSZEPYdWD@58mWVC!Hg7*RNe*9eEW9cW&nugHzy2Y5fvAY4g@nK@=AN" 
 
