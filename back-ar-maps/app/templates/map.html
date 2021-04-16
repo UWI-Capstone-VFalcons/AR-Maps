@@ -32,7 +32,7 @@
                 ></a-asset-item>
             </a-assets>
 
-            <a-entity
+            <!-- <a-entity
                 look-at="[gps-camera]"
                 gltf-model="#building-{{building.id}}"
                 scale="1 1 1"
@@ -40,7 +40,7 @@
                 animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
                 gps-entity-place="latitude: {{building.latitude}}; longitude: {{building.longitude}};"
             >
-            </a-entity>
+            </a-entity> -->
 
         {% endfor %}
         {% for node in nodes %}
@@ -60,7 +60,7 @@
             </a-entity>
         {% endfor %}
 
-        <a-camera gps-camera rotation-reader></a-camera>
+        <a-camera gps-camera="minDistance: 40;" rotation-reader></a-camera>
     </a-scene>
 {% endblock %}
 

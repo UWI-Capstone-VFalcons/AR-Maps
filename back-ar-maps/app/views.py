@@ -21,7 +21,7 @@ simple_geoip = SimpleGeoIP(app)
 @app.route('/nav', methods=['GET'])
 def ar():
     """Render camera with ar experience  <19/3/2021 N.Bedassie>"""
-    currentLocation = fetchCurrentLocation()
+    # currentLocation = fetchCurrentLocation()
     form = FindARDestinationForm()
     if form.validate_on_submit() and request.method == 'GET':
         myLocation = request.form["myLocation"]
