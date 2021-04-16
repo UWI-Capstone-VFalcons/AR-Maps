@@ -30,7 +30,7 @@ def ar():
         locationBuilding = Building.query.filter_by(name=myLocation).first()
         destinationBuilding = Building.query.filter_by(name=myDestination).first()
         
-        return render_template("map.html", form=form, currentLocation = currentLocation, locationBuilding=locationBuilding,destinationBuilding=destinationBuilding)
+        return render_template("map.html", form=form, locationBuilding=locationBuilding,destinationBuilding=destinationBuilding)
     buildings = db.session.query(Building).all()
     nodes = db.session.query(Node).all()
     return render_template("map.html",form=form, buildings=buildings, nodes=nodes)
