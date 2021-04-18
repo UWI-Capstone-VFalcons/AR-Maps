@@ -102,7 +102,7 @@ function staticLoadPlaces() {
            name: 'Sci-Tech Library',
            location: {
                lat: 18.005283,
-               lng: 76.749337,
+               lng: -76.749337,
            },
            name: 'SLT1',
            location: {
@@ -112,17 +112,17 @@ function staticLoadPlaces() {
            name: 'SLT2',
            location: {
                lat: 18.005306,
-               lng: 76.749755,
+               lng: -76.749755,
            },
            name: 'SLT2 Entry/Exit 2',
            location: {
                lat: 18.005081,
-               lng: 76.74980,
+               lng: -76.74980,
            },
            name: 'Aunty Jackie',
            location: {
                lat: 18.005167,
-               lng: 76.749480,
+               lng: -76.749480,
            }
        },
    ];
