@@ -96,8 +96,8 @@ function staticLoadPlaces() {
        {
            name: 'Home Test',
            location: {
-               lat: 18.0063554,
-               lng: -76.7423310,
+               lat: 18.006056,
+               lng: -76.742370,
            },
            name: 'Sci-Tech Library',
            location: {
