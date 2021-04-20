@@ -124,10 +124,10 @@ def calculateShortestPath(coord_a, coord_b):
     g = {"a":coord_a, "b":coord_b} # 1:[[2,.0123]]
     nodes = db.session.query(Node).all()
     for node in nodes:
-        break
+        
 
 
-def calculateSLD(coord_a, coord_b):
+def dist(coord_a, coord_b):
     """
     Calculate the straight line distance between two gps coordinates
 
