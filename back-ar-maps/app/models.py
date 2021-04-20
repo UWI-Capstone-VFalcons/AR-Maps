@@ -73,7 +73,7 @@ class Path(db.Model):
     __tablename__ = 'path'
     id = db.Column('path_id', db.Integer, primary_key=True)
     start = db.Column(db.Integer, nullable=False)
-    end =  db.Column(db.Integer)
+    end =  db.Column(db.Integer, nullable=False)
     length = db.Column(db.Float(10, 20), nullable=False)
 
     def __init__(self, start, end, length):
