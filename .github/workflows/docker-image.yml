@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - sprint3
+      - Sprint3
   pull_request:
     branches:
       - main
