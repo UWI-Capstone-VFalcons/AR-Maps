@@ -6,7 +6,20 @@
     <div id="user-location">
       <img src="../assets/images/icons/map-pin.svg">
       <h6>Location: </h6>
-      <p>{{myCoordinates.lat}} Latitude, {{myCoordinates.lng}} Longitude </p>
+    </div>
+
+    <div id="user-destination">
+      <form action="">
+        <label for="">Destination: </label>
+        <select name="destinations" id="dd-dest">
+          <option value="" disabled selected>Select Destination Here</option>
+          <option value="slt-1">SLT 1</option>
+          <option value="slt-2">SLT 2</option>
+          <option value="slt-3">SLT 3</option>
+          <option value="tech-lib">Science and Technology Library</option>
+        </select>
+        <button @click="findPath">Find Path</button>
+      </form>
     </div>
 
     <div class="map-btns">
@@ -19,9 +32,9 @@
 
 
     <GmapMap
-  :center="myCoordinates"
+  :center="centre"
   :zoom="17"
-  style="width: 100%; height: 50vh;"
+  style="width: 100%; height: 100vh;"
 >
   <GmapMarker
     :key="index"
@@ -43,7 +56,7 @@
 
 const slt1 = {lat:18.005197, lng:-76.749908}
 const slt2 = {lat:18.005242, lng:-76.749795}
-// const uwi = {lat:18.00619408233222, lng:-76.74683600360201}
+const uwi = {lat:18.00619408233222, lng:-76.74683600360201}
 
 
 
@@ -54,7 +67,7 @@ export default {
   data(){
     return{
       markers:[],
-      // centre:uwi,
+      centre:uwi,
       paths:[],
       myCoordinates:{
         lat:0,
@@ -89,6 +102,9 @@ export default {
       this.paths = [];
       this.markers = [];
     },
+    findPath(){
+
+    }
     
   }
 }
