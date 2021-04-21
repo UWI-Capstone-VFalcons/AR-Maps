@@ -21,6 +21,8 @@ Vue.use(VueGoogleMaps, {
 })
 
 Vue.use(VueGeolocation)
+Vue.config.productionTip = false;
+Vue.config.ignoredElements = ['a-scene','a-assets','a-asset-item','a-entity','a-camera']
 
 // Set the default app title
 document.title =  'UWI AR Maps';

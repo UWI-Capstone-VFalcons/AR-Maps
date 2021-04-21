@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block css %}
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+    <script src="https://raw.githack.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
+    <script src="https://rawgit.com/bryik/aframe-bmfont-text-component/master/dist/aframe-bmfont-text-component.js"></script>
+{% endblock %}
+
+{% include 'nav.html' %}
+
+{% block main %}
+    <a-scene
+        renderer="logarithmicDepthBuffer: true;"
+        embedded
+        loading-screen="enabled: false;"
+        arjs="sourceType: webcam; debugUIEnabled: false;"
+    >
+        {% for building in buildings %}
+            <!-- <a-assets>
+                <a-entity geometry="primitive: plane; width: 4; height: auto"
+                        material="color: blue"
+                        text="value: This text will be 4 units wide."></a-entity>
+            </a-assets> -->
+
+            <a-entity
+                position="0 0 -1"
+                look-at="[gps-camera]"
+                geometry="primitive: plane; width: 30; height: auto"
+                material="color: white"
+                text="color: black; align: center; width: auto; height: 10; value: {{ building.name }};"
+                scale="0.14768864307354904 0.14768864307354904 0.14768864307354904"
+                gps-entity-place="latitude: {{building.latitude}}; longitude: {{building.longitude}};"
+            ></a-entity>
+        {% endfor %}
+
+        <!-- <a-assets>
+            <a-asset-item
+                id="animated-asset-2"
+                src="{{ url_for('static', filename='magnemite/scene.gltf')}}"
+            ></a-asset-item>
+        </a-assets>
+
+        <a-entity
+            look-at="[gps-camera]"
+            animation-mixer="loop: repeat"
+            gltf-model="#animated-asset-2"
+            scale="0.14768864307354904 0.14768864307354904 0.14768864307354904"
+            gps-entity-place="latitude: 17.954594228561096; longitude: -76.9048856513913;"
+        ></a-entity> -->
+
+        <a-camera gps-camera rotation-reader></a-camera>
+    </a-scene>
+{% endblock %}
+
+{% include 'bottom.html' %}

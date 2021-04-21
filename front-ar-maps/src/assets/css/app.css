@@ -73,6 +73,8 @@
 .nav-el img{
     width: 100%;
     height: auto;
+    -webkit-filter: drop-shadow( 1px 1px 1px rgba(27, 27, 27, 0.7));
+    filter: drop-shadow( 1px 1px 1px rgba(27, 27, 27, 0.7)); 
 }
 
 /* ======================================= */
@@ -258,4 +260,22 @@
 /* #user-location:nth-child(1){
     height: 3.5rem;
     width: 3rem; 
+/*           AR Guide Screen */
+/* ======================================= */
+
+#arguide{
+    overflow: hidden;
+    margin: 0;
+}
+
+video#arjs-video{
+    z-index: 3!important;
+    height: 100%!important;
+    width: 100%!important;
+}
+
+/* body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 } */
