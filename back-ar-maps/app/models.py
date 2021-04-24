@@ -68,3 +68,39 @@ class Node(db.Model):
 
     def __repr__(self):
         return '<Node %r>' % self.id
+
+# This model defines all the starting point locations
+# to the sci tech area
+class Starting_Point(db.Model):
+    __tablename__ = 'starting_points'
+    id = db.Column('node_id', db.Integer, primary_key=True)
+    name = db.Column(db.String(200), unique=True, nullable=False)
+    latitude = db.Column(db.Float(10,20), nullable=False)
+    longitude =  db.Column(db.Float(10, 20), nullable=False)
+
+    def __init__(self, name, latitude, longitude):
+        self.name = name
+        self.latitude = latitude
+        self.longitude = longitude
+
+    def __repr__(self):
+        return '<starting_points %r>' % self.id
+
+# This model would save all the objects that can be detected by 
+# the object detection model
+class OD_Objects(db.Model):
+    __tablename__ = 'object_detection_objects'
+    id = db.Column('object_id', db.Integer, primary_key=True)
+    name = db.Column(db.String(200), unique=True, nullable=False)
+    object_name = db.Column(db.String(200), unique=True, nullable=False)
+    latitude = db.Column(db.Float(10,20), nullable=False)
+    longitude =  db.Column(db.Float(10, 20), nullable=False)
+
+    def __init__(self, name, object_name, latitude, longitude):
+        self.name = name
+        self.object_name = object_name
+        self.latitude = latitude
+        self.longitude = longitude
+
+    def __repr__(self):
+        return '<object_detection_objects %r>' % self.id
