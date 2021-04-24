@@ -90,7 +90,7 @@ body{
     display: flex;
     flex-direction: column;
     color: #fff;
-    position: absolute;
+    position: fixed;
     width: 100%;
     top: 0;
     background-color: var(--main-background-color);

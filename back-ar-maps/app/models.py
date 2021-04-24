@@ -54,3 +54,17 @@ class Event(db.Model):
 
     def __repr__(self):
         return '<Event %r>' % self.id
+
+
+class Node(db.Model):
+    __tablename__ = 'node'
+    id = db.Column('node_id', db.Integer, primary_key=True)
+    latitude = db.Column(db.Float(10,20), nullable=False)
+    longitude =  db.Column(db.Float(10, 20), nullable=False)
+
+    def __init__(self, latitude, longitude):
+        self.latitude = latitude
+        self.longitude = longitude
+
+    def __repr__(self):
+        return '<Node %r>' % self.id

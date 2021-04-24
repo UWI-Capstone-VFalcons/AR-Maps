@@ -29,7 +29,17 @@ def ar():
 
         return render_template("map.html", form=form, locationBuilding=locationBuilding,destinationBuilding=destinationBuilding)
     buildings = db.session.query(Building).all()
-    return render_template("map.html",form=form, buildings=buildings)
+    nodes = db.session.query(Node).all()
+    node_list = []
+    for node in nodes:
+        node_list.append(vars(node))
+    node_len = len(node_list)
+    for i in range(node_len):
+        if i == 0:
+            node_list[i]["look_at"] = "[gps-camera]"
+        else:
+            node_list[i]["look_at"] = "#node-" + str(node_list[i-1]['id'])
+    return render_template("map.html",form=form, buildings=buildings, nodes=nodes)
 
 @app.route('/nav/OD/orientation', methods=['GET'])
 def od_orientation():
