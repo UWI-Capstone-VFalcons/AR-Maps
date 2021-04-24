@@ -2,7 +2,7 @@ import requests
 import os, datetime
 from flask import abort, jsonify, request, send_file, render_template, redirect, url_for, flash
 from werkzeug.utils import secure_filename
-import json
+import json,math
 from app import app, db, qrcode, Google_API_Key
 from app.models import *
 from app.forms import *
@@ -115,6 +115,38 @@ def get_building(building_id):
         return successResponse(qrcode_data)
     return errorResponse("no such building found")
 
+def calculateShortestPath(coord_a, coord_b):
+    """
+    Calculate the shortest path between two locations using the nodes scattered around the 
+    area of interest.
+
+    Parameters
+        ----------
+        coord_a : tuple/list
+            the first pair of latitude and longitude (17.98321, -76.13138) or [17.13183, -77.13176]
+        coord_b : tuple/list
+            the second pair of latitube and longitude (17.98321, -76.13138) or [17.13183, -77.13176] 
+    """
+
+    # initialize graph
+    g = {"a":coord_a, "b":coord_b} # 1:[[2,.0123]]
+    nodes = db.session.query(Node).all()
+    for node in nodes:
+        break
+
+
+def dist(coord_a, coord_b):
+    """
+    Calculate the straight line distance between two gps coordinates
+
+    Parameters
+        ----------
+        coord_a : tuple/list
+            the first pair of latitude and longitude (17.98321, -76.13138) or [17.13183, -77.13176]
+        coord_b : tuple/list
+            the second pair of latitube and longitude (17.98321, -76.13138) or [17.13183, -77.13176] 
+    """
+    return math.sqrt((coord_a[0] - coord_b[0])**2 + (coord_a[1] - coord_b[1])**2)
 @app.route('/api/destinations', methods=['GET'])
 def get_all_destinations():
 
