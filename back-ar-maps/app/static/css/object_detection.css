@@ -1,0 +1,24 @@
+#camera_feed{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+.containerr{
+    position: relative;
+}
+
+#od-video{
+    background-color: aqua;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+#od-video video{
+    background-color: red;
+    width: 100%;
+    height: 100%;
+}
+
