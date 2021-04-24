@@ -3,11 +3,7 @@ name: Docker Image CI
 on: 
   push:
     branches:
-      - main
-      - Sprint3
-  pull_request:
-    branches:
-      - main
+      - sprint3
 
 jobs:
   build:
