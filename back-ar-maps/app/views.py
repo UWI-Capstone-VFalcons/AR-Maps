@@ -8,6 +8,14 @@ from app.models import *
 from app.forms import *
 from app.helper import *
 
+"""
+    Routes
+"""
+@app.route('/', methods=['GET'])
+def defHome():
+    return redirect(url_for("home"))
+
+
 @app.route('/nav', methods=['GET'])
 def ar():
     """Render camera with ar experience  <19/3/2021 N.Bedassie>"""
@@ -22,7 +30,15 @@ def ar():
         return render_template("map.html", form=form, locationBuilding=locationBuilding,destinationBuilding=destinationBuilding)
     buildings = db.session.query(Building).all()
     return render_template("map.html",form=form, buildings=buildings)
-    
+
+@app.route('/nav/OD/orientation', methods=['GET'])
+def od_orientation():
+    return render_template("od_orientation.html")
+
+"""
+    API EndPOints
+"""
+
 @app.route('/ar-find/', methods=['GET'])
 def ar_find():
     """Render camera with ar experience  <19/3/2021 N.Bedassie>"""
@@ -35,7 +51,6 @@ def home():
 @app.route('/api/buildingQR/<building_id>', methods=['GET'])
 def building_qr(building_id):
 
-    if (not isinstance(building_id, int) and not building_id.isnumeric()): abort(400)
     
     building = Building.query.get(building_id)
     if(not building is None):
