@@ -59,6 +59,7 @@ class Event(db.Model):
 class Node(db.Model):
     __tablename__ = 'node'
     id = db.Column('node_id', db.Integer, primary_key=True)
+    description = db.Column(db.String())
     latitude = db.Column(db.Float(10,20), nullable=False)
     longitude =  db.Column(db.Float(10, 20), nullable=False)
     latitude_2 = db.Column(db.Float(10,20))
