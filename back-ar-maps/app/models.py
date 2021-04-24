@@ -31,7 +31,6 @@ class Building(db.Model):
     def __repr__(self):
         return '<Building %r>' % self.id
 
-
 # The event database object
 # The event object is responsible to store
 # the specific events at a loction or event along with the 
@@ -55,9 +54,9 @@ class Event(db.Model):
 
 # The model define all nodes that are used in the paths
 class Node(db.Model):
-    __tablename__ = 'node'
+    __tablename__ = 'nodes'
     id = db.Column('node_id', db.Integer, primary_key=True)
-    description = db.Column(db.String())
+    description = db.Column(db.Text)
     latitude = db.Column(db.Float(10,20), nullable=False)
     longitude =  db.Column(db.Float(10, 20), nullable=False)
     latitude_2 = db.Column(db.Float(10,20))
@@ -68,32 +67,63 @@ class Node(db.Model):
         self.longitude = longitude
         self.latitude_2 = latitude_2
         self.longitude_2 = longitude_2
+    
+    def __init__(self, latitude, longitude, latitude_2, longitude_2, description):
+        self.latitude = latitude
+        self.longitude = longitude
+        self.latitude_2 = latitude_2
+        self.longitude_2 = longitude_2
+        self.description = description
 
     def __repr__(self):
         return '<Node %r>' % self.id
 
+# The model used to save the gps coordinates for the areas that 
+# ar maps can be used in 
+class MapArea(db.Model):
+    __tablename__ = 'map_areas'
+    id = db.Column('map_area_id', db.Integer, primary_key=True)
+    name = db.Column(db.String(200), unique=True, nullable=False)
+    description = db.Column(db.Text)
+    point1 = db.Column(db.Integer, db.ForeignKey('nodes.node_id'), nullable=False)
+    point2 =  db.Column(db.Integer, db.ForeignKey('nodes.node_id'), nullable=False)
+    point3 =  db.Column(db.Integer, db.ForeignKey('nodes.node_id'), nullable=False)
+    point4 =  db.Column(db.Integer, db.ForeignKey('nodes.node_id'), nullable=False)
+
+    def __init__(self, name="AREA", description = "Map AREA", point1=None, point2=None, point3=None, point4=None):
+        self.name = name
+        self.description = description
+        self.point1 = point1
+        self.point2 = point2
+        self.point3 = point3
+        self.point4 = point4
+
+    def __repr__(self):
+        return '<Map_Areas %r>' % self.id
+
 # The model saves all the paths that are recorded in the scitech area
 class Path(db.Model):
-    __tablename__ = 'path'
+    __tablename__ = 'paths'
     id = db.Column('path_id', db.Integer, primary_key=True)
-    start = db.Column(db.Integer, db.ForeignKey('node.node_id'), nullable=False)
-    end =  db.Column(db.Integer, db.ForeignKey('node.node_id'), nullable=False)
+    map_area = db.Column(db.Integer, db.ForeignKey('map_areas.map_area_id'), nullable=False)
+    start = db.Column(db.Integer, db.ForeignKey('nodes.node_id'), nullable=False)
+    end =  db.Column(db.Integer, db.ForeignKey('nodes.node_id'), nullable=False)
     length = db.Column(db.Float(10, 20), nullable=False)
 
-    def __init__(self, start, end, length):
+    def __init__(self, start, end, length, map_area):
         self.start = start
         self.end = end
         self.length = length
+        self.map_area = map_area
 
     def __repr__(self):
         return '<Path %r>' % self.id
-
 
 # This model defines all the starting point locations
 # to the sci tech area
 class Starting_Point(db.Model):
     __tablename__ = 'starting_points'
-    id = db.Column('node_id', db.Integer, primary_key=True)
+    id = db.Column('sp_id', db.Integer, primary_key=True)
     name = db.Column(db.String(200), unique=True, nullable=False)
     latitude = db.Column(db.Float(10,20), nullable=False)
     longitude =  db.Column(db.Float(10, 20), nullable=False)
@@ -104,7 +134,7 @@ class Starting_Point(db.Model):
         self.longitude = longitude
 
     def __repr__(self):
-        return '<starting_points %r>' % self.id
+        return '<Starting_Point %r>' % self.id
 
 # This model would save all the objects that can be detected by 
 # the object detection model
@@ -123,4 +153,4 @@ class OD_Objects(db.Model):
         self.longitude = longitude
 
     def __repr__(self):
-        return '<object_detection_objects %r>' % self.id
+        return '<Object_Detection_Object %r>' % self.id
