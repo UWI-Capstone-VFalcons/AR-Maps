@@ -10,7 +10,7 @@ MODEL_CLASSES = CLASSES;
 // load the model
 async function load_model() {
   console.log('Loading mobilenet..');
-  const model = await  tf.loadGraphModel("/static/model/scitech_ojects/model.json");
+  const model = await  tf.loadGraphModel("/static/od_model/scitech_ojects/model.json");
   net = model; 
   console.log('Successfully loaded model');
   return model;

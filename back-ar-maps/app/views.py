@@ -60,7 +60,6 @@ def home():
 
 @app.route('/api/buildingQR/<building_id>', methods=['GET'])
 def building_qr(building_id):
-
     
     building = Building.query.get(building_id)
     if(not building is None):
