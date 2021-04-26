@@ -74,6 +74,7 @@ class Node(db.Model):
 
 # The model used to save the gps coordinates for the areas that 
 # ar maps can be used in 
+# The cordinates are saved moving in a clockwise direction
 class MapArea(db.Model):
     __tablename__ = 'map_areas'
     id = db.Column('map_area_id', db.Integer, primary_key=True)

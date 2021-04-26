@@ -2,15 +2,18 @@ import requests
 import os, datetime
 from flask import abort, jsonify, request, send_file, render_template, redirect, url_for, flash
 from werkzeug.utils import secure_filename
-import json,math
+import json, math
 from app import app, db, qrcode, Google_API_Key
 from app.models import *
 from app.forms import *
 from app.helper import *
+from app.my_encoders import *
+
 
 """
     Routes
 """
+
 @app.route('/', methods=['GET'])
 def defHome():
     return redirect(url_for("home"))
@@ -57,6 +60,10 @@ def ar_find():
 @app.route('/api/test')
 def home():
     return jsonify({"test":"Its working"})
+
+"""
+    Building
+"""
 
 @app.route('/api/buildingQR/<building_id>', methods=['GET'])
 def building_qr(building_id):
@@ -115,38 +122,10 @@ def get_building(building_id):
         return successResponse(qrcode_data)
     return errorResponse("no such building found")
 
-def calculateShortestPath(coord_a, coord_b):
-    """
-    Calculate the shortest path between two locations using the nodes scattered around the 
-    area of interest.
+"""
+    Destinations
+"""
 
-    Parameters
-        ----------
-        coord_a : tuple/list
-            the first pair of latitude and longitude (17.98321, -76.13138) or [17.13183, -77.13176]
-        coord_b : tuple/list
-            the second pair of latitube and longitude (17.98321, -76.13138) or [17.13183, -77.13176] 
-    """
-
-    # initialize graph
-    g = {"a":coord_a, "b":coord_b} # 1:[[2,.0123]]
-    nodes = db.session.query(Node).all()
-    for node in nodes:
-        break
-
-
-def dist(coord_a, coord_b):
-    """
-    Calculate the straight line distance between two gps coordinates
-
-    Parameters
-        ----------
-        coord_a : tuple/list
-            the first pair of latitude and longitude (17.98321, -76.13138) or [17.13183, -77.13176]
-        coord_b : tuple/list
-            the second pair of latitube and longitude (17.98321, -76.13138) or [17.13183, -77.13176] 
-    """
-    return math.sqrt((coord_a[0] - coord_b[0])**2 + (coord_a[1] - coord_b[1])**2)
 @app.route('/api/destinations', methods=['GET'])
 def get_all_destinations():
 
@@ -172,15 +151,13 @@ def get_all_destinations():
                     'building_address2': building.address2,
                     'building_address3': building.address3,
                     'building_image': building.image_url,
-                    # 'building_latittude': building.lattitude,
-                    # 'building_longitude':building.longitude,
-                    'building_latittude': 'lt98.7654',
-                    'building_longitude':'lg12.3456',
+                    'building_latittude': building.lattitude,
+                    'building_longitude':building.longitude,
                     'building_info': building.info 
                 }
             allBuildings.append(qrcode_data)
         return successResponse(allBuildings)
-    return errorResponse("no destinations found")
+    return successResponse("no destinations found")
 
 @app.route('/api/closest/destination/<cur_latitude>,<cur_longitude>', methods=['GET'])
 def get_closest_destinations(cur_latitude, cur_longitude):
@@ -226,7 +203,7 @@ def get_closest_destinations(cur_latitude, cur_longitude):
     return errorResponse("no destinations found")
 
 @app.route('/api/destination/estimate/(<cur_latitude>,<cur_longitude>)(<dest_latitude>,<dest_longitude>)', methods=['GET'])
-def get_destimations_estimates(cur_latitude, cur_longitude, dest_latitude, dest_longitude):
+def get_destinations_estimates(cur_latitude, cur_longitude, dest_latitude, dest_longitude):
     if(not isNum(cur_latitude) or not isNum(cur_longitude) or not isNum(dest_latitude) or not isNum(dest_longitude)): return errorResponse("Invalid parameters")
 
     cur_longitude = float(cur_longitude)
@@ -270,13 +247,46 @@ def get_destimations_estimates(cur_latitude, cur_longitude, dest_latitude, dest_
     return errorResponse("no metrix available")
 
 
+"""
+    Paths
+"""
+
+@app.route('/api/paths', methods=['GET'])
+def get_all_paths():
+    all_paths_json = []
+    map_paths = Path().query.all()
+
+    if len(map_paths) > 0:
+        for map_path in map_paths:
+            startNode = Node.query.get(map_path.start)
+            endNode = Node.query.get(map_path.end)
+            json_path = {
+                'id': map_path.id,
+                'name': map_path.name,
+                'description': map_path.description,
+                'start_latitude_1': startNode.latitude_1,
+                'start_longitude_1': startNode.longitude_1,
+                'start_latitude_2': startNode.latitude_2,
+                'start_longitude_2': startNode.longitude_2,
+                'end_latitude_1': endNode.latitude_1,
+                'end_longitude_1': endNode.longitude_1,
+                'end_latitude_2': endNode.latitude_2,
+                'end_longitude_2': endNode.longitude_2,
+            }
+            all_paths_json.append(json_path)
+        return successResponse(all_paths_json)
+    # return if no path was found
+    return successResponse("no paths were found")
+
+
+
 # Jsonify the response and add it under the data field
 def successResponse(message):
     return jsonify({'data':message})
     
 # jsonify the response message with a error title
 def errorResponse(message):
-    return jsonify({'error':message})
+    return json.dumps({'error':message})
 
 
 # if __name__ == '__main__':
