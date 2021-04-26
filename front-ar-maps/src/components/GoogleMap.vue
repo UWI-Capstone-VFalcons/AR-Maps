@@ -1,8 +1,6 @@
 <template>
   <div> 
-    
-    <h3>Google Maps Demo</h3>
-    <!-- <h6>// https://www.youtube.com/watch?v=KARBEHUyooM</h6> -->
+        <!-- <h6>// https://www.youtube.com/watch?v=KARBEHUyooM</h6> -->
     <div id="user-location">
       <img src="../assets/images/icons/map-pin.svg">
       <h6>Location: </h6>
@@ -41,7 +39,7 @@
     v-for="(m, index) in markers"
     :position="m.position"
     :clickable="true"
-    :draggable="true"
+    :draggable="false"
     @click="center=m.position"
   />
 

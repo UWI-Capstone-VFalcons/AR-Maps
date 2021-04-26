@@ -11,13 +11,15 @@ from app.my_encoders import *
 
 
 """
+
     Routes
+  **********
+
 """
 
 @app.route('/', methods=['GET'])
 def defHome():
     return redirect(url_for("home"))
-
 
 @app.route('/nav', methods=['GET'])
 def ar():
@@ -48,14 +50,18 @@ def ar():
 def od_orientation():
     return render_template("od_orientation.html")
 
-"""
-    API EndPOints
-"""
-
 @app.route('/ar-find/', methods=['GET'])
 def ar_find():
     """Render camera with ar experience  <19/3/2021 N.Bedassie>"""
     return render_template("map.html")
+
+
+"""
+    
+    API EndPoints
+  ******************
+
+"""
 
 @app.route('/api/test')
 def home():
@@ -112,10 +118,8 @@ def get_building(building_id):
             'building_address2': building.address2,
             'building_address3': building.address3,
             'building_image': building.image_url,
-            # 'building_latittude': building.lattitude,
-            # 'building_longitude':building.longitude,
-            'building_latittude': 'lt98.7654',
-            'building_longitude':'lg12.3456',
+            'building_latittude': building.latitude,
+            'building_longitude':building.longitude,
             'building_info': building.info 
         }
 
@@ -151,7 +155,7 @@ def get_all_destinations():
                     'building_address2': building.address2,
                     'building_address3': building.address3,
                     'building_image': building.image_url,
-                    'building_latittude': building.lattitude,
+                    'building_latittude': building.latitude,
                     'building_longitude':building.longitude,
                     'building_info': building.info 
                 }
@@ -192,10 +196,8 @@ def get_closest_destinations(cur_latitude, cur_longitude):
                     'building_address2': building.address2,
                     'building_address3': building.address3,
                     'building_image': building.image_url,
-                    # 'building_latittude': building.lattitude,
-                    # 'building_longitude':building.longitude,
-                    'building_latittude': 'lt98.7654',
-                    'building_longitude':'lg12.3456',
+                    'building_latittude': building.latitude,
+                    'building_longitude':building.longitude,
                     'building_info': building.info 
                 }
             allBuildings.append(qrcode_data)
