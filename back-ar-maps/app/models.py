@@ -162,6 +162,7 @@ class Path(db.Model):
     def __repr__(self):
         return '<Path %r>' % self.id
 
+# The model saves how all the paths are connected
 class Path_Connection(db.Model):
     __tablename__ = 'path_connections'
     id = db.Column('path_connection_id', db.Integer, primary_key=True)
@@ -174,6 +175,24 @@ class Path_Connection(db.Model):
 
     def __repr__(self):
         return '<Path_Connection %r>' % self.id
+
+# The model saves the path that each building is connected to
+# and the area of the path to stop to get to the building
+class Path_Building_Connection(db.Model):
+    __tablename__ = 'path_building_connections'
+    id = db.Column('path_building_connection_id', db.Integer, primary_key=True)
+    building_id = db.Column(db.Integer, db.ForeignKey('buildings.building_id'), nullable=False)
+    path = db.Column(db.Integer, db.ForeignKey('paths.path_id'), nullable=False)
+    stop_node = db.Column(db.Integer, db.ForeignKey('nodes.node_id'), nullable=False)
+
+    def __init__(self, building_id=None, path=None, stop_node=None):
+        self.building_id = building_id
+        self.path = path
+        self.stop_node = stop_node
+
+    def __repr__(self):
+        return '<Path_Building_Connection %r>' % self.id
+
 
 # This model defines all the starting point locations
 # to the sci tech area

@@ -167,11 +167,44 @@ n5 = Node(
     longitude_2= -76.749733,
     description= "Mathematics department")  
 
+n6 = Node(
+    latitude_1=18.005218079955107,
+    longitude_1=-76.7494583129883,
+    latitude_2= 18.00519767309901,
+    longitude_2= -76.74942612648012,
+    description= "Sci-Tech Library stop point")  
+
+n7 = Node(
+    latitude_1=18.00510074050024,
+    longitude_1=-76.74967959523202,
+    latitude_2= 18.005075231912745,
+    longitude_2= -76.74965411424638,
+    description= "Sci-Tech SLT2 stop point")  
+
+n8 = Node(
+    latitude_1= 18.00522063081196,
+    longitude_1=-76.74983248114586,
+    latitude_2= 18.00520915195586,
+    longitude_2= -76.74985393881798,
+    description= "Sci-Tech SLT1 stop point")
+
+n9 = Node(
+    latitude_1=18.005349449034735,
+    longitude_1= -76.7499089241028,
+    latitude_2= 18.005343071897208,
+    longitude_2= -76.74992635846138,
+    description= "Sci-Tech Main Office stop point")    
+
 db.session.add(n1)
 db.session.add(n2)
 db.session.add(n3)
 db.session.add(n4)
 db.session.add(n5)
+db.session.add(n6)
+db.session.add(n7)
+db.session.add(n8)
+db.session.add(n9)
+
 
 # commit the insertions to the database
 db.session.commit()
@@ -225,6 +258,38 @@ pc3 = Path_Connection(
 db.session.add(pc1)
 db.session.add(pc2)
 db.session.add(pc3)
+
+# commit the insertions to the database
+db.session.commit()
+
+
+# add path building connection
+
+pbc1 = Path_Building_Connection(
+    building_id=1,
+    path=2,
+    stop_node=6)
+
+pbc2 = Path_Building_Connection(
+    building_id=2,
+    path=2,
+    stop_node=7)
+
+pbc3 = Path_Building_Connection(
+    building_id=3,
+    path=3,
+    stop_node=8)
+
+pbc4 = Path_Building_Connection(
+    building_id=4,
+    path=3,
+    stop_node=9)
+
+db.session.add(pbc1)
+db.session.add(pbc2)
+db.session.add(pbc3)
+db.session.add(pbc4)
+
 
 # commit the insertions to the database
 db.session.commit()
