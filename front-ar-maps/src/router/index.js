@@ -8,6 +8,7 @@ import BuildingInfo from '../views/buildinginfo.vue';
 
 
 
+
 Vue.use(VueRouter);
 
 const routes = [
