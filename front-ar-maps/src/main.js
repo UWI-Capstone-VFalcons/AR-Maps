@@ -7,11 +7,8 @@ import './assets/css/app.css';
 import * as VueGoogleMaps from 'vue2-google-maps'
 import VueGeolocation from 'vue-browser-geolocation'
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
-
-
- 
 Vue.use(VueGoogleMaps, {
   load: {
     key: 'AIzaSyB5QmIo_yG56_KI-WC91I1mmsyZ9cOZF9s',

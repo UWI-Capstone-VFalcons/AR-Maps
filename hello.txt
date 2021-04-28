@@ -1,0 +1,39 @@
+[
+    {
+        'building_id':1,
+        'building_name': 'A',
+        'building_type': 'LT',
+        'building_address1': "A1",
+        'building_address2': "A2",
+        'building_address3': "A3",
+        'building_image': "/i.jpeg",
+        'building_latittude': 'lt98.7654',
+        'building_longitude':'lg12.3456',
+        'building_info': "Near Mrs. Jackie" 
+    },
+    {
+        'building_id':2,
+        'building_name': 'B',
+        'building_type': 'LT',
+        'building_address1': "A1",
+        'building_address2': "A2",
+        'building_address3': "A3",
+        'building_image': "/i.jpeg",
+        'building_latittude': 'lt98.7654',
+        'building_longitude':'lg12.3456',
+        'building_info': "Near Mrs. Jackie" 
+    },
+    {
+        'building_id':3,
+        'building_name': 'C',
+        'building_type': 'LT',
+        'building_address1': "A1",
+        'building_address2': "A2",
+        'building_address3': "A3",
+        'building_image': "/i.jpeg",
+        'building_latittude': 'lt98.7654',
+        'building_longitude':'lg12.3456',
+        'building_info': "Near Mrs. Jackie" 
+    },
+    
+]

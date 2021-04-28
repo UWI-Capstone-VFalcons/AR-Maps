@@ -5,7 +5,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    color: #2c3e50;
+    /* color: #2c3e50; */
 }
 
 .main_bar{
@@ -14,13 +14,15 @@
 }
 
 #app-bar{
-    height: 3.5rem;
+    min-height: 10vh;
     width: 100%;
-    background-color: #00C5CD;
+    background-color: rgb(44, 105, 198,0.63);
     position: absolute;
+    /* position: relative; */
     top: 0;
     text-align: center;
     z-index: 10;
+    border-radius: 0rem 0rem 1.5rem 1.5rem ;
 }
 
 #v-title{
@@ -39,7 +41,7 @@
     position: absolute;
     top: 0;
     z-index: 1;
-    padding: 3.5rem 0rem;
+    /* padding: 3.5rem 0rem; */
     background-color: whitesmoke;
 }
 
