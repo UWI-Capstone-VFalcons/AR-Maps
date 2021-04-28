@@ -28,7 +28,7 @@ def client():
     with app.app_context():
         # populate the temporary database with fake data
         db.create_all()
-        building1 = building = Building('lecture room 1', 'classroom', 'just a test room',17.9834538,-76.7913445)
+        building1 = building = Building(name='lecture room 1', b_type='classroom', info='just a test room',latitude=17.983453,longitude=-76.791344)
         db.session.add(building1)
         db.session.commit()
     yield client
