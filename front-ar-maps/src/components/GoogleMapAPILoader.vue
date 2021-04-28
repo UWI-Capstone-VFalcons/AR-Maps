@@ -10,7 +10,6 @@
   </div>
 </template>
 
-
 <script>
 import GoogleMapsApiLoader from '@googlemaps/js-api-loader';
 
