@@ -44,7 +44,7 @@ def dist(coord_a, coord_b):
     return math.sqrt((coord_a[0] - coord_b[0])**2 + (coord_a[1] - coord_b[1])**2)
 
 # check if a location is inside a map area and return the area ID
-#  coordinate is in the form (lat, longitude)
+# coordinate is in the form (lat, longitude)
 def getMapArea(coordinate):
     latitude = coordinate[0]
     longitude = coordinate[1]

@@ -281,7 +281,6 @@ def get_all_paths():
     return successResponse("no paths were found")
 
 
-
 # Jsonify the response and add it under the data field
 def successResponse(message):
     return jsonify({'data':message})

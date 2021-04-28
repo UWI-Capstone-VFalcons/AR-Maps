@@ -194,7 +194,6 @@ class Path_Building_Connection(db.Model):
     def __repr__(self):
         return '<Path_Building_Connection %r>' % self.id
 
-
 # This model defines all the starting point locations
 # to the sci tech area
 class Starting_Point(db.Model):
