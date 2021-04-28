@@ -1,21 +1,21 @@
 <div id="bottom-nav" class="main_bar">
     <div class="nav-el">
       <a href="https://uwi-ar-maps.herokuapp.com/home">
-        <img src="../static/icons/home.svg" alt="home"/></a>
+        <img src="{{ url_for('static', filename='icons/home.svg') }}" alt="home"/></a>
     </div>
     <div class="nav-el">
       <a href="https://uwi-ar-maps.herokuapp.com/map">
-        <img src="../static/icons/map-pin.svg" alt="map"/>
+        <img src="{{ url_for('static', filename='icons/map-pin.svg') }}" alt="map"/>
       </a> 
     </div>
     <div class="nav-el">
       <a href="https://uwi-ar-maps.herokuapp.com/scan">
-        <img src="../static/icons/qr-code.svg" alt="scan"/>
+        <img src="{{ url_for('static', filename='icons/qr-code.svg') }}" alt="scan"/>
       </a> 
     </div>
     <div class="nav-el">
-      <a href="https://uwi-ar-maps.herokuapp.com/nav">
-        <img src="../static/icons/ar-view.svg" alt="ar"/>
+      <a href="/nav">
+        <img src="{{ url_for('static', filename='icons/ar-view.svg') }}" alt="ar"/>
       </a> 
     </div>
 </div>

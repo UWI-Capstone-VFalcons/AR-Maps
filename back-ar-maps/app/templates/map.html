@@ -20,37 +20,39 @@
         arjs="sourceType: webcam; debugUIEnabled: false;"
     >
         {% for building in buildings %}
-            <!-- <a-assets>
-                <a-entity geometry="primitive: plane; width: 4; height: auto"
-                        material="color: blue"
-                        text="value: This text will be 4 units wide."></a-entity>
-            </a-assets> -->
+            <a-assets>
+                <a-asset-item
+                    id="building-{{building.id}}"
+                    src="{{ url_for('static', filename='3d_model/sign.gltf')}}"
+                ></a-asset-item>
+            </a-assets>
 
             <a-entity
-                position="0 0 -1"
                 look-at="[gps-camera]"
-                geometry="primitive: plane; width: 30; height: auto"
-                material="color: white"
-                text="color: black; align: center; width: auto; height: 10; value: {{ building.name }};"
-                scale="0.14768864307354904 0.14768864307354904 0.14768864307354904"
+                gltf-model="#building-{{building.id}}"
+                scale="1 1 1"
+                text="value: {{building.name}}; color:black; side:double; width: 5;"
+                animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
                 gps-entity-place="latitude: {{building.latitude}}; longitude: {{building.longitude}};"
-            ></a-entity>
+            >
+            </a-entity>
+
         {% endfor %}
-
-        <!-- <a-assets>
-            <a-asset-item
-                id="animated-asset-2"
-                src="{{ url_for('static', filename='magnemite/scene.gltf')}}"
-            ></a-asset-item>
-        </a-assets>
-
-        <a-entity
-            look-at="[gps-camera]"
-            animation-mixer="loop: repeat"
-            gltf-model="#animated-asset-2"
-            scale="0.14768864307354904 0.14768864307354904 0.14768864307354904"
-            gps-entity-place="latitude: 17.954594228561096; longitude: -76.9048856513913;"
-        ></a-entity> -->
+        {% for node in nodes %}
+            <a-assets>
+                <a-asset-item
+                    id="node-{{node.id}}"
+                    src="{{ url_for('static', filename='3d_model/arrow.glb')}}"
+                ></a-asset-item>
+            </a-assets>
+            <a-entity
+                look-at="{{node.look_at}}"
+                gltf-model="#node-{{node.id}}"
+                scale="0.25 0.25 0.25"
+                gps-entity-place="latitude: {{node.latitude}}; longitude: {{node.longitude}};"
+            >
+            </a-entity>
+        {% endfor %}
 
         <a-camera gps-camera rotation-reader></a-camera>
     </a-scene>

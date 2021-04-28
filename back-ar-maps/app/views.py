@@ -2,11 +2,19 @@ import requests
 import os, datetime
 from flask import abort, jsonify, request, send_file, render_template, redirect, url_for, flash
 from werkzeug.utils import secure_filename
-import json
+import json,math
 from app import app, db, qrcode, Google_API_Key
 from app.models import *
 from app.forms import *
 from app.helper import *
+
+"""
+    Routes
+"""
+@app.route('/', methods=['GET'])
+def defHome():
+    return redirect(url_for("home"))
+
 
 @app.route('/nav', methods=['GET'])
 def ar():
@@ -21,8 +29,26 @@ def ar():
 
         return render_template("map.html", form=form, locationBuilding=locationBuilding,destinationBuilding=destinationBuilding)
     buildings = db.session.query(Building).all()
-    return render_template("map.html",form=form, buildings=buildings)
-    
+    nodes = db.session.query(Node).all()
+    node_list = []
+    for node in nodes:
+        node_list.append(vars(node))
+    node_len = len(node_list)
+    for i in range(node_len):
+        if i == 0:
+            node_list[i]["look_at"] = "[gps-camera]"
+        else:
+            node_list[i]["look_at"] = "#node-" + str(node_list[i-1]['id'])
+    return render_template("map.html",form=form, buildings=buildings, nodes=nodes)
+
+@app.route('/nav/OD/orientation', methods=['GET'])
+def od_orientation():
+    return render_template("od_orientation.html")
+
+"""
+    API EndPOints
+"""
+
 @app.route('/ar-find/', methods=['GET'])
 def ar_find():
     """Render camera with ar experience  <19/3/2021 N.Bedassie>"""
@@ -34,8 +60,6 @@ def home():
 
 @app.route('/api/buildingQR/<building_id>', methods=['GET'])
 def building_qr(building_id):
-
-    if (not isinstance(building_id, int) and not building_id.isnumeric()): abort(400)
     
     building = Building.query.get(building_id)
     if(not building is None):
@@ -91,6 +115,38 @@ def get_building(building_id):
         return successResponse(qrcode_data)
     return errorResponse("no such building found")
 
+def calculateShortestPath(coord_a, coord_b):
+    """
+    Calculate the shortest path between two locations using the nodes scattered around the 
+    area of interest.
+
+    Parameters
+        ----------
+        coord_a : tuple/list
+            the first pair of latitude and longitude (17.98321, -76.13138) or [17.13183, -77.13176]
+        coord_b : tuple/list
+            the second pair of latitube and longitude (17.98321, -76.13138) or [17.13183, -77.13176] 
+    """
+
+    # initialize graph
+    g = {"a":coord_a, "b":coord_b} # 1:[[2,.0123]]
+    nodes = db.session.query(Node).all()
+    for node in nodes:
+        break
+
+
+def dist(coord_a, coord_b):
+    """
+    Calculate the straight line distance between two gps coordinates
+
+    Parameters
+        ----------
+        coord_a : tuple/list
+            the first pair of latitude and longitude (17.98321, -76.13138) or [17.13183, -77.13176]
+        coord_b : tuple/list
+            the second pair of latitube and longitude (17.98321, -76.13138) or [17.13183, -77.13176] 
+    """
+    return math.sqrt((coord_a[0] - coord_b[0])**2 + (coord_a[1] - coord_b[1])**2)
 @app.route('/api/destinations', methods=['GET'])
 def get_all_destinations():
 
