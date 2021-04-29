@@ -11,10 +11,9 @@
         <label for="">Destination: </label>
         <select name="destinations" id="dd-dest">
           <option value="" disabled selected>Select Destination Here</option>
-          <option value="slt-1">SLT 1</option>
-          <option value="slt-2">SLT 2</option>
-          <option value="slt-3">SLT 3</option>
-          <option value="tech-lib">Science and Technology Library</option>
+          <option v-for="(building, index) in all_buildings" :key="index" :value="building.building_id">
+            {{building.building_name }} 
+          </option>
         </select>
         <button @click="findPath">Find Path</button>
       </form>
@@ -123,7 +122,7 @@ export default {
   },
   created(){
     // continously set the location data as it change
-    this.watchUserCoordinates(); 
+    // this.watchUserCoordinates(); 
   
     // add all the buildings when the map is creatred
     this.addAllBuildiings();
