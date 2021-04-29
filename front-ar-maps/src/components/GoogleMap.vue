@@ -131,12 +131,14 @@ export default {
     // set the user location name property
     this.setLocationName();
   },
+  
   watch:{
     userCoordinates: function(){
       console.log(this.userCoordinates);
       this.setLocationName();
     }
   },
+
   methods:{
     drawMarkers(){
       // this.markers = [
