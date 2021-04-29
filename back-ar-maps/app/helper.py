@@ -3,6 +3,7 @@ from app.models import *
 from shapely.geometry import Point, Polygon, MultiPoint
 from shapely.ops import nearest_points
 import numpy as np
+import math
 
 # check any value enter if it is a number
 def isNum( number ):
@@ -128,7 +129,6 @@ def closestPath(map_area_id, coordinate):
 def lineMidpoint(x1, x2, y1, y2):
     return ((x1 + x2) / 2,(y1 + y2) / 2)
 
-
 # This would find the closest starting point relative to the user location
 # and the destination. It would take the user location and destination id
 # return the starting point that is best for the user
@@ -172,9 +172,55 @@ def closestStartingPoint(coordinate, destination_building_id, map_area_id):
 def calculatePathMetrix(list_of_path_to_take):
     pass
 
+# check the path that the coordinates is on, if any
+def checkPath(user_loc, map_area):
+    """
+        Parameters
+        user_loc : tuple/list
+            pair of latitude and longitude (17.98321, -76.13138) or [17.13183, -77.13176]
+    """
+    latitude = float(user_loc[0])
+    longitude = float(user_loc[1])
+
+    paths = Path.query.filter(Path.map_area==map_area).all()
+    my_paths = []
+
+    for path in paths:
+        start = Node.query.filter_by(id=path.start).first()
+        end = Node.query.filter_by(id=path.end).first()
+        my_paths.append([start,end])
+
+    i = 0
+    for path in my_paths:  
+        path[0].latitude_1 = float(path[0].latitude_1)
+        path[0].latitude_2 = float(path[0].latitude_2)
+        path[1].latitude_1 = float(path[1].latitude_1)
+        path[1].latitude_2 = float(path[1].latitude_2)
+
+        path[0].longitude_1 = float(path[0].longitude_1)
+        path[0].longitude_2 = float(path[0].longitude_2)
+        path[1].longitude_1 = float(path[1].longitude_1)
+        path[1].longitude_2 = float(path[1].longitude_2)
+
+        path_fence = [
+            (path[0].latitude_1, path[0].longitude_1),
+            (path[0].latitude_2, path[0].longitude_2),
+            (path[1].latitude_1, path[1].longitude_1),
+            (path[1].latitude_2, path[1].longitude_2)
+        ]
+
+        path_polygon = Polygon(path_fence)
+        print(path_fence)
+
+        coordinate_point = Point(latitude, longitude)
+
+        if(coordinate_point.within(path_polygon)):
+            return paths[i]
+        i += 1
+    return None
+
 # This method gets the users map area,  starting path id and building destination
 # it uses dijkstras algorthim to create the shortest path after creating the path structure
 # The return value is a list of paths id in the order that the user should take
 def generateShortestPath(start_path_id, destination_building_id):
     return []
-

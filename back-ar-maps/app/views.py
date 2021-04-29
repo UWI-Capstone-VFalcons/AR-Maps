@@ -34,6 +34,7 @@ def ar():
 
         return render_template("map.html", form=form, locationBuilding=locationBuilding,destinationBuilding=destinationBuilding)
     buildings = db.session.query(Building).all()
+    form.myDestination.choices = [(b.id, b.name) for b in buildings]
     nodes = db.session.query(Node).all()
     node_list = []
     for node in nodes:
@@ -50,7 +51,11 @@ def ar():
 def od_orientation():
     return render_template("od_orientation.html")
 
-@app.route('/ar-find/', methods=['GET'])
+"""
+    API EndPOints
+"""
+
+@app.route('/nav/to/<float:des_lat>/<float:des_long>', methods=['GET'])
 def ar_find():
     """Render camera with ar experience  <19/3/2021 N.Bedassie>"""
     return render_template("map.html")
@@ -208,6 +213,17 @@ def get_location_name(cur_latitude, cur_longitude):
 """
     Destinations
 """
+
+def get_dist(coord_a, coord_b):
+    """
+    Parameters
+        ----------
+        coord_a : tuple/list
+            the first pair of latitude and longitude (17.98321, -76.13138) or [17.13183, -77.13176]
+        coord_b : tuple/list
+            the second pair of latitube and longitude (17.98321, -76.13138) or [17.13183, -77.13176] 
+    """
+    return math.sqrt((coord_a[0] - coord_b[0])**2 + (coord_a[1] - coord_b[1])**2)
 
 @app.route('/api/destinations', methods=['GET'])
 def get_all_destinations():
