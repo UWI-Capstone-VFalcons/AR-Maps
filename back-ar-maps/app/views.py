@@ -177,7 +177,26 @@ def get_location_name(cur_latitude, cur_longitude):
                     location_name = loc_address_result[1]["short_name"]+", "+loc_address_result[3]["short_name"]
                 else:
                     location_name = loc_address_result[0]["short_name"]+" "+loc_address_result[1]["short_name"]+", "+loc_address_result[3]["short_name"]
-                    
+            else:
+                # Get the place ID address information 
+                loc_address_link = "https://maps.googleapis.com/maps/api/geocode/json?latlng={},{}&language={}&key={}\
+                ".format(
+                    cur_latitude,
+                    cur_longitude,
+                    "en",
+                    Google_API_Key
+                )
+                loc_address_response = requests.get(loc_address_link)
+                loc_address_result  = loc_address_response.json()
+                if(len(loc_address_result["results"]) > 0):
+                    loc_address_result = loc_address_result["results"][0]["address_components"]
+
+                    if(loc_address_result[0]["long_name"]== "Unnamed Road"):
+                        location_name = loc_address_result[1]["short_name"]+", "+loc_address_result[3]["short_name"]
+                    else:
+                        location_name = loc_address_result[0]["short_name"]+" "+loc_address_result[1]["short_name"]+", "+loc_address_result[3]["short_name"]
+
+
             return successResponse({"name":location_name})
         except:
             e = sys.exc_info()[0]
