@@ -10,6 +10,7 @@ sys.path.append(parentdir)
 
 from app import app as armaps_app
 from app.models import *
+from app.helper import *
 
 from test_armaps_populate_test_db import client
 
@@ -27,10 +28,17 @@ from test_armaps_populate_test_db import client
 
 #     client = app.test_client()
 #     with app.app_context():
-#          db.create_all()
+#         db.create_all()
 #     yield client
 
 
-def test_qr_generation(client):
-    api_result = client.get("/api/buildingQR/1")
-    assert api_result.status_code == 200
+def test_getMapArea(client):
+    map_area1 = getMapArea((18.004736, -76.749702))
+    map_area2 = getMapArea((18.004039, -76.747125))
+    map_area3 = getMapArea((18.004881, -76.749043))
+    map_area4 = getMapArea((18.004074, -76.747291))
+
+    assert not map_area1 == None
+    assert     map_area2 == None
+    assert not map_area3 == None
+    assert     map_area4 == None

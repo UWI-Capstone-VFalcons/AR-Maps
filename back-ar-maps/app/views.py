@@ -1,20 +1,25 @@
 import requests
-import os, datetime
+import os, datetime, sys
 from flask import abort, jsonify, request, send_file, render_template, redirect, url_for, flash
 from werkzeug.utils import secure_filename
-import json,math
+import json, math
 from app import app, db, qrcode, Google_API_Key
 from app.models import *
 from app.forms import *
 from app.helper import *
+from app.my_encoders import *
+
 
 """
+
     Routes
+  **********
+
 """
+
 @app.route('/', methods=['GET'])
 def defHome():
     return redirect(url_for("home"))
-
 
 @app.route('/nav', methods=['GET'])
 def ar():
@@ -55,9 +60,21 @@ def ar_find():
     """Render camera with ar experience  <19/3/2021 N.Bedassie>"""
     return render_template("map.html")
 
+
+"""
+    
+    API EndPoints
+  ******************
+
+"""
+
 @app.route('/api/test')
 def home():
     return jsonify({"test":"Its working"})
+
+"""
+    Building
+"""
 
 @app.route('/api/buildingQR/<building_id>', methods=['GET'])
 def building_qr(building_id):
@@ -106,40 +123,78 @@ def get_building(building_id):
             'building_address2': building.address2,
             'building_address3': building.address3,
             'building_image': building.image_url,
-            # 'building_latittude': building.lattitude,
-            # 'building_longitude':building.longitude,
-            'building_latittude': 'lt98.7654',
-            'building_longitude':'lg12.3456',
+            'building_latittude': building.latitude,
+            'building_longitude':building.longitude,
             'building_info': building.info 
         }
 
         return successResponse(qrcode_data)
     return errorResponse("no such building found")
 
-def calculateShortestPath(coord_a, coord_b):
-    """
-    Calculate the shortest path between two locations using the nodes scattered around the 
-    area of interest.
+"""
+    Current Location
+"""
+@app.route('/api/location_name/<cur_latitude>,<cur_longitude>', methods=['GET'])
+def get_location_name(cur_latitude, cur_longitude):
+    if(not isNum(cur_latitude) or not isNum(cur_longitude)):  return errorResponse("coordinates are not nuumber")
+    
+    location_name = ""
+    cur_longitude = float(cur_longitude)
+    cur_latitude = float(cur_latitude)
+    # check if the user is inside of a map area
+    location_map_area =  getMapArea((cur_latitude,cur_longitude))
+    
+    if(not location_map_area  == None):
+        # find the path in the map area found that is closest
+        # to the coordinate
+        closest_path = closestPath(location_map_area.id, (cur_latitude, cur_longitude))
+        if(not closest_path == None):
+            location_name = closest_path.name +" path"
+        return successResponse({"name":location_name})
+        
+    else:
+        # if the location is outside of a map area get the location name from google
+        try:
+            # Get the nearest road the location is attached to 
+            nearest_road_link = "https://roads.googleapis.com/v1/nearestRoads?points={},{}&key={}\
+            ".format(
+                cur_latitude,
+                cur_longitude,
+                Google_API_Key
+            )
+            nearest_road_response = requests.get(nearest_road_link)
+            nearest_road_placeid = nearest_road_response.json()["snappedPoints"][0]["placeId"]
+            
+            # Get the place ID address information 
+            loc_address_link = "https://maps.googleapis.com/maps/api/geocode/json?place_id={}&language={}&key={}\
+            ".format(
+                nearest_road_placeid,
+                "en",
+                Google_API_Key
+            )
+            loc_address_response = requests.get(loc_address_link)
+            loc_address_result  = loc_address_response.json()
 
-    Parameters
-        ----------
-        coord_a : tuple/list
-            the first pair of latitude and longitude (17.98321, -76.13138) or [17.13183, -77.13176]
-        coord_b : tuple/list
-            the second pair of latitube and longitude (17.98321, -76.13138) or [17.13183, -77.13176] 
-    """
+            loc_address_result = loc_address_result["results"][0]["address_components"]
 
-    # initialize graph
-    g = {"a":coord_a, "b":coord_b} # 1:[[2,.0123]]
-    nodes = db.session.query(Node).all()
-    for node in nodes:
-        break
+            if(loc_address_result[0]["long_name"]== "Unnamed Road"):
+                location_name = loc_address_result[1]["short_name"]+", "+loc_address_result[3]["short_name"]
+            else:
+                location_name = loc_address_result[0]["short_name"]+" "+loc_address_result[1]["short_name"]+", "+loc_address_result[3]["short_name"]
+                
+            return successResponse({"name":location_name})
+        except:
+            e = sys.exc_info()[0]
+            print(e)
+            return errorResponse("Fail to connect to API or Error occured ")
+    return successResponse("no address or name available for location")
 
 
-def dist(coord_a, coord_b):
-    """
-    Calculate the straight line distance between two gps coordinates
+"""
+    Destinations
+"""
 
+<<<<<<< HEAD
     Parameters
         ----------
         coord_a : tuple/list
@@ -149,6 +204,8 @@ def dist(coord_a, coord_b):
     """
     return math.sqrt((coord_a[0] - coord_b[0])**2 + (coord_a[1] - coord_b[1])**2)
 
+=======
+>>>>>>> cbed71c2b6019b15211786e2a96407f760e0a6ed
 @app.route('/api/destinations', methods=['GET'])
 def get_all_destinations():
 
@@ -174,15 +231,13 @@ def get_all_destinations():
                     'building_address2': building.address2,
                     'building_address3': building.address3,
                     'building_image': building.image_url,
-                    # 'building_latittude': building.lattitude,
-                    # 'building_longitude':building.longitude,
-                    'building_latittude': 'lt98.7654',
-                    'building_longitude':'lg12.3456',
+                    'building_latittude': building.latitude,
+                    'building_longitude':building.longitude,
                     'building_info': building.info 
                 }
             allBuildings.append(qrcode_data)
         return successResponse(allBuildings)
-    return errorResponse("no destinations found")
+    return successResponse("no destinations found")
 
 @app.route('/api/closest/destination/<cur_latitude>,<cur_longitude>', methods=['GET'])
 def get_closest_destinations(cur_latitude, cur_longitude):
@@ -190,7 +245,7 @@ def get_closest_destinations(cur_latitude, cur_longitude):
     # building = Building("test2", "address1", "address2", "address3", "static/images/building/test.jpg", "b_type", "The Building info", 12.3556, 98.7654)
     # db.session.add(building)
     # db.session.commit()
-    if(not isNum(cur_latitude) or not isNum(cur_longitude)):  abort(400)
+    if(not isNum(cur_latitude) or not isNum(cur_longitude)):  return errorResponse("coordinates are not nuumber")
 
     cur_longitude = float(cur_longitude)
     cur_latitude = float(cur_latitude)
@@ -217,10 +272,8 @@ def get_closest_destinations(cur_latitude, cur_longitude):
                     'building_address2': building.address2,
                     'building_address3': building.address3,
                     'building_image': building.image_url,
-                    # 'building_latittude': building.lattitude,
-                    # 'building_longitude':building.longitude,
-                    'building_latittude': 'lt98.7654',
-                    'building_longitude':'lg12.3456',
+                    'building_latittude': building.latitude,
+                    'building_longitude':building.longitude,
                     'building_info': building.info 
                 }
             allBuildings.append(qrcode_data)
@@ -228,7 +281,7 @@ def get_closest_destinations(cur_latitude, cur_longitude):
     return errorResponse("no destinations found")
 
 @app.route('/api/destination/estimate/(<cur_latitude>,<cur_longitude>)(<dest_latitude>,<dest_longitude>)', methods=['GET'])
-def get_destimations_estimates(cur_latitude, cur_longitude, dest_latitude, dest_longitude):
+def get_destinations_estimates(cur_latitude, cur_longitude, dest_latitude, dest_longitude):
     if(not isNum(cur_latitude) or not isNum(cur_longitude) or not isNum(dest_latitude) or not isNum(dest_longitude)): return errorResponse("Invalid parameters")
 
     cur_longitude = float(cur_longitude)
@@ -269,7 +322,39 @@ def get_destimations_estimates(cur_latitude, cur_longitude, dest_latitude, dest_
         return successResponse(estimates)
     except:
         return errorResponse("Fail to connect to API or Error occured")
-    return errorResponse("no metrix available")
+    return successResponse("no metrix available")
+
+
+"""
+    Paths
+"""
+
+@app.route('/api/paths', methods=['GET'])
+def get_all_paths():
+    all_paths_json = []
+    map_paths = Path().query.all()
+
+    if len(map_paths) > 0:
+        for map_path in map_paths:
+            startNode = Node.query.get(map_path.start)
+            endNode = Node.query.get(map_path.end)
+            json_path = {
+                'id': map_path.id,
+                'name': map_path.name,
+                'description': map_path.description,
+                'start_latitude_1': startNode.latitude_1,
+                'start_longitude_1': startNode.longitude_1,
+                'start_latitude_2': startNode.latitude_2,
+                'start_longitude_2': startNode.longitude_2,
+                'end_latitude_1': endNode.latitude_1,
+                'end_longitude_1': endNode.longitude_1,
+                'end_latitude_2': endNode.latitude_2,
+                'end_longitude_2': endNode.longitude_2,
+            }
+            all_paths_json.append(json_path)
+        return successResponse(all_paths_json)
+    # return if no path was found
+    return successResponse("no paths were found")
 
 
 # Jsonify the response and add it under the data field
@@ -278,7 +363,7 @@ def successResponse(message):
     
 # jsonify the response message with a error title
 def errorResponse(message):
-    return jsonify({'error':message})
+    return json.dumps({'error':message})
 
 
 # if __name__ == '__main__':

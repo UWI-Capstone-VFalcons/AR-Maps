@@ -1,5 +1,6 @@
 <template>
   <div id="home">
+    <Test/>
     <div class="top">
       <img src="../assets/images/illustrations/navigate.svg">
     </div>
@@ -21,12 +22,13 @@
 // @ is an alias to /src
 // import HelloWorld from '@/components/HelloWorld.vue'
 import router from '@/router';
+import Test from '@/components/Test.vue';
 
 
 export default {
   name: 'Home',
   components: {
-    // HelloWorld
+     Test,
   },
 
   methods:{

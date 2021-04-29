@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_qrcode import QRcode
 from flask_cors import CORS
 import pymysql
+from .my_encoders import *
 
 
 app = Flask(__name__)
@@ -43,6 +44,9 @@ CORS(app, resources={r'/*': {'origins': '*'}})
 
 # Google API Keys
 Google_API_Key = "AIzaSyB5QmIo_yG56_KI-WC91I1mmsyZ9cOZF9s"
+
+# add Json encoders
+app.json_encoder = DecimalEncoder
 
 # import the views for flask
 from app import views, models

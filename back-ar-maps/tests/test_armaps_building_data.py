@@ -21,9 +21,9 @@ def test_new_building():
     WHEN a new User is created
     THEN check the email, hashed_password, and role fields are defined correctly
     """
-    building = Building('lecture room 1', 'classroom', 'just a test room',17.9834538,-76.7913445)
+    building = Building(name='lecture room 1', b_type='classroom', info='just a test room',latitude= 17.983453,longitude=-76.791344)
     assert building.name == 'lecture room 1'
     assert building.b_type == 'classroom'
     assert building.info == 'just a test room'
-    assert building.lattitude == 17.9834538
-    assert building.longitude == -76.7913445
+    assert building.latitude == 17.983453
+    assert building.longitude == -76.791344
