@@ -3,6 +3,7 @@ from app.models import *
 from shapely.geometry import Point, Polygon, MultiPoint
 from shapely.ops import nearest_points
 import numpy as np
+import math
 
 # check any value enter if it is a number
 def isNum( number ):
@@ -127,3 +128,49 @@ def closestPath(map_area_id, coordinate):
 # find the midpoint of two points 
 def lineMidpoint(x1, x2, y1, y2):
     return ((x1 + x2) / 2,(y1 + y2) / 2)
+
+def checkPath(user_loc, map_area):
+    """
+        Parameters
+        user_loc : tuple/list
+            pair of latitude and longitude (17.98321, -76.13138) or [17.13183, -77.13176]
+    """
+    latitude = float(user_loc[0])
+    longitude = float(user_loc[1])
+
+    paths = Path.query.filter(Path.map_area==map_area).all()
+    my_paths = []
+
+    for path in paths:
+        start = Node.query.filter_by(id=path.start).first()
+        end = Node.query.filter_by(id=path.end).first()
+        my_paths.append([start,end])
+
+    i = 0
+    for path in my_paths:  
+        path[0].latitude_1 = float(path[0].latitude_1)
+        path[0].latitude_2 = float(path[0].latitude_2)
+        path[1].latitude_1 = float(path[1].latitude_1)
+        path[1].latitude_2 = float(path[1].latitude_2)
+
+        path[0].longitude_1 = float(path[0].longitude_1)
+        path[0].longitude_2 = float(path[0].longitude_2)
+        path[1].longitude_1 = float(path[1].longitude_1)
+        path[1].longitude_2 = float(path[1].longitude_2)
+
+        path_fence = [
+            (path[0].latitude_1, path[0].longitude_1),
+            (path[0].latitude_2, path[0].longitude_2),
+            (path[1].latitude_1, path[1].longitude_1),
+            (path[1].latitude_2, path[1].longitude_2)
+        ]
+
+        path_polygon = Polygon(path_fence)
+        print(path_fence)
+
+        coordinate_point = Point(latitude, longitude)
+
+        if(coordinate_point.within(path_polygon)):
+            return paths[i]
+        i += 1
+    return None

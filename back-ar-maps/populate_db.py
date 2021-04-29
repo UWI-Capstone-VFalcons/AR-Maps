@@ -39,10 +39,20 @@ b4 = Building(
     latitude=18.005356,
     longitude=-76.749883)
 
+b5 = Building(
+    name='Aunty Jackie\'s Shop',
+    address1="2742+24", 
+    address2="Kingston, Jamaica", 
+    b_type="Stall", 
+    info="Aunty Jackie\'s Food and Supplies Shop",
+    latitude=18.005061,
+    longitude=-76.749630)
+
 db.session.add(b1)
 db.session.add(b2)
 db.session.add(b3)
 db.session.add(b4)
+db.session.add(b5)
 
 # commit the insertions to the database
 db.session.commit()
@@ -126,17 +136,17 @@ db.session.commit()
 
 # add nodes
 n1 = Node(
-    latitude_1=18.005656,
-    longitude_1=-76.748537,
-    latitude_2= 18.005612,
-    longitude_2= -76.748541,
+    latitude_1=18.005667,
+    longitude_1=-76.748556,
+    latitude_2= 18.005619,
+    longitude_2= -76.748535,
     description= "sci-tech entrance")
 
 n2 = Node(
-    latitude_1=18.005330317621468,
-    longitude_1=-76.74919009208679,
-    latitude_2= 18.00526399537271,
-    longitude_2= -76.74915790557861,
+    latitude_1=18.005377,
+    longitude_1= -76.749178,
+    latitude_2= 18.005335,
+    longitude_2= -76.749152,
     description= "sci-tech entrance")
 
 n3 = Node(
@@ -147,10 +157,10 @@ n3 = Node(
     description= "Miss.Jackie Stall")  
 
 n4 = Node(
-    latitude_1=18.005013,
-    longitude_1=-76.749707,
-    latitude_2= 18.005002,
-    longitude_2= -76.749733,
+    latitude_1=18.005075,
+    longitude_1=-76.749651,
+    latitude_2= 18.005029,
+    longitude_2= -76.749608,
     description= "Miss.Jackie Stall")  
 
 n4 = Node(
@@ -163,8 +173,8 @@ n4 = Node(
 n5 = Node(
     latitude_1=18.004602,
     longitude_1=-76.749443,
-    latitude_2= 18.005002,
-    longitude_2= -76.749733,
+    latitude_2= 18.004588,
+    longitude_2= -76.749468,
     description= "Mathematics department")  
 
 n6 = Node(
@@ -184,15 +194,15 @@ n7 = Node(
 n8 = Node(
     latitude_1= 18.00522063081196,
     longitude_1=-76.74983248114586,
-    latitude_2= 18.00520915195586,
-    longitude_2= -76.74985393881798,
+    latitude_2= 18.005205,
+    longitude_2=-76.749876,
     description= "Sci-Tech SLT1 stop point")
 
 n9 = Node(
     latitude_1=18.005349449034735,
     longitude_1= -76.7499089241028,
-    latitude_2= 18.005343071897208,
-    longitude_2= -76.74992635846138,
+    latitude_2= 18.005341,
+    longitude_2= -76.749938,
     description= "Sci-Tech Main Office stop point")    
 
 db.session.add(n1)

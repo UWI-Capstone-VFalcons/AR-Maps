@@ -54,7 +54,7 @@ class Event(db.Model):
 
 # The model define all nodes that are used in the paths
 class Node(db.Model):
-    __tablename__ = 'node'
+    __tablename__ = 'nodes'
     id = db.Column('node_id', db.Integer, primary_key=True)
     description = db.Column(db.Text)
     latitude_1 = db.Column(db.Numeric(9,6), nullable=False)
