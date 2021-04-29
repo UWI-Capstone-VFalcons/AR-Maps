@@ -3,7 +3,7 @@
         <!-- <h6>// https://www.youtube.com/watch?v=KARBEHUyooM</h6> -->
     <div id="user-location">
       <img src="../assets/images/icons/map-pin.svg">
-      <h6>Location: </h6>
+      <h6>Location: {{user_location_name}}</h6>
     </div>
 
     <div id="user-destination">
@@ -30,10 +30,11 @@
 
 
     <GmapMap
-      :center="centre"
-      :zoom="17"
+      :center="userCoordinates"
+      :zoom="zoom_level"
       style="width: 100%; height: 100vh;"
     >
+      <!-- Marker Window if it is clicked -->
       <GmapInfoWindow
       :options="infoWindow.options"
       :position="infoWindow.position"
@@ -43,6 +44,7 @@
       <div v-html="infoWindow.template"></div>
       </GmapInfoWindow>
 
+      <!-- Building Markers -->
       <GmapMarker
         :key="index"
         v-for="(m, index) in markers"
@@ -56,6 +58,17 @@
         @click="openInfoWindowTemplate(index)"
       />
 
+      <!-- User Marker -->
+      <GmapMarker
+        :key="userMarker.key"
+        :position="userCoordinates"
+        :title="userMarker.title"
+        :icon="userMarker.icon"
+        :animation="userMarker.animation"
+        :clickable="false"
+        :draggable="false"
+      />
+
       <gmap-polygon :paths="paths" >  
       </gmap-polygon>
     </GmapMap>
@@ -66,15 +79,12 @@
 <script>
 import axios from 'axios';
 
-const slt1 = {lat:18.005197, lng:-76.749908}
-const slt2 = {lat:18.005242, lng:-76.749795}
-const uwi = {lat:18.00619408233222, lng:-76.74683600360201}
-
 export default {
   name: 'GoogleMap',
   data(){
     return{
       // Google map variables
+      zoom_level:19,
       markers:[],
       paths:[],
       infoWindow:{
@@ -86,42 +96,61 @@ export default {
         open:false,
         template:'',
       },
-      centre:uwi,
-      myCoordinates:{
-        lat:0,
-        lng:0
-      },
       // database cached variables
       all_buildings:[],
       all_paths:[],
+      // user variables
+      userCoordinates:{
+        lat:18.00619408233222,
+        lng:-76.74683600360201,
+        accuracy:0
+      },
+      userMarker:{
+        key:"user",
+        title:"User",
+        icon: {
+          url: require('../assets/images/icons/map/user.png'),
+          scaledSize: {width: 25, height: 25, f: 'px', b: 'px',},
+          labelOrigin: {x:75, y:35},
+        },
+        animation:2,
+      },
+      location_avialable: false,
+      // navigation variables
+      destination:{},
+      user_location_name:""
     }
   },
   created(){
-    //get users coordinated from browser request
-    this.$getLocation({}) //Prompts the user to reveal the location to our app
-      .then(coordinates => {
-        // console.log(coordinates);
-        this.myCoordinates = coordinates;
-      })
-        .catch(error => alert(error));
-    
+    // continously set the location data as it change
+    this.watchUserCoordinates(); 
+  
     // add all the buildings when the map is creatred
     this.addAllBuildiings();
+
+    // set the user location name property
+    this.setLocationName();
+  },
+  watch:{
+    userCoordinates: function(){
+      console.log(this.userCoordinates);
+      this.setLocationName();
+    }
   },
   methods:{
     drawMarkers(){
-      this.markers = [
-        {
-          position:slt1,
-        },
-        {
-          position:slt2,
-        },
-      ];
+      // this.markers = [
+      //   {
+      //     position:slt1,
+      //   },
+      //   {
+      //     position:slt2,
+      //   },
+      // ];
     },
 
     drawDirection(){
-      this.paths=[slt1,slt2];
+      // this.paths=[slt1,slt2];
     },
 
     clearMap(){
@@ -130,6 +159,39 @@ export default {
     },
 
     findPath(){  
+
+    },
+
+    watchUserCoordinates(){
+      if ("geolocation" in navigator){
+        navigator.geolocation.watchPosition(position => {
+          this.userCoordinates = {
+            lat:position.coords.latitude,
+            lng:position.coords.longitude,
+            accuracy:position.coords.accuracy
+          }
+          this.location_avialable = true
+          // console.log(position);
+        }, err => {
+          const errorStr = err.message;
+          console.log(errorStr)
+        });
+      }else{
+        this.location_avialable = false;
+        console.log("Geolocation not available");
+      }
+    },
+
+    setLocationName(){
+      const path = this.$host+'api/test';
+      axios.get(path)
+        .then((res) => {
+          this.user_location_name = res.data.test;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
 
     },
     
@@ -149,12 +211,12 @@ export default {
                 label:{
                   text: this.all_buildings[i].building_name,
                   color: "#2270C4",
-                  fontSize: "12px",
+                  fontSize: "11px",
                 }, 
                 markerIcon: {
                   url: require('../assets/images/icons/map/building.png'),
                   // size: {width: 60, height: 90, f: 'px', b: 'px',},
-                  scaledSize: {width: 30, height: 30, f: 'px', b: 'px',},
+                  scaledSize: {width: 28, height: 28, f: 'px', b: 'px',},
                   // labelOrigin: {lat:this.all_buildings[i].building_latittude , lng:this.all_buildings[i].building_longitude},
                   // labelOrigin: {x:this.all_buildings[i].building_latittude-0.001, y:this.all_buildings[i].building_longitude-0.001},
                   labelOrigin: {x:75, y:35},
@@ -171,6 +233,8 @@ export default {
           console.error(error);
         });
     },
+
+    
     openInfoWindowTemplate(index) {
       const building = this.all_buildings[index];
       this.infoWindow.position = { lat: building.building_latittude, lng: building.building_longitude }
