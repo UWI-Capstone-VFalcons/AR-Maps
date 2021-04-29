@@ -295,15 +295,40 @@ db.session.add(pbc4)
 db.session.commit()
 
 # Add starting points
-sp = Starting_Point(
+sp1 = Starting_Point(
     name= "Juici Patty Entrance", 
+    map_area=1,
     latitude= 18.005642, 
     longitude= -76.748532)
 
-db.session.add(sp)
+sp2 = Starting_Point(
+    name= "Computing Department", 
+    map_area=1,
+    latitude= 18.005645, 
+    longitude= -76.749424)
+
+db.session.add(sp1)
+db.session.add(sp2)
 
 # commit the insertions to the database
 db.session.commit()
+
+
+#  Add startign point and path connections
+sppc1 = Path_Starting_Point_Connection(
+    starting_point_id=1,
+    path= 1)
+
+sppc2 = Path_Starting_Point_Connection(
+    starting_point_id=2,
+    path=2 )
+
+db.session.add(sppc1)
+db.session.add(sppc2)
+
+# commit the insertions to the database
+db.session.commit()
+
 
 # add OD objects
 odo1 = OD_Objects(

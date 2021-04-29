@@ -3,5 +3,5 @@ from app.helper import *
 from app.views import *
 
 if __name__ == '__main__':
-   a = closestPath(1, (18.004736, -76.749702))
+   a = closestStartingPoint((18.006684, -76.749459), 1,1)
    print(a)

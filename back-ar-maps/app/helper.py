@@ -127,3 +127,54 @@ def closestPath(map_area_id, coordinate):
 # find the midpoint of two points 
 def lineMidpoint(x1, x2, y1, y2):
     return ((x1 + x2) / 2,(y1 + y2) / 2)
+
+
+# This would find the closest starting point relative to the user location
+# and the destination. It would take the user location and destination id
+# return the starting point that is best for the user
+def closestStartingPoint(coordinate, destination_building_id, map_area_id):
+    # try:
+    latitude = float(coordinate[0])
+    longitude = float(coordinate[1])
+    # get the building and all the paths 
+    destination_building = Building.query.get(destination_building_id)
+    starting_points = Starting_Point.query.filter(Starting_Point.map_area == map_area_id).all()
+
+    # create starting point and building destination midpoints
+    if(len(starting_points) > 0 ):
+        starting_point_destin_mid = []
+        for starting_point in starting_points:
+            starting_point_destin_mid.append(lineMidpoint(
+                float(starting_point.latitude), 
+                float(destination_building.latitude), 
+                float(starting_point.longitude), 
+                float(destination_building.longitude)
+                )    
+            )
+        
+        starting_mids = MultiPoint(starting_point_destin_mid)
+
+        coordinate_point = Point(latitude, longitude)
+
+        closest_point = nearest_points(coordinate_point, starting_mids)
+        closest_point_index = starting_point_destin_mid.index(list(closest_point[1].coords)[0])
+        print(closest_point[1])
+        
+        return starting_points[closest_point_index]
+    # except:
+    #     pass
+    return None
+
+# This method takes a list of paths in the order from start to finish
+# It would then calculate the distance from the starting path to the ending path
+# and the time base on the average walking speed of a person
+# return the distance and the time as tuple (distance, time)
+def calculatePathMetrix(list_of_path_to_take):
+    pass
+
+# This method gets the users map area,  starting path id and building destination
+# it uses dijkstras algorthim to create the shortest path after creating the path structure
+# The return value is a list of paths id in the order that the user should take
+def generateShortestPath(start_path_id, destination_building_id):
+    return []
+

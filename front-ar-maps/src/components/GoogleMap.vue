@@ -7,26 +7,19 @@
     </div>
 
     <div id="user-destination">
-      <form action="">
-        <label for="">Destination: </label>
-        <select name="destinations" id="dd-dest">
-          <option value="" disabled selected>Select Destination Here</option>
-          <option v-for="(building, index) in all_buildings" :key="index" :value="building.building_id">
+      <div >
+        <label for="">Destination:</label>
+        <select name="destinations" id="dd-dest"  v-model="destination_id">
+          <option selected :value="null" disabled >Select Destination Here</option>
+          <option v-for="(building, index) in all_buildings" 
+          :key="index" 
+          :value="building.building_id">
             {{building.building_name }} 
           </option>
         </select>
         <button @click="findPath">Find Path</button>
-      </form>
+      </div>
     </div>
-
-    <div class="map-btns">
-      <button @click="drawMarkers"> Draw Markers </button>
-
-      <button @click="drawDirection"> Draw Direction </button>
-
-      <button @click="clearMap"> Clear Map</button>
-    </div>
-
 
     <GmapMap
       :center="userCoordinates"
@@ -116,7 +109,7 @@ export default {
       },
       location_avialable: false,
       // navigation variables
-      destination:{},
+      destination_id:null,
       user_location_name:""
     }
   },
@@ -135,6 +128,13 @@ export default {
     userCoordinates: function(){
       console.log(this.userCoordinates);
       this.setLocationName();
+    },
+
+    destination_id: function(to, from){
+      if(from != null){
+        this.markers[from-1].animation = 0
+      }
+      this.markers[to-1].animation = 1
     }
   },
 
@@ -160,7 +160,7 @@ export default {
     },
 
     findPath(){  
-
+      console.log("finding path")
     },
 
     watchUserCoordinates(){
@@ -185,10 +185,9 @@ export default {
 
     setLocationName(){
       const path = this.$host+'api/location_name/'+this.userCoordinates.lat+','+this.userCoordinates.lng;
-      console.log(path);
       axios.get(path)
         .then((res) => {
-          console.log(res);
+          // console.log(res);
           if(typeof res.data.error === 'undefined'){
             if(typeof res.data.data.name !== 'undefined'){
               this.user_location_name = res.data.data.name;
