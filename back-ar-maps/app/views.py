@@ -194,7 +194,8 @@ def get_location_name(cur_latitude, cur_longitude):
     Destinations
 """
 
-<<<<<<< HEAD
+def get_dist(coord_a, coord_b):
+    """
     Parameters
         ----------
         coord_a : tuple/list
@@ -204,8 +205,6 @@ def get_location_name(cur_latitude, cur_longitude):
     """
     return math.sqrt((coord_a[0] - coord_b[0])**2 + (coord_a[1] - coord_b[1])**2)
 
-=======
->>>>>>> cbed71c2b6019b15211786e2a96407f760e0a6ed
 @app.route('/api/destinations', methods=['GET'])
 def get_all_destinations():
 
