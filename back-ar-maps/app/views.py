@@ -1,5 +1,5 @@
 import requests
-import os, datetime
+import os, datetime, sys
 from flask import abort, jsonify, request, send_file, render_template, redirect, url_for, flash
 from werkzeug.utils import secure_filename
 import json, math
@@ -127,6 +127,65 @@ def get_building(building_id):
     return errorResponse("no such building found")
 
 """
+    Current Location
+"""
+@app.route('/api/location_name/<cur_latitude>,<cur_longitude>', methods=['GET'])
+def get_location_name(cur_latitude, cur_longitude):
+    if(not isNum(cur_latitude) or not isNum(cur_longitude)):  return errorResponse("coordinates are not nuumber")
+    
+    location_name = ""
+    cur_longitude = float(cur_longitude)
+    cur_latitude = float(cur_latitude)
+    # check if the user is inside of a map area
+    location_map_area =  getMapArea((cur_latitude,cur_longitude))
+    
+    if(not location_map_area  == None):
+        # find the path in the map area found that is closest
+        # to the coordinate
+        closest_path = closestPath(location_map_area.id, (cur_latitude, cur_longitude))
+        if(not closest_path == None):
+            location_name = closest_path.name +" path"
+        return successResponse({"name":location_name})
+        
+    else:
+        # if the location is outside of a map area get the location name from google
+        try:
+            # Get the nearest road the location is attached to 
+            nearest_road_link = "https://roads.googleapis.com/v1/nearestRoads?points={},{}&key={}\
+            ".format(
+                cur_latitude,
+                cur_longitude,
+                Google_API_Key
+            )
+            nearest_road_response = requests.get(nearest_road_link)
+            nearest_road_placeid = nearest_road_response.json()["snappedPoints"][0]["placeId"]
+            
+            # Get the place ID address information 
+            loc_address_link = "https://maps.googleapis.com/maps/api/geocode/json?place_id={}&language={}&key={}\
+            ".format(
+                nearest_road_placeid,
+                "en",
+                Google_API_Key
+            )
+            loc_address_response = requests.get(loc_address_link)
+            loc_address_result  = loc_address_response.json()
+
+            loc_address_result = loc_address_result["results"][0]["address_components"]
+
+            if(loc_address_result[0]["long_name"]== "Unnamed Road"):
+                location_name = loc_address_result[1]["short_name"]+", "+loc_address_result[3]["short_name"]
+            else:
+                location_name = loc_address_result[0]["short_name"]+" "+loc_address_result[1]["short_name"]+", "+loc_address_result[3]["short_name"]
+                
+            return successResponse({"name":location_name})
+        except:
+            e = sys.exc_info()[0]
+            print(e)
+            return errorResponse("Fail to connect to API or Error occured ")
+    return successResponse("no address or name available for location")
+
+
+"""
     Destinations
 """
 
@@ -169,7 +228,7 @@ def get_closest_destinations(cur_latitude, cur_longitude):
     # building = Building("test2", "address1", "address2", "address3", "static/images/building/test.jpg", "b_type", "The Building info", 12.3556, 98.7654)
     # db.session.add(building)
     # db.session.commit()
-    if(not isNum(cur_latitude) or not isNum(cur_longitude)):  abort(400)
+    if(not isNum(cur_latitude) or not isNum(cur_longitude)):  return errorResponse("coordinates are not nuumber")
 
     cur_longitude = float(cur_longitude)
     cur_latitude = float(cur_latitude)
@@ -246,7 +305,7 @@ def get_destinations_estimates(cur_latitude, cur_longitude, dest_latitude, dest_
         return successResponse(estimates)
     except:
         return errorResponse("Fail to connect to API or Error occured")
-    return errorResponse("no metrix available")
+    return successResponse("no metrix available")
 
 
 """

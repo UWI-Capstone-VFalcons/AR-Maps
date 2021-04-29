@@ -1,5 +1,8 @@
 from app import db, Google_API_Key
 from app.models import *
+from shapely.geometry import Point, Polygon, MultiPoint
+from shapely.ops import nearest_points
+import numpy as np
 
 # check any value enter if it is a number
 def isNum( number ):
@@ -46,8 +49,8 @@ def dist(coord_a, coord_b):
 # check if a location is inside a map area and return the area ID
 # coordinate is in the form (lat, longitude)
 def getMapArea(coordinate):
-    latitude = coordinate[0]
-    longitude = coordinate[1]
+    latitude = float(coordinate[0])
+    longitude = float(coordinate[1])
 
     map_areas  = MapArea.query.all()
 
@@ -63,40 +66,64 @@ def getMapArea(coordinate):
         map_area.longitude_3 = float(map_area.longitude_3)
         map_area.longitude_4 = float(map_area.longitude_4)
 
-        area_rectangle = 0.5 * abs(
-        #   y_A                          y_C                   x_D                   x_B
-        (map_area.longitude_1 - map_area.longitude_3) * (map_area.latitude_4 - map_area.latitude_2)
-        #    y_B                     y_D                        x_A                  x_C
-        + (map_area.longitude_2 - map_area.longitude_4) * (map_area.latitude_1 - map_area.latitude_3)
-        )
+        map_area_fence = [
+            (map_area.latitude_1, map_area.longitude_1),
+            (map_area.latitude_2, map_area.longitude_2),
+            (map_area.latitude_3, map_area.longitude_3),
+            (map_area.latitude_4, map_area.longitude_4)
+        ]
 
-        triangle1 = 0.5 * abs(
-        latitude * (map_area.longitude_1 - map_area.longitude_4)
-        + map_area.latitude_1 * (map_area.longitude_4 - longitude)
-        + map_area.latitude_4 * (longitude - map_area.longitude_1)
-        )
+        map_area_polygon = Polygon(map_area_fence)
 
-        triangle2 = 0.5 * abs(
-        latitude * (map_area.longitude_4 - map_area.longitude_3)
-        + map_area.latitude_4 * (map_area.longitude_3 - longitude)
-        + map_area.latitude_3 * (longitude - map_area.longitude_4)
-        )
+        coordinate_point = Point(latitude, longitude)
 
-        triangle3 = 0.5 * abs(
-        latitude * (map_area.longitude_3 - map_area.longitude_2)
-        + map_area.latitude_3 * (map_area.longitude_2 - longitude)
-        + map_area.latitude_2 * (longitude - map_area.longitude_3)
-        )
-
-        triangle4 = 0.5 * abs(
-        latitude * (map_area.longitude_2 - map_area.longitude_1)
-        + map_area.latitude_2 * (map_area.longitude_1 - longitude)
-        + map_area.latitude_1 * (longitude - map_area.longitude_2)
-        )
-
-        added_area = (triangle1 + triangle2 + triangle3 + triangle4)
-
-        if(area_rectangle < added_area):
+        if(coordinate_point.within(map_area_polygon)):
             return map_area
-
     return None
+
+# get the closest path in a map area that 
+# a point is close to
+# coordinates are in the form (lat, lng)
+def closestPath(map_area_id, coordinate):
+    latitude = float(coordinate[0])
+    longitude = float(coordinate[1])
+
+    paths = Path.query.filter(Path.map_area == map_area_id).all()
+    path_midpoints = []
+    if(len(paths)>0):
+        for path in paths:
+            start_node = Node.query.get(path.start)
+            end_node = Node.query.get(path.end)
+            # generate the midpoint from each node
+            start_mid = lineMidpoint(
+                float(start_node.latitude_1), 
+                float(start_node.latitude_2),
+                float(start_node.longitude_1), 
+                float(start_node.longitude_2))
+            
+            end_mid = lineMidpoint(
+                float(end_node.latitude_1), 
+                float(end_node.latitude_2),
+                float(end_node.longitude_1), 
+                float(end_node.longitude_2))
+
+            # find the midpoint of the path
+            path_midpoints.append(lineMidpoint(
+                start_mid[0],
+                end_mid[0], 
+                start_mid[1], 
+                end_mid[1]
+                )
+            )
+        destin_paths = MultiPoint(path_midpoints)
+        coordinate_point = Point(latitude, longitude)
+
+        closest_point = nearest_points(coordinate_point, destin_paths)
+        closest_point_index = path_midpoints.index(list(closest_point[1].coords)[0])
+        
+        return paths[closest_point_index]
+    return None
+
+# find the midpoint of two points 
+def lineMidpoint(x1, x2, y1, y2):
+    return ((x1 + x2) / 2,(y1 + y2) / 2)

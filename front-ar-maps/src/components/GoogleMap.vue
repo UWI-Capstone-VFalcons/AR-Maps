@@ -183,16 +183,23 @@ export default {
     },
 
     setLocationName(){
-      const path = this.$host+'api/test';
+      const path = this.$host+'api/location_name/'+this.userCoordinates.lat+','+this.userCoordinates.lng;
+      console.log(path);
       axios.get(path)
         .then((res) => {
-          this.user_location_name = res.data.test;
+          console.log(res);
+          if(typeof res.data.error === 'undefined'){
+            if(typeof res.data.data.name !== 'undefined'){
+              this.user_location_name = res.data.data.name;
+            }
+          }else{
+            console.log(res.data.error);
+          }
         })
         .catch((error) => {
           // eslint-disable-next-line
           console.error(error);
         });
-
     },
     
     addAllBuildiings(){
@@ -233,7 +240,6 @@ export default {
           console.error(error);
         });
     },
-
     
     openInfoWindowTemplate(index) {
       const building = this.all_buildings[index];

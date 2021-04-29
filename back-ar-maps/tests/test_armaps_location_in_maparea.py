@@ -33,8 +33,8 @@ def client():
             description="The science faculty of the Universiy of the west Indies",
             latitude_1= 18.003364,
             longitude_1= -76.749843,
-            latitude_2= 18.005936,
-            longitude_2= 18.005936, 
+            latitude_2= 18.005778,
+            longitude_2= -76.751507, 
             latitude_3= 18.006836,
             longitude_3= -76.749104,
             latitude_4= 18.004963,
@@ -46,10 +46,10 @@ def client():
 
 
 def test_getMapArea(client):
-    map_area1=  getMapArea((18.004736, -76.749702))
+    map_area1 = getMapArea((18.004736, -76.749702))
     map_area2 = getMapArea((18.004039, -76.747125))
     map_area3 = getMapArea((18.004881, -76.749043))
-    map_area4 = getMapArea(( 18.004074, -76.747291))
+    map_area4 = getMapArea((18.004074, -76.747291))
 
     assert not map_area1 == None
     assert     map_area2 == None
