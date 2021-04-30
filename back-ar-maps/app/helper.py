@@ -303,3 +303,34 @@ def shortestRoute(user_coord, building_id):
     return None
 
 
+    """
+    1) we will need to get all data 
+    - destination
+    - current location
+    - paths
+    - paths connection
+    - building path connectioon
+
+2) check if the user is insde of a map area and return the map area *
+    a) if the user is 
+        1) check if the user is on a path -
+            a) if they are then 
+                - use their current location as he starting point for calulation
+            b) if they are not 
+                - find the closes path to the users ,
+                then 
+ find the closes path to the users ,
+                then use that path statign point as the starting point for calculation
+                
+        continue to next step 
+    b) if not 
+        1) find the the closest starting relative to the destination and curentlocation -
+            - find the middle point between each starting point and destination ,
+             then find the the closest middle point to tghe use current location
+        2) user google distance matirx api to get the dist
+d
+distance and time to the starting point *
+        from the current user location
+        3) continue to next step 
+3) get the disatance, time and shortest path from the user's starting point to the destination - 
+    """
