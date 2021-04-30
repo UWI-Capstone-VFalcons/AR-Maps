@@ -379,31 +379,16 @@ def get_all_paths():
 def get_shortest_path_overhead(cur_latitude, cur_longitude, destination_id):    
     if(not isNum(cur_latitude) or not isNum(cur_longitude) or not isNum(destination_id)):  return errorResponse("All parameters must be numeric")
 
+    # convert the variables 
     cur_longitude = float(cur_longitude)
     cur_latitude = float(cur_latitude)
     cur_coordinate = (cur_latitude, cur_longitude)
     
-    # get the building and building map area
-    destin_building = Building.query.get(destination_id)
-
-    if(not destin_building == None):
-        try:
-            destin_coordinate = (destin_building.latitude, destin_building.longitude)
-            destin_building_map_area = getMapArea(destin_coordinate)
-        
-            # Check if the user is in any of the map area
-            user_map_area = getMapArea(cur_coordinate)
-            if(not user_map_area == None):
-                pass
-            else:
-                # if the user is not in one of the map areas, 
-                # find the closest starting point for the map area of the destination
-                best_startign_point = closestStartingPoint(cur_coordinate, destination_id, destin_building_map_area.id)
-                
-
-
-        except:
-            return errorResponse("faulty data was input")
+    try:
+        starting_path = shortestRoute(cur_coordinate, destination_id)
+        return successResponse(starting_path)
+    except:
+        return errorResponse("Error occured, report to the admin")
     return errorResponse("Invalid Request, destination not valid")
 
 

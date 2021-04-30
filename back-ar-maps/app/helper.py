@@ -13,26 +13,6 @@ def isNum( number ):
     except ValueError:
         return False
 
-# calculate the shortent path between two coordinates
-def calculateShortestPath(coord_a, coord_b):
-    """
-    Calculate the shortest path between two locations using the nodes scattered around the 
-    area of interest.
-
-    Parameters
-        ----------
-        coord_a : tuple/list
-            the first pair of latitude and longitude (17.98321, -76.13138) or [17.13183, -77.13176]
-        coord_b : tuple/list
-            the second pair of latitube and longitude (17.98321, -76.13138) or [17.13183, -77.13176] 
-    """
-
-    # initialize graph
-    g = {"a":coord_a, "b":coord_b} # 1:[[2,.0123]]
-    nodes = db.session.query(Node).all()
-    for node in nodes:
-        break
-
 # calculate the distance between two cordiates
 def dist(coord_a, coord_b):
     """
@@ -133,36 +113,36 @@ def lineMidpoint(x1, x2, y1, y2):
 # and the destination. It would take the user location and destination id
 # return the starting point that is best for the user
 def closestStartingPoint(coordinate, destination_building_id, map_area_id):
-    # try:
-    latitude = float(coordinate[0])
-    longitude = float(coordinate[1])
-    # get the building and all the paths 
-    destination_building = Building.query.get(destination_building_id)
-    starting_points = Starting_Point.query.filter(Starting_Point.map_area == map_area_id).all()
+    try:
+        latitude = float(coordinate[0])
+        longitude = float(coordinate[1])
+        # get the building and all the paths 
+        destination_building = Building.query.get(destination_building_id)
+        starting_points = Starting_Point.query.filter(Starting_Point.map_area == map_area_id).all()
 
-    # create starting point and building destination midpoints
-    if(len(starting_points) > 0 ):
-        starting_point_destin_mid = []
-        for starting_point in starting_points:
-            starting_point_destin_mid.append(lineMidpoint(
-                float(starting_point.latitude), 
-                float(destination_building.latitude), 
-                float(starting_point.longitude), 
-                float(destination_building.longitude)
-                )    
-            )
-        
-        starting_mids = MultiPoint(starting_point_destin_mid)
+        # create starting point and building destination midpoints
+        if(len(starting_points) > 0 ):
+            starting_point_destin_mid = []
+            for starting_point in starting_points:
+                starting_point_destin_mid.append(lineMidpoint(
+                    float(starting_point.latitude), 
+                    float(destination_building.latitude), 
+                    float(starting_point.longitude), 
+                    float(destination_building.longitude)
+                    )    
+                )
+            
+            starting_mids = MultiPoint(starting_point_destin_mid)
 
-        coordinate_point = Point(latitude, longitude)
+            coordinate_point = Point(latitude, longitude)
 
-        closest_point = nearest_points(coordinate_point, starting_mids)
-        closest_point_index = starting_point_destin_mid.index(list(closest_point[1].coords)[0])
-        print(closest_point[1])
-        
-        return starting_points[closest_point_index]
-    # except:
-    #     pass
+            closest_point = nearest_points(coordinate_point, starting_mids)
+            closest_point_index = starting_point_destin_mid.index(list(closest_point[1].coords)[0])
+            # print(closest_point[1])
+            
+            return starting_points[closest_point_index]
+    except:
+        pass
     return None
 
 # This method takes a list of paths in the order from start to finish
@@ -210,7 +190,7 @@ def checkPath(user_loc, map_area):
         ]
 
         path_polygon = Polygon(path_fence)
-        print(path_fence)
+        # print(path_fence)
 
         coordinate_point = Point(latitude, longitude)
 
@@ -219,8 +199,88 @@ def checkPath(user_loc, map_area):
         i += 1
     return None
 
-# This method gets the users map area,  starting path id and building destination
+
+# This method gets the users map area,  starting path id and building destination of type object
 # it uses dijkstras algorthim to create the shortest path after creating the path structure
 # The return value is a list of paths id in the order that the user should take
-def generateShortestPath(start_path_id, destination_building_id):
+def generateShortestRoute(start_path_id, destination_building, map_area):
+    # create graph from all the paths in the map area
+    
+    map_area_paths = Path.query.filter(Path.map_area == map_area).all()
+    map_area_paths_connection = []
+    for path in map_area_paths:
+        pcs = Path_Connection.query.filter(Path_Connection.path1 == path.id)
+        for pc in pcs:
+            map_area_paths_connection.append((pc.path1, pc.path2))
+    print(map_area_paths_connection)
     return []
+
+"""
+Calculate the shortest Route between two locations using the nodes scattered around the 
+area of interest.
+
+Parameters
+    ----------
+    user_coord : tuple/list
+        the first pair of latitude and longitude (17.98321, -76.13138) or [17.13183, -77.13176]
+    building_id : building object id 
+        in the form of an integer
+Return
+   --------
+   A tuple containing
+    - starting path,
+    - use starting point - a boolean to check if starting point would be used
+    - best starting point
+    - shortestRoute
+"""
+def shortestRoute(user_coord, building_id):
+    # get the building and building map area
+    starting_path = None
+    best_starting_point = None
+    use_starting_point =  False
+    shortestRoute = []
+
+    destin_building = Building.query.get(building_id)
+
+    if(not destin_building == None):
+        try:
+            """
+            First to try finding the best starting point to plan the route
+            """
+            destin_coordinate = (destin_building.latitude, destin_building.longitude)
+            destin_building_map_area = getMapArea(destin_coordinate)
+        
+            # Check if the user is in any of the map area
+            user_map_area = getMapArea(user_coord)
+            
+            if(not user_map_area == None):
+                # check the path that the user is on if they are in a map are
+                current_path = checkPath(user_coord, user_map_area.id)
+
+                if(not current_path == None):
+                    # use the path the user is on 
+                    starting_path = current_path.id
+                else:
+                    # get the closest path to the user if the user is not on a path
+                    user_closest_path = closestPath(user_map_area.id, user_coord)
+                    starting_path = user_closest_path.id
+            else:
+                # if the user is not in one of the map areas, 
+                # find the closest starting point for the map area of the destination
+                use_starting_point = True
+                best_starting_point = closestStartingPoint(user_coord, destination_id, destin_building_map_area.id)
+                # get path connected to the starting point 
+                PSPC = Path_Starting_Point_Connection.query.filter_by(starting_point_id=best_startign_point.id).first()
+                starting_path = PSPC.path
+
+            """
+                Generate the shortest route to thedestination
+            """
+            shortestRoute = generateShortestRoute(starting_path, destin_building, destin_building_map_area.id)
+            
+            return (starting_path, use_starting_point, best_starting_point, shortestRoute)
+        except:
+            pass
+    return None
+
+
