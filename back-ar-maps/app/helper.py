@@ -25,7 +25,25 @@ def dist(coord_a, coord_b):
         coord_b : tuple/list
             the second pair of latitube and longitude (17.98321, -76.13138) or [17.13183, -77.13176] 
     """
-    return math.sqrt((coord_a[0] - coord_b[0])**2 + (coord_a[1] - coord_b[1])**2)
+    lat1 = math.radians(coord_a[0])
+    lat2 = math.radians(coord_a[0])
+    lng1 = math.radians(coord_a[1])
+    lng2 = math.radians(coord_b[1])
+    
+    # Haversine formula
+    dlat = lat2 - lat1
+    dlng = lng2 - lng1
+
+    a = math.sin(dlat / 2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlng / 2)**2
+ 
+    distance_radians = 2 * math.asin(math.sqrt(a))
+
+    # Radius of earth in kilometers.
+    r_earth = 6371
+      
+    # calculate the distane in kilometers
+    return(distance_radians * r_earth)
+
 
 # check if a location is inside a map area and return the area ID
 # coordinate is in the form (lat, longitude)
@@ -199,38 +217,6 @@ def checkPath(user_loc, map_area):
         i += 1
     return None
 
-"""
-    1) we will need to get all data 
-    - destination
-    - current location
-    - paths
-    - paths connection
-    - building path connectioon
-
-    2) check if the user is insde of a map area and return the map area *
-    a) if the user is 
-        1) check if the user is on a path -
-            a) if they are then 
-                - use their current location as he starting point for calulation
-            b) if they are not 
-                - find the closes path to the users ,
-                then 
-    find the closes path to the users ,
-                then use that path statign point as the starting point for calculation
-                
-        continue to next step 
-    b) if not 
-        1) find the the closest starting relative to the destination and curentlocation -
-            - find the middle point between each starting point and destination ,
-                then find the the closest middle point to tghe use current location
-        2) user google distance matirx api to get the dist
-    d
-    distance and time to the starting point *
-        from the current user location
-        3) continue to next step 
-    3) get the disatance, time and shortest path from the user's starting point to the destination - 
-"""
-
 def postLengths(map_area):
     """
         Populate paths with lengths in database
@@ -258,6 +244,7 @@ def generateShortestRoute(start_path_id, destination_building, map_area):
         pcs = Path_Connection.query.filter(Path_Connection.path1 == path.id)
         for pc in pcs:
             map_area_paths_connection.append((pc.path1, pc.path2))
+
     print(map_area_paths_connection)
     return []
 
@@ -330,3 +317,34 @@ def shortestRoute(user_coord, building_id):
     return None
 
 
+    """
+    1) we will need to get all data 
+    - destination
+    - current location
+    - paths
+    - paths connection
+    - building path connectioon
+
+2) check if the user is insde of a map area and return the map area *
+    a) if the user is 
+        1) check if the user is on a path -
+            a) if they are then 
+                - use their current location as he starting point for calulation
+            b) if they are not 
+                - find the closes path to the users ,
+                then 
+ find the closes path to the users ,
+                then use that path statign point as the starting point for calculation
+                
+        continue to next step 
+    b) if not 
+        1) find the the closest starting relative to the destination and curentlocation -
+            - find the middle point between each starting point and destination ,
+             then find the the closest middle point to tghe use current location
+        2) user google distance matirx api to get the dist
+d
+distance and time to the starting point *
+        from the current user location
+        3) continue to next step 
+3) get the disatance, time and shortest path from the user's starting point to the destination - 
+    """
