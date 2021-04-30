@@ -25,7 +25,25 @@ def dist(coord_a, coord_b):
         coord_b : tuple/list
             the second pair of latitube and longitude (17.98321, -76.13138) or [17.13183, -77.13176] 
     """
-    return math.sqrt((coord_a[0] - coord_b[0])**2 + (coord_a[1] - coord_b[1])**2)
+    lat1 = math.radians(coord_a[0])
+    lat2 = math.radians(coord_a[0])
+    lng1 = math.radians(coord_a[1])
+    lng2 = math.radians(coord_b[1])
+    
+    # Haversine formula
+    dlat = lat2 - lat1
+    dlng = lng2 - lng1
+
+    a = math.sin(dlat / 2)**2 + math.cos(lat1) * math.cos(lat2) * math.sin(dlng / 2)**2
+ 
+    distance_radians = 2 * math.asin(math.sqrt(a))
+
+    # Radius of earth in kilometers.
+    r_earth = 6371
+      
+    # calculate the distane in kilometers
+    return(distance_radians * r_earth)
+
 
 # check if a location is inside a map area and return the area ID
 # coordinate is in the form (lat, longitude)
@@ -212,6 +230,7 @@ def generateShortestRoute(start_path_id, destination_building, map_area):
         pcs = Path_Connection.query.filter(Path_Connection.path1 == path.id)
         for pc in pcs:
             map_area_paths_connection.append((pc.path1, pc.path2))
+
     print(map_area_paths_connection)
     return []
 
