@@ -217,6 +217,20 @@ def checkPath(user_loc, map_area):
         i += 1
     return None
 
+def postLengths(map_area):
+    """
+        Populate paths with lengths in database
+    """
+    paths = Path.query.filter(Path.map_area==map_area).all()
+
+    for path in paths:
+        start = Node.query.filter_by(id=path.start).first()
+        end = Node.query.filter_by(id=path.end).first()
+        length_1 = dist([float(start.latitude_1), float(start.longitude_1)], [float(end.latitude_1),float(end.longitude_1)])
+        length_2 = dist([float(start.latitude_2),float(start.longitude_2)], [float(end.latitude_2),float(end.longitude_2)])
+        print((length_1 + length_2)/2)
+        # path.length = (length_1 + length_2)/2
+    # db.session.commit()
 
 # This method gets the users map area,  starting path id and building destination of type object
 # it uses dijkstras algorthim to create the shortest path after creating the path structure
