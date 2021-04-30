@@ -1,172 +1,203 @@
 <template>
   <div> 
-    <!-- <h6>// https://www.youtube.com/watch?v=KARBEHUyooM</h6> -->
-
-    <div id="app-bar" class="main_bar">
-      <div id="user-location">
-        <img src="../assets/images/icons/map-pin.svg">
-        <h6>{{destination_location}}</h6>
-      </div>
-      <div id="user-destination">
-        <form action="">
-          <label for="">Destination: </label>
-          <select name="destinations" id="dd-dest">
-            <option value="" disabled selected>Select Destination Here</option>
-            <option value="slt-1">SLT 1</option>
-            <option value="slt-2">SLT 2</option>
-            <option value="slt-3">SLT 3</option>
-            <option value="tech-lib">Science and Technology Library</option>
-          </select>
-          <button @click="findPath">Find Path</button>
-        </form>
-      </div>
+        <!-- <h6>// https://www.youtube.com/watch?v=KARBEHUyooM</h6> -->
+    <div id="user-location">
+      <img src="../assets/images/icons/map-pin.svg">
+      <h6>Location: {{user_location_name}}</h6>
     </div>
          
    
        
 
-    <!-- <div class="map-btns">
-      <button @click="drawMarkers"> Draw Markers </button>
-
-      <button @click="drawDirection"> Draw Direction </button>
-
-      <button @click="clearMap"> Clear Map</button>
-    </div> -->
+    <div id="user-destination">
+      <div >
+        <label for="">Destination:</label>
+        <select name="destinations" id="dd-dest"  v-model="destination_id">
+          <option selected :value="null" disabled >Select Destination Here</option>
+          <option v-for="(building, index) in all_buildings" 
+          :key="index" 
+          :value="building.building_id">
+            {{building.building_name }} 
+          </option>
+        </select>
+        <button @click="findPath">Find Path</button>
+      </div>
+    </div>
 
     <GmapMap
-  :center="centre"
-  :zoom="17"
-  style="width: 100%; height: 100vh;"
->
-  <GmapMarker
-    :key="index"
-    v-for="(m, index) in markers"
-    :position="m.position"
-    :clickable="true"
-    :draggable="false"
-    @click="center=m.position"
-  />
+      :center="userCoordinates"
+      :zoom="zoom_level"
+      style="width: 100%; height: 100vh;"
+    >
+      <!-- Marker Window if it is clicked -->
+      <GmapInfoWindow
+      :options="infoWindow.options"
+      :position="infoWindow.position"
+      :opened="infoWindow.open"
+      @closeclick="infoWindow.open=false"
+      >
+      <div v-html="infoWindow.template"></div>
+      </GmapInfoWindow>
 
-  <gmap-polygon :paths="paths" >  
-  </gmap-polygon>
-</GmapMap>
- 
+      <!-- Building Markers -->
+      <GmapMarker
+        :key="index"
+        v-for="(m, index) in markers"
+        :position="m.position"
+        :title="m.title"
+        :label="m.label"
+        :icon="m.markerIcon"
+        :animation="m.animation"
+        :clickable="true"
+        :draggable="false"
+        @click="openInfoWindowTemplate(index)"
+      />
+
+      <!-- User Marker -->
+      <GmapMarker
+        :key="userMarker.key"
+        :position="userCoordinates"
+        :title="userMarker.title"
+        :icon="userMarker.icon"
+        :animation="userMarker.animation"
+        :clickable="false"
+        :draggable="false"
+      />
+
+      <gmap-polygon :paths="paths" >  
+      </gmap-polygon>
+    </GmapMap>
+
   </div>
 </template>
 
 <script>
 import axios from 'axios';
 
-let buildings_ar_paths = [];
-let buildings_paths;
-const slt1 = {lat:18.005197, lng:-76.749908}
-const slt2 = {lat:18.005242, lng:-76.749795}
-
-
-
-
-
-const test = { lat: 18.005656,  lng: -76.748537}
-const test2 = { lat: 18.005612,lng: -76.748541}
-
-const test3 = {lat:18.00533,lng: -76.74919}
-const test4 = {lat: 18.005264, lng: -76.749158}
-
-
-const uwi = {lat:18.00619408233222, lng:-76.74683600360201}
-
-
-
-
-
 
 export default {
   name: 'GoogleMap',
   data(){
     return{
-      destination_location: 'Location:',
+      // Google map variables
+      zoom_level:19,
       markers:[],
-      centre:uwi,
       paths:[],
-      myCoordinates:{
-        lat:0,
-        lng:0
+      infoWindow:{
+        options: {
+          maxWidth: 300,
+          pixelOffset: { width: 0, height: -35 }
+        },
+        position:{lat:0, lng:0},
+        open:false,
+        template:'',
       },
+      // database cached variables
+      all_buildings:[],
+      all_paths:[],
+      // user variables
+      userCoordinates:{
+        lat:18.00619408233222,
+        lng:-76.74683600360201,
+        accuracy:0
+      },
+      userMarker:{
+        key:"user",
+        title:"User",
+        icon: {
+          url: require('../assets/images/icons/map/user.png'),
+          scaledSize: {width: 25, height: 25, f: 'px', b: 'px',},
+          labelOrigin: {x:75, y:35},
+        },
+        animation:2,
+      },
+      location_avialable: false,
+      // navigation variables
+      destination_id:null,
+      user_location_name:""
     }
   },
   created(){
-    //get users coordinated from browser request
-    this.$getLocation({}) //Prompts the user to reveal the location to our app
-      .then(coordinates => {
-        console.log(coordinates);
-        this.myCoordinates = coordinates;
-      })
-        .catch(error => alert(error));
+    // continously set the location data as it change
+    // this.watchUserCoordinates(); 
+  
+    // add all the buildings when the map is creatred
+    this.addAllBuildiings();
 
-      this.addPath();
-      // this.drawMarkers();
-      this.drawDirection();
-      this.print_path();
+    // set the user location name property
+    this.setLocationName();
   },
+  
+  watch:{
+    userCoordinates: function(){
+      console.log(this.userCoordinates);
+      this.setLocationName();
+    },
+
+    destination_id: function(to, from){
+      if(from != null){
+        this.markers[from-1].animation = 0
+      }
+      this.markers[to-1].animation = 1
+    }
+  },
+
   methods:{
     drawMarkers(){
-      this.markers = [
-        {
-          position:slt1,
-        },
-        {
-          position:slt2,
-        },
-      ];
+      // this.markers = [
+      //   {
+      //     position:slt1,
+      //   },
+      //   {
+      //     position:slt2,
+      //   },
+      // ];
     },
+
+    drawDirection(){
+      // this.paths=[slt1,slt2];
+    },
+
     clearMap(){
       this.paths = [];
       this.markers = [];
     },
-    findPath(){
 
+    findPath(){  
+      console.log("finding path")
     },
-    addPath(){
-      const path = this.$host+'api/paths';
-      
+
+    watchUserCoordinates(){
+      if ("geolocation" in navigator){
+        navigator.geolocation.watchPosition(position => {
+          this.userCoordinates = {
+            lat:position.coords.latitude,
+            lng:position.coords.longitude,
+            accuracy:position.coords.accuracy
+          }
+          this.location_avialable = true
+          // console.log(position);
+        }, err => {
+          const errorStr = err.message;
+          console.log(errorStr)
+        });
+      }else{
+        this.location_avialable = false;
+        console.log("Geolocation not available");
+      }
+    },
+
+    setLocationName(){
+      const path = this.$host+'api/location_name/'+this.userCoordinates.lat+','+this.userCoordinates.lng;
       axios.get(path)
         .then((res) => {
-          for(let i=0; i<res.data.data.length;i++){
-            // console.log(res.data.data[i])
-            // buildingName = res.data.data[i].name;
-            // buildingpos = 
-            
-            buildings_paths = [
-              {
-                pathName: res.data.data[i].name,
-                position: [
-                  {
-                    lat:res.data.data[i].start_latitude_1, 
-                    lng: res.data.data[i].start_longitude_1,
-                  },
-                  {
-                    lat:res.data.data[i].start_latitude_2, 
-                    lng: res.data.data[i].start_longitude_2
-                  },
-                  {
-                    lat:res.data.data[i].end_latitude_1, 
-                    lng: res.data.data[i].end_longitude_1
-                  },
-                  {
-                    lat:res.data.data[i].end_latitude_2, 
-                    lng: res.data.data[i].end_longitude_2
-                  }
-                ]
-
-              }
-            ]//End of building_paths
-            // console.log("Buliding Name:"+buildingName);
-            console.log(buildings_paths);
-            this.buildings_ar_paths.push(buildings_paths);
-            // this.paths=[buildings_paths.position[0],
-            //               buildings_paths.position[1],
-            //               buildings_paths.position[2],
-            //               buildings_paths.position[3]];
+          // console.log(res);
+          if(typeof res.data.error === 'undefined'){
+            if(typeof res.data.data.name !== 'undefined'){
+              this.user_location_name = res.data.data.name;
+            }
+          }else{
+            console.log(res.data.error);
           }
         })
         .catch((error) => {
@@ -174,26 +205,52 @@ export default {
           console.error(error);
         });
     },
-    print_path(){
-      // console.log("This is B-AR-Paths")
-      // console.log(buildings_ar_paths.length);
-      // console.log(buildings_ar_paths.push("Hello"));
-      // console.log(buildings_ar_paths.length);
+    
+    addAllBuildiings(){
+      const path = this.$host+'api/destinations';
+      axios.get(path)
+        .then((res) => {
+          this.all_buildings = res.data.data;
 
-      console.log(buildings_ar_paths);
-      // console.log(JSON.stringify(buildings_ar_paths, null, 2));
-      
-      // 
-      
-      console.log(buildings_paths);
+          // run a loop on the json list and create a
+          // marker for each building
+          if(this.all_buildings.length > 0){
+            for(var i = 0; i < this.all_buildings.length; i ++){
+              this.markers.push({
+                position: {lat:this.all_buildings[i].building_latittude , lng:this.all_buildings[i].building_longitude},
+                title: this.all_buildings[i].building_name,
+                label:{
+                  text: this.all_buildings[i].building_name,
+                  color: "#2270C4",
+                  fontSize: "11px",
+                }, 
+                markerIcon: {
+                  url: require('../assets/images/icons/map/building.png'),
+                  // size: {width: 60, height: 90, f: 'px', b: 'px',},
+                  scaledSize: {width: 28, height: 28, f: 'px', b: 'px',},
+                  // labelOrigin: {lat:this.all_buildings[i].building_latittude , lng:this.all_buildings[i].building_longitude},
+                  // labelOrigin: {x:this.all_buildings[i].building_latittude-0.001, y:this.all_buildings[i].building_longitude-0.001},
+                  labelOrigin: {x:75, y:35},
 
+                },
+                animation: 0
+              })
+            }
+          }
 
-    },
-    drawDirection(){
-      // slt1,slt2,
-      this.paths=[test,test2,test4,test3];
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
     },
     
+    openInfoWindowTemplate(index) {
+      const building = this.all_buildings[index];
+      this.infoWindow.position = { lat: building.building_latittude, lng: building.building_longitude }
+      this.infoWindow.template = `<b>${building.building_name}</b><br>${building.building_address1}<br>${building.building_address2} ${building.building_address3}<br>`
+      this.infoWindow.open = true
+    },
   }
 }
 </script>
