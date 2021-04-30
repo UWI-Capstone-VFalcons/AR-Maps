@@ -136,9 +136,9 @@ def get_building(building_id):
 """
 @app.route('/api/location_name/<cur_latitude>,<cur_longitude>', methods=['GET'])
 def get_location_name(cur_latitude, cur_longitude):
-    if(not isNum(cur_latitude) or not isNum(cur_longitude)):  return errorResponse("coordinates are not nuumber")
+    if(not isNum(cur_latitude) or not isNum(cur_longitude)):  return errorResponse("coordinates are not numbers")
     
-    location_name = ""
+    location_name = "Unname Location"
     cur_longitude = float(cur_longitude)
     cur_latitude = float(cur_latitude)
     # check if the user is inside of a map area
@@ -163,25 +163,45 @@ def get_location_name(cur_latitude, cur_longitude):
                 Google_API_Key
             )
             nearest_road_response = requests.get(nearest_road_link)
-            nearest_road_placeid = nearest_road_response.json()["snappedPoints"][0]["placeId"]
-            
-            # Get the place ID address information 
-            loc_address_link = "https://maps.googleapis.com/maps/api/geocode/json?place_id={}&language={}&key={}\
-            ".format(
-                nearest_road_placeid,
-                "en",
-                Google_API_Key
-            )
-            loc_address_response = requests.get(loc_address_link)
-            loc_address_result  = loc_address_response.json()
-
-            loc_address_result = loc_address_result["results"][0]["address_components"]
-
-            if(loc_address_result[0]["long_name"]== "Unnamed Road"):
-                location_name = loc_address_result[1]["short_name"]+", "+loc_address_result[3]["short_name"]
-            else:
-                location_name = loc_address_result[0]["short_name"]+" "+loc_address_result[1]["short_name"]+", "+loc_address_result[3]["short_name"]
+            if(not nearest_road_response.json() == {}):
+                nearest_road_placeid = nearest_road_response.json()["snappedPoints"][0]["placeId"]
                 
+                # Get the place ID address information 
+                loc_address_link = "https://maps.googleapis.com/maps/api/geocode/json?place_id={}&language={}&key={}\
+                ".format(
+                    nearest_road_placeid,
+                    "en",
+                    Google_API_Key
+                )
+                loc_address_response = requests.get(loc_address_link)
+                loc_address_result  = loc_address_response.json()
+
+                loc_address_result = loc_address_result["results"][0]["address_components"]
+
+                if(loc_address_result[0]["long_name"]== "Unnamed Road"):
+                    location_name = loc_address_result[1]["short_name"]+", "+loc_address_result[3]["short_name"]
+                else:
+                    location_name = loc_address_result[0]["short_name"]+" "+loc_address_result[1]["short_name"]+", "+loc_address_result[3]["short_name"]
+            else:
+                # Get the place ID address information 
+                loc_address_link = "https://maps.googleapis.com/maps/api/geocode/json?latlng={},{}&language={}&key={}\
+                ".format(
+                    cur_latitude,
+                    cur_longitude,
+                    "en",
+                    Google_API_Key
+                )
+                loc_address_response = requests.get(loc_address_link)
+                loc_address_result  = loc_address_response.json()
+                if(len(loc_address_result["results"]) > 0):
+                    loc_address_result = loc_address_result["results"][0]["address_components"]
+
+                    if(loc_address_result[0]["long_name"]== "Unnamed Road"):
+                        location_name = loc_address_result[1]["short_name"]+", "+loc_address_result[3]["short_name"]
+                    else:
+                        location_name = loc_address_result[0]["short_name"]+" "+loc_address_result[1]["short_name"]+", "+loc_address_result[3]["short_name"]
+
+
             return successResponse({"name":location_name})
         except:
             e = sys.exc_info()[0]
@@ -354,6 +374,22 @@ def get_all_paths():
         return successResponse(all_paths_json)
     # return if no path was found
     return successResponse("no paths were found")
+
+@app.route('/api/shortest_paths/overheadMap/<destination_id>,(<cur_latitude>,<cur_longitude>)', methods=['GET'])
+def get_shortest_path_overhead(cur_latitude, cur_longitude, destination_id):    
+    if(not isNum(cur_latitude) or not isNum(cur_longitude) or not isNum(destination_id)):  return errorResponse("All parameters must be numeric")
+
+    # convert the variables 
+    cur_longitude = float(cur_longitude)
+    cur_latitude = float(cur_latitude)
+    cur_coordinate = (cur_latitude, cur_longitude)
+    
+    try:
+        starting_path = shortestRoute(cur_coordinate, destination_id)
+        return successResponse(starting_path)
+    except:
+        return errorResponse("Error occured, report to the admin")
+    return errorResponse("Invalid Request, destination not valid")
 
 
 # Jsonify the response and add it under the data field

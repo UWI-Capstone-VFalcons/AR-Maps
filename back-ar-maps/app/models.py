@@ -200,16 +200,33 @@ class Starting_Point(db.Model):
     __tablename__ = 'starting_points'
     id = db.Column('sp_id', db.Integer, primary_key=True)
     name = db.Column(db.String(200), unique=True, nullable=False)
+    map_area = db.Column(db.Integer, db.ForeignKey('map_areas.map_area_id'), nullable=False)
     latitude = db.Column(db.Numeric(9,6), nullable=False)
     longitude =  db.Column(db.Numeric(9,6), nullable=False)
 
-    def __init__(self, name="unname", latitude=None, longitude=None):
+
+    def __init__(self, name="unname", map_area=None, latitude=None, longitude=None):
         self.name = name
+        self.map_area = map_area
         self.latitude = latitude
         self.longitude = longitude
 
     def __repr__(self):
         return '<Starting_Point %r>' % self.id
+
+# The model saves the path that each starting point is connected to
+class Path_Starting_Point_Connection(db.Model):
+    __tablename__ = 'path_starting_point_connections'
+    id = db.Column('path_building_connection_id', db.Integer, primary_key=True)
+    starting_point_id = db.Column(db.Integer, db.ForeignKey('starting_points.sp_id'), nullable=False)
+    path = db.Column(db.Integer, db.ForeignKey('paths.path_id'), nullable=False)
+
+    def __init__(self, starting_point_id=None, path=None):
+        self.starting_point_id = starting_point_id
+        self.path = path
+
+    def __repr__(self):
+        return '<Path_Starting_Point_Connection %r>' % self.id
 
 # This model would save all the objects that can be detected by 
 # the object detection model
