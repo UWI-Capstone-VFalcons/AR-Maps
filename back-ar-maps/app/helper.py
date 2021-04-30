@@ -41,9 +41,8 @@ def dist(coord_a, coord_b):
     # Radius of earth in kilometers.
     r_earth = 6371
       
-    # calculate the distane in kilometers
-    return(distance_radians * r_earth)
-
+    # calculate the distane in meters
+    return(distance_radians * r_earth)*1000
 
 # check if a location is inside a map area and return the area ID
 # coordinate is in the form (lat, longitude)
@@ -217,7 +216,7 @@ def checkPath(user_loc, map_area):
         i += 1
     return None
 
-def postLengths(map_area):
+def postPathLengths(map_area):
     """
         Populate paths with lengths in database
     """
@@ -226,27 +225,135 @@ def postLengths(map_area):
     for path in paths:
         start = Node.query.filter_by(id=path.start).first()
         end = Node.query.filter_by(id=path.end).first()
-        length_1 = dist([float(start.latitude_1), float(start.longitude_1)], [float(end.latitude_1),float(end.longitude_1)])
-        length_2 = dist([float(start.latitude_2),float(start.longitude_2)], [float(end.latitude_2),float(end.longitude_2)])
-        print((length_1 + length_2)/2)
-        # path.length = (length_1 + length_2)/2
-    # db.session.commit()
+        # get the length of the two side of the paths
+        length_1 = dist(
+            [float(start.latitude_1), 
+            float(start.longitude_1)], 
+            [float(end.latitude_1),
+            float(end.longitude_1)])
+        length_2 = dist(
+            [float(start.latitude_2),
+            float(start.longitude_2)], 
+            [float(end.latitude_2),
+            float(end.longitude_2)])
+        # find the average of the two lengths 
+        # and set it as the path length
+        avg_length = (length_1 + length_2)/2
+        path.length = avg_length
+        print(avg_length)
+    # save the changes to the database
+    db.session.commit()
 
 # This method gets the users map area,  starting path id and building destination of type object
 # it uses dijkstras algorthim to create the shortest path after creating the path structure
 # The return value is a list of paths id in the order that the user should take
-def generateShortestRoute(start_path_id, destination_building, map_area):
+def generateShortestRoute(start_path_id, destination_building_id, map_area):
     # create graph from all the paths in the map area
-    
-    map_area_paths = Path.query.filter(Path.map_area == map_area).all()
-    map_area_paths_connection = []
-    for path in map_area_paths:
-        pcs = Path_Connection.query.filter(Path_Connection.path1 == path.id)
-        for pc in pcs:
-            map_area_paths_connection.append((pc.path1, pc.path2))
+    # graph structure
+    pathRoutes = {}
+    allPaths_and_connections = {}
+    pathsToVisit = []
+    pathsToVisitLength = []
+    pathsToVisitRoute = []
 
-    print(map_area_paths_connection)
-    return []
+    vistedPaths = set([])
+    unvistedPaths = set([])
+
+    map_area_paths = Path.query.filter(Path.map_area == map_area).all()
+
+    # check if any of the path lengths are missing and update them all before continueing
+    for map_area_path in map_area_paths:
+        if map_area_path.length == None:
+            postPathLengths(map_area)
+            map_area_paths = Path.query.filter(Path.map_area == map_area).all()
+            break
+
+    # create a list with all the path connections and their length
+    for path in map_area_paths:
+        pcs1 = Path_Connection.query.filter(Path_Connection.path1 == path.id).all()
+        pcs2 = Path_Connection.query.filter(Path_Connection.path2 == path.id).all()
+
+        connections = [float(path.length), set([])]
+        for pc in pcs1:
+            connections[1].add(pc.path2)
+
+        for pc in pcs2:
+            if not pc.path1 in connections[1]:
+                connections[1].add(pc.path1)
+        connections[1] = list(connections[1])
+        unvistedPaths.add(path.id)
+        # add the connections to the path 
+        allPaths_and_connections[path.id]= connections
+
+        # add all the path routes 
+        pathRoutes[path.id]=[float('infinity'),[]]
+    
+    # add the starting point to the dictionarys
+    allPaths_and_connections[0] = [0, [start_path_id]]
+    pathRoutes[0]=[0,[]]
+
+
+    # DIJKSTRA'S algorithm
+    
+    # set the first route that is connected to the starting point
+    pathsToVisit += allPaths_and_connections[0][1]
+    pathsToVisitLength += [ 0+ allPaths_and_connections[pathsToVisit[0]][0]]
+    pathsToVisitRoute += [[pathsToVisit[0]]]
+    prevPathVisited = [0]
+
+    minimum_path_index = 0
+
+    while(len(pathsToVisit)>0):
+        # skip the path if the first is already visited
+        if pathsToVisit[0] in unvistedPaths:
+
+            # find the minimum path index
+            minLength = float('infinity')
+            for indx in range(len(pathsToVisit)):
+                if(pathsToVisitLength[indx] < minLength):
+                    minLength = pathsToVisitLength[indx]
+                    minimum_path_index = indx
+
+            # get the current path, prev path visited 
+            # the current length and current route for the pathe
+            # the current path would be the least expensive path
+            prev_path = prevPathVisited.pop(minimum_path_index)
+            current_path = pathsToVisit.pop(minimum_path_index)
+            current_length = pathsToVisitLength.pop(minimum_path_index)
+            current_route = pathsToVisitRoute.pop(minimum_path_index)
+
+            if(current_path in unvistedPaths):
+                vistedPaths.add(current_path) # add the current path to the visted list
+                unvistedPaths.remove(current_path) # remove current path from the unvisited list
+
+                # add the connecting paths and previous paths 
+                # if the path is not visted by priority 
+                # calculate the path lengths for each and plot the route
+                for path_id in allPaths_and_connections[current_path][1]:
+                    if(path_id in unvistedPaths):
+                        pathsToVisit.append(path_id)
+                        pathsToVisitLength.append(current_length +  allPaths_and_connections[path_id][0])
+                        pathsToVisitRoute.append(current_route+[path_id])
+                        prevPathVisited.append(current_path)
+
+                # create the new route
+                currentRoute = [current_length, current_route]
+
+                # add the route if the previous route for the path 
+                # is a greater cost 
+                if(pathRoutes[current_path][0]>currentRoute[0]):
+                    pathRoutes[current_path]= currentRoute
+
+        else:
+            # remove the duplicates
+            prevPathVisited.pop(0)
+            pathsToVisit.pop(0)
+
+    # Find the path that the destination is connect to 
+    # and return the route
+    pbc = Path_Building_Connection.query.filter_by(building_id=destination_building_id).first()
+    best_route_to_destination = pathRoutes[pbc.path]
+    return best_route_to_destination
 
 """
 Calculate the shortest Route between two locations using the nodes scattered around the 
@@ -301,50 +408,17 @@ def shortestRoute(user_coord, building_id):
                 # if the user is not in one of the map areas, 
                 # find the closest starting point for the map area of the destination
                 use_starting_point = True
-                best_starting_point = closestStartingPoint(user_coord, destination_id, destin_building_map_area.id)
+                best_starting_point = closestStartingPoint(user_coord, destin_building.id, destin_building_map_area.id)
                 # get path connected to the starting point 
-                PSPC = Path_Starting_Point_Connection.query.filter_by(starting_point_id=best_startign_point.id).first()
+                PSPC = Path_Starting_Point_Connection.query.filter_by(starting_point_id=best_starting_point.id).first()
                 starting_path = PSPC.path
 
             """
                 Generate the shortest route to thedestination
             """
-            shortestRoute = generateShortestRoute(starting_path, destin_building, destin_building_map_area.id)
+            shortestRoute = generateShortestRoute(starting_path, destin_building.id, destin_building_map_area.id)
             
             return (starting_path, use_starting_point, best_starting_point, shortestRoute)
         except:
             pass
     return None
-
-
-    """
-    1) we will need to get all data 
-    - destination
-    - current location
-    - paths
-    - paths connection
-    - building path connectioon
-
-2) check if the user is insde of a map area and return the map area *
-    a) if the user is 
-        1) check if the user is on a path -
-            a) if they are then 
-                - use their current location as he starting point for calulation
-            b) if they are not 
-                - find the closes path to the users ,
-                then 
- find the closes path to the users ,
-                then use that path statign point as the starting point for calculation
-                
-        continue to next step 
-    b) if not 
-        1) find the the closest starting relative to the destination and curentlocation -
-            - find the middle point between each starting point and destination ,
-             then find the the closest middle point to tghe use current location
-        2) user google distance matirx api to get the dist
-d
-distance and time to the starting point *
-        from the current user location
-        3) continue to next step 
-3) get the disatance, time and shortest path from the user's starting point to the destination - 
-    """
