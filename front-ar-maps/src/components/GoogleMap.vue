@@ -26,6 +26,24 @@
       :zoom="zoom_level"
       style="width: 100%; height: 100vh;"
     >
+      <!-- Draw all the paths that are not travelled on -->
+      <gmap-polygon
+        :key="'plg'+index"
+        v-for="(plg, index) in paths_polygon"
+        :editable="plg.editable"
+        :draggable="plg.draggable"
+        :options="plg.options"
+        :path="plg.path"
+      />  
+
+      <!-- Draw circle around user showing accuracy of reading -->
+      <GmapCircle
+        :key="'uc'+userMarker.key"
+        :center="userCoordinates"
+        :radius="(userCoordinates.accuracy+1)/1000"
+        :options="userMarker.circle.options"
+      />
+
       <!-- Marker Window if it is clicked -->
       <GmapInfoWindow
       :options="infoWindow.options"
@@ -38,7 +56,7 @@
 
       <!-- Building Markers -->
       <GmapMarker
-        :key="index"
+        :key="'m'+index"
         v-for="(m, index) in markers"
         :position="m.position"
         :title="m.title"
@@ -52,7 +70,7 @@
 
       <!-- User Marker -->
       <GmapMarker
-        :key="userMarker.key"
+        :key="'m'+userMarker.key"
         :position="userCoordinates"
         :title="userMarker.title"
         :icon="userMarker.icon"
@@ -61,8 +79,6 @@
         :draggable="false"
       />
 
-      <gmap-polygon :paths="paths" >  
-      </gmap-polygon>
     </GmapMap>
 
   </div>
@@ -78,7 +94,7 @@ export default {
       // Google map variables
       zoom_level:19,
       markers:[],
-      paths:[],
+      paths_polygon:[],
       infoWindow:{
         options: {
           maxWidth: 300,
@@ -106,6 +122,16 @@ export default {
           labelOrigin: {x:75, y:35},
         },
         animation:2,
+        circle:{
+          options:{
+            strokeColor: "#FF0000",
+            strokeOpacity: 0.2,
+            strokeWeight: 2,
+            fillColor: "#FF0000",
+            fillOpacity: 0.35,
+            visible:true,
+          },  
+        }
       },
       location_avialable: false,
       // navigation variables
@@ -119,6 +145,9 @@ export default {
   
     // add all the buildings when the map is creatred
     this.addAllBuildiings();
+
+    // add all the paths to the map
+    this.addAllPaths()
 
     // set the user location name property
     this.setLocationName();
@@ -239,6 +268,47 @@ export default {
           // eslint-disable-next-line
           console.error(error);
         });
+    },
+
+    addAllPaths(){
+      const url_path = this.$host+'api/paths';
+      axios.get(url_path)
+        .then((res) => {
+          this.all_paths = res.data.data;
+          for(var indx in this.all_paths){
+            // var path_id = this.all_paths[indx].id;
+            // var path_name = this.all_paths[indx].name;
+            var path_start_1 = {lat: this.all_paths[indx].start_latitude_1, lng: this.all_paths[indx].start_longitude_1};
+            var path_start_2 = {lat: this.all_paths[indx].start_latitude_2, lng: this.all_paths[indx].start_longitude_2};
+            var path_end_1 = {lat: this.all_paths[indx].end_latitude_1, lng: this.all_paths[indx].end_longitude_1};
+            var path_end_2 = {lat: this.all_paths[indx].end_latitude_2, lng: this.all_paths[indx].end_longitude_2};
+
+            this.paths_polygon.push({
+              draggable: false,
+              editable: false, 
+              options:{
+                strokeColor: "#FF0000",
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: "#FF0000",
+                fillOpacity: 0.35,
+              },
+              path:[
+                path_start_1,
+                path_start_2,
+                path_end_2,
+                path_end_1,
+                path_start_1
+              ],
+            });
+          }
+
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
+    
     },
     
     openInfoWindowTemplate(index) {
