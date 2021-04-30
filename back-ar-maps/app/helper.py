@@ -228,24 +228,38 @@ def postLengths(map_area):
         end = Node.query.filter_by(id=path.end).first()
         length_1 = dist([float(start.latitude_1), float(start.longitude_1)], [float(end.latitude_1),float(end.longitude_1)])
         length_2 = dist([float(start.latitude_2),float(start.longitude_2)], [float(end.latitude_2),float(end.longitude_2)])
-        print((length_1 + length_2)/2)
-        # path.length = (length_1 + length_2)/2
-    # db.session.commit()
+        path.length = (length_1 + length_2)/2
+    db.session.commit()
 
 # This method gets the users map area,  starting path id and building destination of type object
 # it uses dijkstras algorthim to create the shortest path after creating the path structure
 # The return value is a list of paths id in the order that the user should take
 def generateShortestRoute(start_path_id, destination_building, map_area):
     # create graph from all the paths in the map area
-    
+    # get all paths in map area
+    start_path = Path.query.filter_by(path_id=start_path_id).first()
     map_area_paths = Path.query.filter(Path.map_area == map_area).all()
     map_area_paths_connection = []
+    # for each path
     for path in map_area_paths:
-        pcs = Path_Connection.query.filter(Path_Connection.path1 == path.id)
+        # get path connections for that map area
+        pcs = Path_Connection.query.filter(Path_Connection.path1 == path.id or Path_Connection.path2 == path.id)
         for pc in pcs:
-            map_area_paths_connection.append((pc.path1, pc.path2))
-
+            map_area_paths_connection.append((Path.query.filter(Path.id == pc.path1).first(), Path.query.filter(Path.id == pc.path2).first()))
+    # get paths attached to destination
+    dest_paths = Path_Building_Connection.query.filter_by(building_id=destination_building.id).all()
     print(map_area_paths_connection)
+    print(dest_paths)
+    # Initialize visits
+    unvisited = map_area_paths_connections[:]
+    visited = []
+
+    # get path to destination
+    for path_con in unvisited:
+        if start_path in path_con:
+            visited.append(path_con)
+            unvisited.pop(unvisited.index(path_con))
+
     return []
 
 """
