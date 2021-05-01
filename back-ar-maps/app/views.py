@@ -382,10 +382,12 @@ def get_shortest_path_overhead(cur_latitude, cur_longitude, destination_id):
             "route": shortestPathDetail[3][1]
         }
         if(shortestPathDetail[1]):
-            shortest_path_response[ "starting_point_latitude"] = float(shortestPathDetail[2].latitude)
-            shortest_path_response["starting_point_longitude"] =  float(shortestPathDetail[2].longitude)
+            starting_point = shortestPathDetail[2]
+            starting_point_lat = float(starting_point.latitude)
+            starting_point_lng = float(starting_point.longitude)
+            shortest_path_response["starting_point_latitude"] = starting_point_lat
+            shortest_path_response["starting_point_longitude"] = starting_point_lng
 
-        print(metrix)
         if not metrix == None:
             shortest_path_response["metrix"] = metrix
 
