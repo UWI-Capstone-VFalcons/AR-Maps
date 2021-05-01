@@ -1,8 +1,7 @@
-import requests
 import os, datetime, sys
 from flask import abort, jsonify, request, send_file, render_template, redirect, url_for, flash
 from werkzeug.utils import secure_filename
-import json, math
+import json, math, requests
 from app import app, db, qrcode, Google_API_Key
 from app.models import *
 from app.forms import *
@@ -299,50 +298,33 @@ def get_closest_destinations(cur_latitude, cur_longitude):
         return successResponse(allBuildings)
     return errorResponse("no destinations found")
 
-@app.route('/api/destination/estimate/(<cur_latitude>,<cur_longitude>)(<dest_latitude>,<dest_longitude>)', methods=['GET'])
-def get_destinations_estimates(cur_latitude, cur_longitude, dest_latitude, dest_longitude):
-    if(not isNum(cur_latitude) or not isNum(cur_longitude) or not isNum(dest_latitude) or not isNum(dest_longitude)): return errorResponse("Invalid parameters")
+@app.route('/api/destination/estimate/(<cur_latitude>,<cur_longitude>)&<des_building_id>&<starting_point_id>&<route>', methods=['GET'])
+def get_destinations_estimates(cur_latitude, cur_longitude, des_building_id, starting_point_id, route):
+    if(not isNum(cur_latitude) or not isNum(cur_longitude) or not isNum(des_building_id) or not isNum(starting_point_id) or not type(route) == str): return errorResponse("Invalid parameters")
 
     cur_longitude = float(cur_longitude)
     cur_latitude = float(cur_latitude)
-    dest_longitude = float(dest_longitude)
-    dest_latitude = float(dest_latitude)
-    language = "en"
-    unit="metric"
-    mode ="walking"
+    cur_coord = (cur_latitude,cur_longitude)
 
-    # try requesting information from api
+    des_building_id = int(des_building_id)
+    starting_point_id = int(starting_point_id)
+
     try:
-        request_link = "https://maps.googleapis.com/maps/api/distancematrix/json?origins={},{}&destinations={},{}&mode={}&language={}&units={}&key={}\
-        ".format(
-            cur_latitude,
-            cur_longitude,
-            dest_latitude,
-            dest_longitude,
-            mode,
-            language,
-            unit,
-            Google_API_Key
-        )
-
-     
-        response = requests.get( request_link)
-
-        json_result  = response.json()
-
+        route = [int(x) for x in route.split(',')]
         estimates = "Bad Response"
 
-        if( json_result['rows'][0]["elements"][0]['status'] == "OK"):         
-            estimates = {
-                "distance": json_result['rows'][0]["elements"][0]['distance']['value'],
-                "time": json_result['rows'][0]["elements"][0]['duration']['value']
-                }
+        building = Building.query.get(des_building_id)
+        dest_coord = (float(building.latitude),float(building.longitude))
+
+        sp = Starting_Point.query.get(starting_point_id)
+        metrix = estimateDistanceAndTime(cur_coord, dest_coord, sp, route)
+
+        estimates = metrix
         
         return successResponse(estimates)
     except:
         return errorResponse("Fail to connect to API or Error occured")
     return successResponse("no metrix available")
-
 
 """
     Paths
@@ -375,7 +357,7 @@ def get_all_paths():
     # return if no path was found
     return successResponse("no paths were found")
 
-@app.route('/api/shortest_paths/overheadMap/<destination_id>,(<cur_latitude>,<cur_longitude>)', methods=['GET'])
+@app.route('/api/shortest_paths/overheadMap/<destination_id>&(<cur_latitude>,<cur_longitude>)', methods=['GET'])
 def get_shortest_path_overhead(cur_latitude, cur_longitude, destination_id):    
     if(not isNum(cur_latitude) or not isNum(cur_longitude) or not isNum(destination_id)):  return errorResponse("All parameters must be numeric")
 
@@ -383,10 +365,31 @@ def get_shortest_path_overhead(cur_latitude, cur_longitude, destination_id):
     cur_longitude = float(cur_longitude)
     cur_latitude = float(cur_latitude)
     cur_coordinate = (cur_latitude, cur_longitude)
-    
+
     try:
-        starting_path = shortestRoute(cur_coordinate, destination_id)
-        return successResponse(starting_path)
+        destination_id = int(destination_id)
+        building = Building.query.get(destination_id)
+        dest_coord = (float(building.latitude),float(building.longitude))
+
+        shortestPathDetail = shortestRoute(cur_coordinate, destination_id)
+
+        metrix = estimateDistanceAndTime(cur_coordinate, dest_coord, shortestPathDetail[2], shortestPathDetail[3][1])
+
+        # create dictionary for ouput
+        shortest_path_response = {
+            "starting_path":shortestPathDetail[0],
+            "use_starting_point": shortestPathDetail[1],
+            "route": shortestPathDetail[3][1]
+        }
+        if(shortestPathDetail[1]):
+            shortest_path_response[ "starting_point_latitude"] = float(shortestPathDetail[2].latitude)
+            shortest_path_response["starting_point_longitude"] =  float(shortestPathDetail[2].longitude)
+
+        print(metrix)
+        if not metrix == None:
+            shortest_path_response["metrix"] = metrix
+
+        return successResponse(shortest_path_response)
     except:
         return errorResponse("Error occured, report to the admin")
     return errorResponse("Invalid Request, destination not valid")
