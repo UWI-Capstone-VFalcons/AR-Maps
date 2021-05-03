@@ -1,11 +1,11 @@
 <template>
-  <div id="app">
-    <!-- Top Bar -->
+  <div >
 
-    <!-- <div id="app-bar" class="main_bar">
-      <h2 id="v-title">{{ title }}</h2> 
-         
-    </div> -->
+
+    <!-- Top Bar -->
+    <!-- <div id="app-bar" class="main_bar">  -->
+      <!-- <router-view /> -->
+    <!-- </div> -->
 
 
     <!-- Main Contnent area -->
@@ -30,11 +30,11 @@
           <img src="./assets/images/icons/qr-code.svg" alt="home"/>
         </div>
       </router-link>
+      <router-link to="/ar">
         <div class="nav-el">
-          <a href="./nav">
-            <img src="./assets/images/icons/ar-view.svg" alt="home"/>
-          </a>
+          <img src="./assets/images/icons/ar-view.svg" alt="home"/>
         </div>
+      </router-link>   
     </div>
   </div>
 </template>

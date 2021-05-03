@@ -1,6 +1,9 @@
 <template>
   <div id="home">
     <Test/>
+    <div id="app-bar" >
+      <h2 id="v-title">{{ title }}</h2>
+    </div>
     <div class="top">
       <img src="../assets/images/illustrations/navigate.svg">
     </div>
@@ -13,7 +16,6 @@
         @click="toMaps"
         >Find my destination</button> 
       </div>
-
     </div>
   </div>
 </template>
@@ -30,7 +32,11 @@ export default {
   components: {
      Test,
   },
-
+  data() {
+    return {
+      title: 'UWI AR Maps',
+    };
+  },
   methods:{
     toMaps: function(){
       router.push({ name: 'Map'});

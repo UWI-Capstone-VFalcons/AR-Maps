@@ -1,18 +1,17 @@
 <template>
-  <div> 
+  <div id="g-map-header"> 
         <!-- <h6>// https://www.youtube.com/watch?v=KARBEHUyooM</h6> -->
-    <div id="user-location">
-      <img src="../assets/images/icons/map-pin.svg">
-      <h6>Location: {{user_location_name}}</h6>
-    </div>
-         
-   
-       
+    
+      <div class="user-location">
+        <img class="loc-svg" src="../assets/images/icons/map-pin.svg">
+        <h6>Location: {{user_location_name}}</h6>
+        <input class = "user-loc-des" type="text">
+      </div>
 
-    <div id="user-destination">
-      <div >
+      <div class="user-destination">
+        <img class="loc-svg" src="../assets/images/icons/map-pin.svg">
         <label for="">Destination:</label>
-        <select name="destinations" id="dd-dest"  v-model="destination_id">
+        <select name="destinations" id="dd-dest" class = "user-loc-des"  v-model="destination_id">
           <option selected :value="null" disabled >Select Destination Here</option>
           <option v-for="(building, index) in all_buildings" 
           :key="index" 
@@ -20,14 +19,14 @@
             {{building.building_name }} 
           </option>
         </select>
-        <button @click="findPath">Find Path</button>
+        <!-- <button @click="findPath">Find Path</button> -->
       </div>
-    </div>
+    
 
     <GmapMap
       :center="userCoordinates"
       :zoom="zoom_level"
-      style="width: 100%; height: 100vh;"
+      style="width: 100%; height: 100vh; "
     >
       <!-- Marker Window if it is clicked -->
       <GmapInfoWindow
@@ -67,8 +66,8 @@
       <gmap-polygon :paths="paths" >  
       </gmap-polygon>
     </GmapMap>
+</div>
 
-  </div>
 </template>
 
 <script>
@@ -140,7 +139,7 @@ export default {
       }
       this.markers[to-1].animation = 1
     }
-  },
+},
 
   methods:{
     drawMarkers(){
