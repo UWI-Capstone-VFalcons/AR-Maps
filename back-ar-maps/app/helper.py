@@ -441,32 +441,77 @@ def getPositions(start, end):
     if end[0][0] < start[0][0]:
         #print(direct_1(start[0][0], interval*i))
         while direct_1(start[0][0], interval*i) > end[0][0] and direct_2(start[1][0], interval*i) > end[1][0]:
-            positions.append([direct_1(start[0][0], interval*i)])
-            positions.append([direct_2(start[1][0], interval*i)])
-            i += 2
+            # perhaps appending the average will give a good distance between the two nodes
+            positions.append([(direct_1(start[0][0], interval*i) + direct_2(start[1][0], interval*i))/2])
+            # positions.append([direct_2(start[1][0], interval*i)])
+            i += 1
     else:
         while direct_1(start[0][0], interval*i) < end[0][0] and direct_2(start[1][0], interval*i) < end[1][0]:
-            positions.append([direct_1(start[0][0], interval*i)])
-            positions.append([direct_2(start[1][0], interval*i)])
-            i += 2
+            positions.append([(direct_1(start[0][0], interval*i) + direct_2(start[1][0], interval*i))/2])
+            # positions.append([direct_2(start[1][0], interval*i)])
+            i += 1
     
     # Need to account for overflow of longitude without a check
+    # use interval binning
+    interval = ((dis_long_1 + dis_long_2)/2)/float(i)
     #Longitude
+    j = int(i)
     i = 0
     direct_1 = move(start[0][1], end[0][1])
     direct_2 = move(start[1][1], end[1][1])
     if end[0][1] < start[0][1]:
         #print(direct_1(start[0][0], interval*i))
-        while direct_1(start[0][0], interval*i) > end[0][0] and direct_2(start[1][0], interval*i) > end[1][0]:
-            positions[i].append(direct_1(start[0][1], interval*i))
-            positions[i+1].append(direct_2(start[1][1], interval*i))
-            i += 2
+        # while direct_1(start[0][0], interval*i) > end[0][0] and direct_2(start[1][0], interval*i) > end[1][0]:
+        while i < j:
+            positions[i].append((direct_1(start[0][1], interval*i) + direct_2(start[1][1], interval*i))/2)
+            # positions[i+1].append(direct_2(start[1][1], interval*i))
+            i += 1
     else:
-        while direct_1(start[0][0], interval*i) < end[0][0] and direct_2(start[1][0], interval*i) < end[1][0]:
-            positions[i].append(direct_1(start[0][1], interval*i))
-            positions[i+1].append(direct_2(start[1][1], interval*i))
-            i += 2
-    return positions
+        # while direct_1(start[0][0], interval*i) < end[0][0] and direct_2(start[1][0], interval*i) < end[1][0]:
+        while i < j:
+            positions[i].append((direct_1(start[0][1], interval*i) + direct_2(start[1][1], interval*i))/2)
+            # positions[i+1].append(direct_2(start[1][1], interval*i))
+            i += 1
+
+    # # Latitude
+    # i = 0
+    # direct_1 = move(start[0][0], end[0][0])
+    # direct_2 = move(start[1][0], end[1][0])
+    # if end[0][0] < start[0][0]:
+    #     #print(direct_1(start[0][0], interval*i))
+    #     while direct_1(start[0][0], interval*i) > end[0][0] and direct_2(start[1][0], interval*i) > end[1][0]:
+    #         # perhaps appending the average will give a good distance between the two nodes
+    #         positions.append([direct_1(start[0][0], interval*i)])
+    #         positions.append([direct_2(start[1][0], interval*i)])
+    #         i += 1
+    # else:
+    #     while direct_1(start[0][0], interval*i) < end[0][0] and direct_2(start[1][0], interval*i) < end[1][0]:
+    #         positions.append([direct_1(start[0][0], interval*i)])
+    #         positions.append([direct_2(start[1][0], interval*i)])
+    #         i += 1
+    
+    # # Need to account for overflow of longitude without a check
+    # # use interval binning
+    # interval = ((dis_long_1 + dis_long_2)/2)/float(i)
+    # #Longitude
+    # j = int(i)
+    # i = 0
+    # direct_1 = move(start[0][1], end[0][1])
+    # direct_2 = move(start[1][1], end[1][1])
+    # if end[0][1] < start[0][1]:
+    #     #print(direct_1(start[0][0], interval*i))
+    #     # while direct_1(start[0][0], interval*i) > end[0][0] and direct_2(start[1][0], interval*i) > end[1][0]:
+    #     while i < j:
+    #         positions[i].append(direct_1(start[0][1], interval*i))
+    #         positions[i+1].append(direct_2(start[1][1], interval*i))
+    #         i += 1
+    # else:
+    #     # while direct_1(start[0][0], interval*i) < end[0][0] and direct_2(start[1][0], interval*i) < end[1][0]:
+    #     while i < j:
+    #         positions[i].append(direct_1(start[0][1], interval*i))
+    #         positions[i+1].append(direct_2(start[1][1], interval*i))
+    #         i += 1
+    return (len(positions),positions)
 
 def absNeg(num):
     if num < 0:
