@@ -3,7 +3,7 @@ from app.models import *
 from shapely.geometry import Point, Polygon, MultiPoint
 from shapely.ops import nearest_points
 import numpy as np
-import math
+import math, requests
 
 # check any value enter if it is a number
 def isNum( number ):
@@ -216,6 +216,7 @@ def checkPath(user_loc, map_area):
         i += 1
     return None
 
+# calculate and add path length to database
 def postPathLengths(map_area):
     """
         Populate paths with lengths in database
@@ -476,3 +477,137 @@ def move(start, end):
     if start <= end:
         return lambda x,y: x + y
     return lambda x,y: x - y
+# get the distance and time between two coordiates 
+# with one being a destination in a map area
+# return the distance and time to reach the target
+# the coordinate are in the form (lat, lng)
+# the shortest route is a list with the routes in order
+def estimateDistanceAndTime(cur_coord, dest_coord, starting_point, shortest_route):
+    try:
+        cur_lat = float(cur_coord[0])
+        cur_lng = float(cur_coord[1])
+        cur_coord = (cur_lat, cur_lng)
+
+        dest_lat = float(dest_coord[0])
+        dest_lng = float(dest_coord[1])
+        dest_coord = (dest_lat, dest_lng)
+
+        # initialize variables
+        total_distance = 0
+        total_time = 0
+        track_start_path = None
+        average_walking_speed = 1.31 # this value is in meters/second
+
+        # check if the user is outside of a map area 
+        # if the user is outside a map area get distance 
+        # and time to the starting poing
+        map_area = getMapArea(cur_coord)
+        if(map_area == None):
+            language = "en"
+            unit="metric"
+            mode ="walking"
+
+            starting_point_lat = float(starting_point.latitude)
+            starting_point_lng = float(starting_point.longitude)
+
+            # try requesting information from api
+            try:
+                request_link = "https://maps.googleapis.com/maps/api/distancematrix/json?origins={},{}&destinations={},{}&mode={}&language={}&units={}&key={}\
+                ".format(
+                    cur_lat,
+                    cur_lng,
+                    starting_point_lat,
+                    starting_point_lng,
+                    mode,
+                    language,
+                    unit,
+                    Google_API_Key
+                )
+
+            
+                response = requests.get( request_link)
+
+                json_result  = response.json()
+
+                if( json_result['rows'][0]["elements"][0]['status'] == "OK"):      
+                    total_distance += json_result['rows'][0]["elements"][0]['distance']['value'] 
+                    total_time += json_result['rows'][0]["elements"][0]['duration']['value']
+
+                # set the starting path to the first element in the route
+                track_start_path = shortest_route[0]
+
+            except:
+                # exit the function and return all the values as  0 
+                # if an error occured while trying to fetch the metrix 
+                return {"distance":total_distance, "time":total_time}
+        else:
+
+            #find the best starting path to track from
+
+            # check if the user is on a path 
+            current_path = checkPath(cur_coord, map_area.id)
+            if(current_path == None):
+                # if the user is not currently on a path fetch
+                #  the closest path to the user is on 
+                closest_path = closestPath(map_area.id, cur_coord)
+
+                # check if the closest path is in the routes list
+                # if it is not return the first element
+                if(closest_path.id in shortest_route):
+                    track_start_path = closest_path.id
+                else:
+                    track_start_path = shortest_route[0]
+            else:
+                # get the total distance and time from 
+                # the persons current location until the end of their path
+                # if they are not on a pth in the list initalize the value to the first
+                if(current_path.id in shortest_route):
+                    current_distance = 0
+                    current_time = 0
+                    routes = shortest_route[:]
+
+                    for path_id in routes:
+                        if(path_id == current_path.id):
+                            # assummes that the user is trying to get to the end of the path
+                            e_node = Node.query.get(current_path.end)
+                            current_distance += dist(cur_coord, (float(e_node.latitude_1), float(e_node.longitude_1)))
+                            shortest_route.pop(0)
+                            track_start_path= shortest_route[0]
+                            
+                            # update the distance and time
+                            current_time += current_distance/average_walking_speed
+                            total_distance += current_distance
+                            total_time += current_time
+                            break
+                        else:
+                            shortest_route.pop(0) # romove the element to prevent loss in processing time rechecking
+                else:
+                    track_start_path = shortest_route[0]
+        
+        # use the starting point to the last path in the route to
+        # get the distance and time
+        internal_distance = 0
+        internal_time = 0
+        start_checking = False
+
+        for path_id in shortest_route:
+            if start_checking :
+                path = Path.query.get(path_id)
+                internal_distance += float(path.length)
+            else:
+                if path_id == track_start_path:
+                    start_checking = True
+                    path = Path.query.get(path_id)
+                    internal_distance += float(path.length)
+            
+        # calculate the total time
+        internal_time = internal_distance/average_walking_speed
+
+        # add internal to total
+        total_distance += internal_distance
+        total_time += internal_time    
+        return {"distance":total_distance, "time":total_time}
+
+    except:
+        pass
+    return None

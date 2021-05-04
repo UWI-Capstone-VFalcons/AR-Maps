@@ -36,6 +36,26 @@
         :path="plg.path"
       />  
 
+      <!-- Draw all the route the user should follow -->
+      <gmap-polygon
+        :key="'plg_r'+index_r"
+        v-for="(plg_r, index_r) in paths_route_polygon"
+        :editable="plg_r.editable"
+        :draggable="plg_r.draggable"
+        :options="plg_r.options"
+        :path="plg_r.path"
+      />  
+
+      <!-- Render the google generated route -->
+      <DirectionsRenderer 
+        :travelMode="travel_mode"
+        :origin="userCoordinates"
+        :destination="starting_point_coord"
+        :options="google_route_options"
+        :toggle="google_route_options.toggle"
+      
+      />
+
       <!-- Draw circle around user showing accuracy of reading -->
       <GmapCircle
         :key="'uc'+userMarker.key"
@@ -86,9 +106,16 @@
 
 <script>
 import axios from 'axios';
+import {gmapApi} from 'vue2-google-maps';
+import DirectionsRenderer from '../map_components/DirectionRenderer';
+
 
 export default {
   name: 'GoogleMap',
+  components: {DirectionsRenderer},
+  computed: {
+    google: gmapApi
+  },
   data(){
     return{
       // Google map variables
@@ -104,13 +131,35 @@ export default {
         open:false,
         template:'',
       },
+      // google map direction variables
+      paths_route_polygon:[],
+      travel_mode:"WALKING",
+      starting_point_coord:{
+        lat: 18.005636, 
+        lng: -76.748542
+      },
+      google_route_options: {
+        markerOptions:{
+          visible:false,
+        },
+        polylineOptions:{
+          strokeColor: "#FF00FF",
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: "#FF00FF",
+          fillOpacity: 0.35,
+        },
+        toggle:false
+      },
       // database cached variables
       all_buildings:[],
       all_paths:[],
+      best_route_data:{},
+      route_paths:[],
       // user variables
       userCoordinates:{
-        lat:18.00619408233222,
-        lng:-76.74683600360201,
+        lat: 18.005656, 
+        lng: -76.747472,  
         accuracy:0
       },
       userMarker:{
@@ -136,7 +185,8 @@ export default {
       location_avialable: false,
       // navigation variables
       destination_id:null,
-      user_location_name:""
+      user_location_name:"",
+      istracking: false,
     }
   },
   created(){
@@ -151,12 +201,19 @@ export default {
 
     // set the user location name property
     this.setLocationName();
+
+    // test fake walk
+    // this.testFakeWalk(-0.00005,-0.00005,5000)
+
   },
   
   watch:{
     userCoordinates: function(){
       console.log(this.userCoordinates);
       this.setLocationName();
+      if(this.istracking==true){
+        this.findPath();
+      }
     },
 
     destination_id: function(to, from){
@@ -168,28 +225,71 @@ export default {
   },
 
   methods:{
-    drawMarkers(){
-      // this.markers = [
-      //   {
-      //     position:slt1,
-      //   },
-      //   {
-      //     position:slt2,
-      //   },
-      // ];
-    },
-
-    drawDirection(){
-      // this.paths=[slt1,slt2];
-    },
-
-    clearMap(){
-      this.paths = [];
-      this.markers = [];
-    },
-
     findPath(){  
-      console.log("finding path")
+      const path = this.$host+'/api/shortest_paths/overheadMap/'+this.destination_id+'&('+this.userCoordinates.lat+','+this.userCoordinates.lng+')';
+      axios.get(path)
+        .then((res) => {
+          
+          //clear any previous path
+          this.paths_route_polygon = []
+          this.route_paths = []
+           // turn off tracking
+          this.istracking = false; 
+
+          // console.log(res.data.data);
+          this.best_route_data = res.data.data
+
+          // generate path user should follow
+          for(var indx_a in this.all_paths){
+            if(this.best_route_data.route.includes(this.all_paths[indx_a].id)){
+              this.route_paths.push(this.all_paths[indx_a])
+            }
+          }
+          
+          // draw the paths on the map
+          for(var indx in this.route_paths){
+            // var path_id = this.route_paths[indx].id;
+            // var path_name = this.route_paths[indx].name;
+            var path_start_1 = {lat: this.route_paths[indx].start_latitude_1, lng: this.route_paths[indx].start_longitude_1};
+            var path_start_2 = {lat: this.route_paths[indx].start_latitude_2, lng: this.route_paths[indx].start_longitude_2};
+            var path_end_1 = {lat: this.route_paths[indx].end_latitude_1, lng: this.route_paths[indx].end_longitude_1};
+            var path_end_2 = {lat: this.route_paths[indx].end_latitude_2, lng: this.route_paths[indx].end_longitude_2};
+
+            this.paths_route_polygon.push({
+              draggable: false,
+              editable: false, 
+              options:{
+                strokeColor: "#FF00FF",
+                strokeOpacity: 0.8,
+                strokeWeight: 2,
+                fillColor: "#FF00FF",
+                fillOpacity: 0.35,
+              },
+              path:[
+                path_start_1,
+                path_start_2,
+                path_end_2,
+                path_end_1,
+                path_start_1
+              ],
+            });
+          }
+
+          // activate google direction renderer if the person is outside scit tech
+          if(this.best_route_data.use_starting_point == true){
+            console.log("here3")
+            this.starting_point_coord.lat = this.best_route_data.starting_point_latitude;
+            this.starting_point_coord.lng = this.best_route_data.starting_point_longitude;
+            this.google_route_options.toggle = true;
+          }
+
+          // turn on tracking
+          this.istracking = true;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
+        });
     },
 
     watchUserCoordinates(){
@@ -317,6 +417,26 @@ export default {
       this.infoWindow.template = `<b>${building.building_name}</b><br>${building.building_address1}<br>${building.building_address2} ${building.building_address3}<br>`
       this.infoWindow.open = true
     },
+
+    testFakeWalk(x=1, y=1, delay=1000){
+      // let cur_cord = this.userCoordinates;
+      this.polling = setInterval(() => {
+        let point = new this.google.maps.Point(
+        this.userCoordinates.lat + x,
+        this.userCoordinates.lng + y) 
+          
+        this.userCoordinates.lat = point.x;
+        this.userCoordinates.lng = point.y;
+
+        this.setLocationName();
+        console.log("here1");
+        if(this.istracking==true){
+          console.log("here2");
+          this.findPath();
+        }
+      }, delay);
+    },
+
   }
 }
 </script>

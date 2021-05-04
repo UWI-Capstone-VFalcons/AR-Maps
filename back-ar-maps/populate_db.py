@@ -265,9 +265,14 @@ pc3 = Path_Connection(
     path1=2,
     path2=4)
 
+pc4 = Path_Connection(
+    path1=3,
+    path2=4)
+
 db.session.add(pc1)
 db.session.add(pc2)
 db.session.add(pc3)
+db.session.add(pc4)
 
 # commit the insertions to the database
 db.session.commit()
