@@ -412,17 +412,23 @@ def get_shortest_path_ar(cur_latitude, cur_longitude, destination_id):
     
     try:
         route = shortestRoute(cur_coordinate, destination_id) 
-        # returns tuple with 4 values (starting point, use_starting_point, sp, shortest route)
+        # returns tuple with 4 values (starting_path, use_starting_point, best_starting_point, shortest route)
+
+        if route[1]: # get distance and time
+            meta = estimateDistanceAndTime(cur_coordinate, dest_coord, route[2], route[3])
+        
         paths = []
         positions = [] # 3D objects placed 2 meters apart(just randomly chosen)
-        for pid in route[4]:
+        for pid in route[3]:
             paths.append(Path.query.filter_by(path_id=pid).first())
         for path in paths:
             start = Node.query.filter_by(id=path.start).first()
             end = Node.query.filter_by(id=path.end).first()
             result = getPositions([(start.latitude_1, start.longitude_1), (start.latitude_2,start.longitude_2)], [(end.latitude_1, end.longitude_1),(end.latitude_2, end.longitude_2)])
             positions.append(result)
-        return successResponse(positions)
+        if(meta):
+            return successResponse({"route": route, "positions":positions, "meta": meta})
+        return successResponse({"route": route, "positions":positions})
     except:
         return errorResponse("Error occured, report to the admin")
     return errorResponse("Invalid Request, destination not valid")
