@@ -1,27 +1,27 @@
 <template>
-  <div id="g-map-header"> 
+  <div> 
         <!-- <h6>// https://www.youtube.com/watch?v=KARBEHUyooM</h6> -->
-    
-      <div class="user-location">
-        <img class="loc-svg" src="../assets/images/icons/map-pin.svg">
-        <h6>Location: {{user_location_name}}</h6>
-        <input class = "user-loc-des" type="text">
-      </div>
+      <div id="g-map-header">
+        <div class="user-location">
+          <img class="loc-svg" src="../assets/images/icons/map-pin.svg">
+          <h6>Location: {{user_location_name}}</h6>
+          <input class = "user-loc-des" type="text">
+        </div>
 
-      <div class="user-destination">
-        <img class="loc-svg" src="../assets/images/icons/map-pin.svg">
-        <label for="">Destination:</label>
-        <select name="destinations" id="dd-dest" class = "user-loc-des"  v-model="destination_id">
-          <option selected :value="null" disabled >Select Destination Here</option>
-          <option v-for="(building, index) in all_buildings" 
-          :key="index" 
-          :value="building.building_id">
-            {{building.building_name }} 
-          </option>
-        </select>
-        <!-- <button @click="findPath">Find Path</button> -->
+        <div class="user-destination">
+          <img class="loc-svg" src="../assets/images/icons/map-pin.svg">
+          <label for="">Destination:</label>
+          <select name="destinations" id="dd-dest" class = "user-loc-des"  v-model="destination_id">
+            <option selected :value="null" disabled >Select Destination Here</option>
+            <option v-for="(building, index) in all_buildings" 
+            :key="index" 
+            :value="building.building_id">
+              {{building.building_name }} 
+            </option>
+          </select>
+          <!-- <button @click="findPath">Find Path</button> -->
+        </div>
       </div>
-    
 
     <GmapMap
       :center="userCoordinates"

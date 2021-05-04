@@ -11,6 +11,7 @@
 
 html{
 	font-size: 62.5%;
+    overflow-y: hidden; 
 }
 
 body{
@@ -28,21 +29,21 @@ body{
 
 /* Main Contnent area */
 #main-content{
-    width: 100%;
-    height: 100%;
+    /* width: 100%; */
+    /* height: 100%; */
     overflow-y:hidden;
     overflow-x:hidden;
-    display: block;
-    position: absolute;
-    top: 0;
-    z-index: 1;
-    padding: 3.5rem 0rem;
-    background-color: whitesmoke;
+    /* display: block; */
+    /* position: absolute; */
+    /* top: 0; */
+    /* z-index: 1; */
+    /* padding: 3.5rem 0rem; */
+    /* background-color: whitesmoke; */
 }
 
 /* Bottom Navigation bar */
 #bottom-nav{
-    height: 5rem;
+    height: 10vh;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -124,4 +125,182 @@ body{
 #home .bottom .btn-holder .btn{
     padding: 0.5rem 5rem;
     border-radius: 2rem;
+}
+
+/* ======================================= */
+/*           QR Scanner */
+/* ======================================= */
+
+#qrscanner{
+    width: 100%;
+    height: 100%;
+    background-color: grey;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#scanner{
+    display: block;
+}
+.qrcode-stream-overlay{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#qr-overlay{
+    height: 70%;
+    width: 70%;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#qr-overlay p{
+    width: fit-content;
+    color: grey;
+    background-color: white;
+    padding: 0.2rem 0.5rem;
+    font-weight: bold;
+    border-radius: 0.4rem;
+}
+
+#qr-box{ 
+    width: 90%;
+    height: 90%;
+    border: 0.4rem dashed blue ;
+    border-radius: 0.4rem;
+    /* position: relative; */
+    z-index: 10;
+}
+
+.full_cam{
+    width:  auto !important;
+    height: auto !important;
+}
+
+#qrview-main{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ======================================= */
+/*           Building info Screen */
+/* ======================================= */
+
+/* bi is used as a shortening for building info */
+
+#v-buildinginfo{
+    height: 100%;
+    width: 100%;
+    background-color: gray;
+}
+
+.bi-top{
+    height: 32%;
+    width: 100%;
+    position: absolute;
+    z-index: 1;
+}
+
+.bi-top img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.bi-body{
+    height: 70%;
+    width: 100%;
+    overflow-y: auto;
+    background-color: white;
+    border-top-left-radius: 1.5rem;
+    border-top-right-radius: 1.5rem;
+    z-index: 2;
+    position: relative;
+    top: 30%;
+}
+
+.bi-detail{
+    padding: 1rem 2rem;
+    width: 70%;
+}
+
+.bi-detail h1, .bi-detail p{
+    width: fit-content;
+}
+
+.bi-detail h1{
+    text-transform: capitalize;
+}
+
+.bi-address{
+    color: grey;
+    line-height: 0.4rem;
+}
+
+
+
+/* ======================================= */
+/*               Map Screen                */
+/* ======================================= */
+
+#g-map-header{
+    background-color: rgb(44, 105, 198,0.63);
+    height: 10vh;
+    width: 100%;
+    position: absolute;
+    z-index: 10;
+    padding-top: 1rem;
+    border-radius: 10rem;
+    /* top: 0; */
+    /* text-align: center; */
+    border-radius: 0rem 0rem 2rem 2rem ;
+}
+
+
+#g-map-header .user-location{
+    height: 1rem;
+    width: 35%;
+    margin: auto;
+    display: flex;
+    /* justify-content: center; */
+    /* padding-top: 1rem; */
+    /* align-items: center; */
+}
+
+.user-loc-des{
+    border-radius: 0.8rem;
+}
+
+.loc-svg{
+    height: 1rem;
+    width: 1rem; 
+}
+
+.user-destination{
+    width: 35%;
+    margin: auto;
+}
+
+
+/* ======================================= */
+/*           AR Guide Screen               */
+/* ======================================= */
+
+#arguide{
+    overflow: hidden;
+    margin: 0;
+}
+
+video#arjs-video{
+    z-index: 3!important;
+    height: 100%!important;
+    width: 100%!important;
 }
