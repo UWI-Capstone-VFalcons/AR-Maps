@@ -422,3 +422,57 @@ def shortestRoute(user_coord, building_id):
         except:
             pass
     return None
+
+def getPositions(start, end):
+    interval = 0.000019 # about two meters
+    positions = []
+    start = [(float(start[0][0]), float(start[0][1])), (float(start[1][0]), float(start[1][1]))]
+    end = [(float(end[0][0]), float(end[0][1])),(float(end[1][0]), float(end[1][1]))]
+    dis_lat_1 = start[0][0] - end[0][0]
+    dis_long_1 = start[0][1] - end[0][1]
+    dis_lat_2 = start[1][0] - end[1][0]
+    dis_long_2 = start[1][1] - end[1][1]
+
+    # Latitude
+    i = 0
+    direct_1 = move(start[0][0], end[0][0])
+    direct_2 = move(start[1][0], end[1][0])
+    if end[0][0] < start[0][0]:
+        #print(direct_1(start[0][0], interval*i))
+        while direct_1(start[0][0], interval*i) > end[0][0] and direct_2(start[1][0], interval*i) > end[1][0]:
+            positions.append([direct_1(start[0][0], interval*i)])
+            positions.append([direct_2(start[1][0], interval*i)])
+            i += 2
+    else:
+        while direct_1(start[0][0], interval*i) < end[0][0] and direct_2(start[1][0], interval*i) < end[1][0]:
+            positions.append([direct_1(start[0][0], interval*i)])
+            positions.append([direct_2(start[1][0], interval*i)])
+            i += 2
+    
+    # Need to account for overflow of longitude without a check
+    #Longitude
+    i = 0
+    direct_1 = move(start[0][1], end[0][1])
+    direct_2 = move(start[1][1], end[1][1])
+    if end[0][1] < start[0][1]:
+        #print(direct_1(start[0][0], interval*i))
+        while direct_1(start[0][0], interval*i) > end[0][0] and direct_2(start[1][0], interval*i) > end[1][0]:
+            positions[i].append(direct_1(start[0][1], interval*i))
+            positions[i+1].append(direct_2(start[1][1], interval*i))
+            i += 2
+    else:
+        while direct_1(start[0][0], interval*i) < end[0][0] and direct_2(start[1][0], interval*i) < end[1][0]:
+            positions[i].append(direct_1(start[0][1], interval*i))
+            positions[i+1].append(direct_2(start[1][1], interval*i))
+            i += 2
+    return positions
+
+def absNeg(num):
+    if num < 0:
+        return num
+    return -1*num
+
+def move(start, end):
+    if start <= end:
+        return lambda x,y: x + y
+    return lambda x,y: x - y
