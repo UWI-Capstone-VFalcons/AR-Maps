@@ -24,7 +24,6 @@ def ar():
     # currentLocation = fetchCurrentLocation()
     form = FindARDestinationForm()
     if form.validate_on_submit() and request.method == 'GET':
-        myLocation = request.form["myLocation"]
         myDestination = request.form["myDestination"]
        
         locationBuilding = Building.query.filter_by(name=myLocation).first()
