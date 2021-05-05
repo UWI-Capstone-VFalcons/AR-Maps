@@ -59,12 +59,32 @@ class Event(db.Model):
 class Node(db.Model):
     __tablename__ = 'node'
     id = db.Column('node_id', db.Integer, primary_key=True)
+    description = db.Column(db.String())
     latitude = db.Column(db.Float(10,20), nullable=False)
     longitude =  db.Column(db.Float(10, 20), nullable=False)
+    latitude_2 = db.Column(db.Float(10,20))
+    longitude_2 = db.Column(db.Float(10,20))
 
-    def __init__(self, latitude, longitude):
+    def __init__(self, latitude, longitude, latitude_2, longitude_2):
         self.latitude = latitude
         self.longitude = longitude
+        self.latitude_2 = latitude_2
+        self.longitude_2 = longitude_2
 
     def __repr__(self):
         return '<Node %r>' % self.id
+
+class Path(db.Model):
+    __tablename__ = 'path'
+    id = db.Column('path_id', db.Integer, primary_key=True)
+    start = db.Column(db.Integer, db.ForeignKey('node.node_id'), nullable=False)
+    end =  db.Column(db.Integer, db.ForeignKey('node.node_id'), nullable=False)
+    length = db.Column(db.Float(10, 20), nullable=False)
+
+    def __init__(self, start, end, length):
+        self.start = start
+        self.end = end
+        self.length = length
+
+    def __repr__(self):
+        return '<Path %r>' % self.id

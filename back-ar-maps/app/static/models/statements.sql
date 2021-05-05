@@ -1,0 +1,3 @@
+INSERT INTO node(latitude, longitude, latitude_2, longitude_2, description) VALUES (18.005655, -76.748550  ,18.005617, -76.748543,'Saint George Close entrance');
+INSERT INTO node(latitude, longitude, latitude_2, longitude_2, description) VALUES (18.005417, -76.749089, 18.005383, -76.749077,'Saint George Close exit');
+INSERT INTO node(latitude, longitude, latitude_2, longitude_2, description) VALUES (18.005375, -76.749178, 18.005337, -76.749152, 'Physics Department entrance');

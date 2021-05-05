@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - ar_implementation
+      - ARview
 
 jobs:
   build:
