@@ -2,14 +2,6 @@ import requests
 import os, datetime
 from flask import abort, jsonify, request, send_file, render_template, redirect, url_for, flash
 from werkzeug.utils import secure_filename
-<<<<<<< HEAD
-import json
-from app.forms import FindARDestinationForm
-from app.models import Building, Node
-from app import qrcode
-from flask import jsonify
-from flask_simple_geoip import SimpleGeoIP
-=======
 import json,math
 from app import app, db, qrcode, Google_API_Key
 from app.models import *
@@ -22,11 +14,7 @@ from app.helper import *
 @app.route('/', methods=['GET'])
 def defHome():
     return redirect(url_for("home"))
->>>>>>> ARview
 
-
-# Initialize the extension
-simple_geoip = SimpleGeoIP(app)
 
 @app.route('/nav', methods=['GET'])
 def ar():
@@ -291,13 +279,5 @@ def errorResponse(message):
     return jsonify({'error':message})
 
 
-<<<<<<< HEAD
-def fetchCurrentLocation():
-    # Retrieve geoip data for the given requester
-    geoip_data = simple_geoip.get_geoip_data()
-
-    return jsonify(data=geoip_data)
-=======
 # if __name__ == '__main__':
 #     app.run(debug=True, host="0.0.0.0", port="5000")
->>>>>>> ARview
