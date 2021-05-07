@@ -40,15 +40,15 @@ function setCurrentLocationName(position){
     })
 }
 
-function dynamicallyLoadDirections() {
+function dynamicallyLoadDirections(currentLocation, destination) {
 
-    fetch(`/api/shortest_paths/ar/1/18.005620/-76.748580`,{
+    // Building paths
+    fetch(`/api/shortest_paths/ar/${destination}/${currentLocation[0]}/${currentLocation[1]}`,{
         method:'GET',
         headers:{
             Accept: 'application/json'  
         }
     })
-    
     .then(function (response) {
         if (!response.ok) {
             throw Error(response.statusText);
@@ -60,35 +60,89 @@ function dynamicallyLoadDirections() {
         console.log(jsonResponse);
         console.log(jsonResponse.data.positions[0][1][0][1]);
 
-        const scene = document.querySelector('arrow-asset');
+        let scene = document.querySelector('a-scene');
 
-        coordinates = jsonResponse.data.positions[0][1];
-        coordinates.forEach(coordinate => {
-            const latitude = coordinate[0];
-            const longitude = coordinate[1];
+        let paths = jsonResponse.data.positions;
+        var i = 0;
+        paths.forEach(pos => {
+            coordinates = pos[1];
+            coordinates.forEach(coordinate => {
+                let latitude = coordinate[0];
+                let longitude = coordinate[1];
+                let id = coordinate[2];
+                let look_at = coordinate[3]
 
-            console.log(latitude);
-            console.log(longitude);
+                console.log(latitude);
+                console.log(longitude);
+                
+                let node_asset = document.createElement('a-assets');
+                let node_model = document.createElement('a-asset-item');
+                node_model.setAttribute('id', `node-${i}-${id}`);
+                node_model.setAttribute('src', '/static/3d_models/arrow.glb');
+                node_asset.appendChild(node_model);
+                scene.appendChild(node_asset);
 
 
-             const placeText = document.createElement('a-link');
-             placeText.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
-             placeText.setAttribute('scale', '15 15 15');
-   
-             placeText.addEventListener('loaded', () => {
-                window.dispatchEvent(new CustomEvent('gps-entity-place-loaded'))
+                let node_entity = document.createElement('a-entity');
+                node_entity.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
+                node_entity.setAttribute('scale', '0.25 0.25 0.25');
+                node_entity.setAttribute('gltf-model', `#node-${i}-${id}`);
+                if(i == 0 && id == 0){
+                    node_entity.setAttribute('look-at', '[gps-camera]');
+                } else {
+                    node_entity.setAttribute('look-at',`#node-${i}-${look_at}`);
+                }
+                scene.appendChild(node_entity);
+
             });
+            i += 1;
+        })
 
-            scene.appendChild(placeText);
-        
-    });
+        // Finally add destination to map
+        fetch(`/api/building/${destination}`, {
+            method:'GET',
+            headers:{
+                Accept: 'application/json'  
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw Error(response.statusText);
+              }
+            return response.json();
+        })
+        .then(res => {
+            console.log(res);
 
-        (err) => console.error('Error in retrieving position', err),
-        {
-            enableHighAccuracy: true,
-            maximumAge: 0,
-            timeout: 27000,
-        }
+            let scene = document.querySelector('a-scene');
+
+            let building = res.data;
+            let latitude = building.building_latittude;
+            let longitude = building.building_longitude;
+            let name = building.building_name
+            let id = building.building_id
+
+            let building_asset = document.createElement('a-assets');
+            let building_model = document.createElement('a-asset-item');
+            building_model.setAttribute('id', `building-${id}`);
+            building_model.setAttribute('src', '/static/3d_models/sign.glb');
+            building_asset.appendChild(building_model);
+            scene.appendChild(building_asset);
+
+
+            let building_entity = document.createElement('a-entity');
+            building_entity.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
+            building_entity.setAttribute('scale', '1 1 1');
+            building_entity.setAttribute('gltf-model', `#building-${id}`);
+            building_entity.setAttribute('look-at', '[gps-camera]');
+            building_entity.setAttribute('animation','property: rotation; to: 0 360 0; loop: true; dur: 10000');
+            building_entity.setAttribute('text',`value: ${name}; color:black; side:double; width: 5;`);
+            scene.appendChild(building_entity);
+        })
+        .catch (function(error){
+            // show error message
+            console.log(error);
+        })  
     })
     .catch (function(error){
         // show error message
@@ -159,8 +213,8 @@ function loadPlacesNearMe() {
 };
 
 getLocation();
-loadPlacesNearMe();
-dynamicallyLoadDirections();
+//loadPlacesNearMe();
+dynamicallyLoadDirections([18.005621, -76.748550], 1);
 
 }
 

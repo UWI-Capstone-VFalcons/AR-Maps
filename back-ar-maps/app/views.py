@@ -25,26 +25,26 @@ def ar():
     """Render camera with ar experience  <19/3/2021 N.Bedassie>"""
     # currentLocation = fetchCurrentLocation()
     form = FindARDestinationForm()
-    if form.validate_on_submit() and request.method == 'GET':
-        myDestination = request.form["myDestination"]
+    # if form.validate_on_submit() and request.method == 'GET':
+    #     myDestination = request.form["myDestination"]
        
-        locationBuilding = Building.query.filter_by(name=myLocation).first()
-        destinationBuilding = Building.query.filter_by(name=myDestination).first()
+    #     locationBuilding = Building.query.filter_by(name=myLocation).first()
+    #     destinationBuilding = Building.query.filter_by(name=myDestination).first()
         
-        return render_template("map.html", form=form, locationBuilding=locationBuilding,destinationBuilding=destinationBuilding)
+    #     return render_template("map.html", form=form, locationBuilding=locationBuilding,destinationBuilding=destinationBuilding)
     buildings = db.session.query(Building).all()
-    form.myDestination.choices = [(b.id, b.name) for b in buildings]
-    nodes = db.session.query(Node).all()
-    node_list = []
-    for node in nodes:
-        node_list.append(vars(node))
-    node_len = len(node_list)
-    for i in range(node_len):
-        if i == 0:
-            node_list[i]["look_at"] = "[gps-camera]"
-        else:
-            node_list[i]["look_at"] = "#node-" + str(node_list[i-1]['id'])
-    return render_template("map.html",form=form, buildings=buildings, nodes=nodes)
+    # form.myDestination.choices = [(b.id, b.name) for b in buildings]
+    # nodes = db.session.query(Node).all()
+    # node_list = []
+    # for node in nodes:
+    #     node_list.append(vars(node))
+    # node_len = len(node_list)
+    # for i in range(node_len):
+    #     if i == 0:
+    #         node_list[i]["look_at"] = "[gps-camera]"
+    #     else:
+    #         node_list[i]["look_at"] = "#node-" + str(node_list[i-1]['id'])
+    return render_template("map.html",form=form, buildings=buildings)
 
 @app.route('/nav/OD/orientation', methods=['GET'])
 def od_orientation():

@@ -464,14 +464,20 @@ def getPositions(start, end):
         # while direct_1(start[0][0], interval*i) > end[0][0] and direct_2(start[1][0], interval*i) > end[1][0]:
         while i < j:
             positions[i].append((direct_1(start[0][1], interval*i) + direct_2(start[1][1], interval*i))/2)
+            positions[i].append(i)
             # positions[i+1].append(direct_2(start[1][1], interval*i))
             i += 1
+            if i < j:
+                positions[i-1].append(i)
     else:
         # while direct_1(start[0][0], interval*i) < end[0][0] and direct_2(start[1][0], interval*i) < end[1][0]:
         while i < j:
             positions[i].append((direct_1(start[0][1], interval*i) + direct_2(start[1][1], interval*i))/2)
+            positions[i].append(i)
             # positions[i+1].append(direct_2(start[1][1], interval*i))
             i += 1
+            if i < j:
+                positions[i-1].append(i)
 
     # # Latitude
     # i = 0
