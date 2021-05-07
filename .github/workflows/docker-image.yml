@@ -18,7 +18,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build the Docker image
-        run: docker build --tag ${{env.HEROKU_REGISTRY_IMAGE}} --file Dockerfile "."
+        run: docker build --no-cache --tag ${{env.HEROKU_REGISTRY_IMAGE}} --file Dockerfile "."
         
       - name: Login to registry
         run: docker login -u _ -p ${{ secrets.HEROKU_AUTH_TOKEN }} registry.heroku.com
