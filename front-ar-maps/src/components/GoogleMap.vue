@@ -226,7 +226,7 @@ export default {
 
   methods:{
     findPath(){  
-      const path = this.$host+'/api/shortest_paths/overheadMap/'+this.destination_id+'&('+this.userCoordinates.lat+','+this.userCoordinates.lng+')';
+      const path = this.$host+'api/shortest_paths/overheadMap/'+this.destination_id+'&('+this.userCoordinates.lat+','+this.userCoordinates.lng+')';
       axios.get(path)
         .then((res) => {
           
