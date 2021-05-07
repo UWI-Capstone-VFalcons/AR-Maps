@@ -24,6 +24,7 @@ RUN apk update && apk add postgresql-dev gcc g++ python3-dev musl-dev jpeg-dev z
 COPY --from=build-vue /app/dist /usr/share/nginx/html
 COPY ./nginx/default.conf /etc/nginx/conf.d/default.conf
 COPY ./back-ar-maps/requirements.txt .
+RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 RUN pip install gunicorn
 COPY ./back-ar-maps .
