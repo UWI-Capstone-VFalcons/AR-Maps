@@ -134,23 +134,12 @@ body{
     align-items: center;
 }
 
-.form-element label{
+.form-group label{
     color: white;
 }
 
-.form-element input{
-    color: rgb(153, 153, 153);
-    font-size: large;
-    border: 0;
-    box-shadow: 0px 0px .5px .5px #777777;
-    padding: 0 3rem 0 3rem;
-    border-radius: 5px;
-    height: 30px;
-    vertical-align: text-bottom;
-    text-shadow: 1px 1px 1px #8f8f8f9b;
-}
 
-.form-element > svg{
+.form-group > svg{
     vertical-align: text-bottom;
     -webkit-filter: drop-shadow( 1px 1px 1px rgba(27, 27, 27, 0.7));
     filter: drop-shadow( 1px 1px 1px rgba(27, 27, 27, 0.7));

@@ -1,9 +1,49 @@
 window.onload = () => {
 // getting places from APIs
 
-function dynamicallyLoadPlaces() {
+function getLocation() {
+    if(navigator.geolocation) {
+        navigator.geolocation.watchPosition(setCurrentLocationName);
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+}
 
-    fetch('/api/shortest_paths/ar/1/18.005621/-76.748550',{
+function setCurrentLocationName(position){
+    console.log('test');
+    fetch(`/api/location_name/${position.coords.latitude},${position.coords.longitude}`,{
+        method:'GET',
+        headers:{
+            Accept: 'application/json'
+        }
+    })
+    .then(function (response) {
+        if (!response.ok) {
+            throw Error(response.statusText);
+        }
+        return response.json();
+    })
+    .then(function (res) {
+        // show success message
+        console.log(res);
+        if(typeof res.data.error === 'undefined'){
+            if(typeof res.data.name !== 'undefined'){
+                my_loc = document.getElementById('myLocation');
+                my_loc.value = res.data.name;
+            }
+        }else{
+            console.log(res.data.error);
+        }
+    })
+    .catch (function(error){
+        // show error message
+        console.log(error);
+    })
+}
+
+function dynamicallyLoadPlaces(position) {
+
+    fetch(`/api/shortest_paths/ar/1/${position.coords.latitude}/${position.coords.longitude}`,{
         method:'GET',
         headers:{
             Accept: 'application/json'  
@@ -21,7 +61,8 @@ function dynamicallyLoadPlaces() {
         console.log(jsonResponse);
         console.log(jsonResponse.data.positions[0][1][0][1]);
 
-        const scene = document.querySelector('a-scene');
+        const assets = document.querySelector('a-assets');
+
         coordinates = jsonResponse.data.positions[0][1];
         coordinates.forEach(coordinate => {
             const latitude = coordinate[0];
@@ -57,10 +98,53 @@ function dynamicallyLoadPlaces() {
         console.log(error);
     })              
 
+    function getLocation() {
+        if(navigator.geolocation) {
+            navigator.geolocation.watchPosition(setCurrentLocationName);
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+    }
+
+    function setCurrentLocationName(position){
+        console.log('test');
+        fetch(`/api/location_name/${position.coords.latitude},${position.coords.longitude}`,{
+            method:'GET',
+            headers:{
+                Accept: 'application/json'
+            }
+        })
+        .then(function (response) {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+            return response.json();
+        })
+        .then(function (res) {
+            // show success message
+            console.log(res);
+            if(typeof res.data.error === 'undefined'){
+                if(typeof res.data.name !== 'undefined'){
+                    my_loc = document.getElementById('myLocation');
+                    my_loc.value = res.data.name;
+                }
+            }else{
+                console.log(res.data.error);
+            }
+        })
+        .catch (function(error){
+            // show error message
+            console.log(error);
+        })
+    }
+
+    
+    
 
 };
 
-    dynamicallyLoadPlaces();
+dynamicallyLoadPlaces();
+    getLocation()
 
 }
 
