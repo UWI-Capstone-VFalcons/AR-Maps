@@ -2,7 +2,6 @@ from app import db, Google_API_Key
 from app.models import *
 from shapely.geometry import Point, Polygon, MultiPoint
 from shapely.ops import nearest_points
-import numpy as np
 import math, requests
 
 # check any value enter if it is a number
