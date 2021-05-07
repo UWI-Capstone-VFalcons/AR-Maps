@@ -1,35 +1,74 @@
 window.onload = () => {
 // getting places from APIs
 
-function dynamicallyLoadPlaces() {
-
-    fetch('/api/shortest_paths/ar/1/18.005621/-76.748550',{
-        method:'GET',
-        headers:{
-            Accept: 'application/json',
-            //'Content-Type': 'multipart/form-data',
-            'X-CSRFToken': token
+    function getLocation() {
+        if(navigator.geolocation) {
+            navigator.geolocation.watchPosition(setLocationName);
+        } else {
+            alert("Geolocation is not supported by this browser.");
         }
-        // credentials: 'same-origin'
-    })
-    
-    .then(function (response) {
-        if (!response.ok) {
-            throw Error(response.statusText);
-          }
-        return response.json();
-    })
-    .then(function (jsonResponse) {
-        // show success message
-        console.log(jsonResponse);
-    })
-    .catch (function(error){
-        // show error message
-        console.log(error);
-    })              
+    }
 
-}
+    function setLocationName(position){
+        console.log('test');
+        fetch(`/api/location_name/${position.coords.latitude},${position.coords.longitude}`,{
+            method:'GET',
+            headers:{
+                Accept: 'application/json'
+            }
+        })
+        .then(function (response) {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+            return response.json();
+        })
+        .then(function (res) {
+            // show success message
+            console.log(res);
+            if(typeof res.data.error === 'undefined'){
+                if(typeof res.data.name !== 'undefined'){
+                    my_loc = document.getElementById('myLocation');
+                    my_loc.value = res.data.name;
+                }
+            }else{
+                console.log(res.data.error);
+            }
+        })
+        .catch (function(error){
+            // show error message
+            console.log(error);
+        })
+    }
+
+    function dynamicallyLoadPlaces() {
+
+        fetch('/api/shortest_paths/ar/1/18.005621/-76.748550',{
+            method:'GET',
+            headers:{
+                Accept: 'application/json'
+            }
+            // credentials: 'same-origin'
+        })
+        
+        .then(function (response) {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+            return response.json();
+        })
+        .then(function (jsonResponse) {
+            // show success message
+            console.log(jsonResponse);
+        })
+        .catch (function(error){
+            // show error message
+            console.log(error);
+        })              
+
+    }
     dynamicallyLoadPlaces();
+    getLocation()
 
   //  renderPlaces(places);
 };
