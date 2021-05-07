@@ -1,5 +1,4 @@
 window.onload = () => {
-// getting places from APIs
 
 function getLocation() {
     if(navigator.geolocation) {
