@@ -26,7 +26,7 @@
         </div>
       </router-link>
         <div class="nav-el">
-          <a href="./nav">
+          <a href="/nav">
             <img src="./assets/images/icons/ar-view.svg" alt="home"/>
           </a>
         </div>

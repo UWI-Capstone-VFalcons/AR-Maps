@@ -213,7 +213,7 @@ function loadPlacesNearMe() {
 };
 
 getLocation();
-//loadPlacesNearMe();
+loadPlacesNearMe();
 dynamicallyLoadDirections([18.005621, -76.748550], 1);
 
 }
