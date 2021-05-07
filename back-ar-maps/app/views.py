@@ -20,7 +20,7 @@ from app.my_encoders import *
 def defHome():
     return redirect(url_for("home"))
 
-@app.route('/nav', methods=['GET'])
+@app.route('/navv', methods=['GET'])
 def ar():
     """Render camera with ar experience  <19/3/2021 N.Bedassie>"""
     form = FindARDestinationForm()
@@ -54,10 +54,10 @@ def od_orientation():
     API EndPOints
 """
 
-@app.route('/nav/to/<float:des_lat>/<float:des_long>', methods=['GET'])
-def ar_find():
-    """Render camera with ar experience  <19/3/2021 N.Bedassie>"""
-    return render_template("map.html")
+# @app.route('/nav/to/<float:des_lat>/<float:des_long>', methods=['GET'])
+# def ar_find():
+#     """Render camera with ar experience  <19/3/2021 N.Bedassie>"""
+#     return render_template("map.html")
 
 
 """
