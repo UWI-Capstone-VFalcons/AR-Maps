@@ -2,9 +2,10 @@
   <div> 
         <!-- <h6>// https://www.youtube.com/watch?v=KARBEHUyooM</h6> -->
       <div id="g-map-header">
+        <h6>Swipe to go back</h6>
         <div class="user-location">
           <img class="loc-svg" src="../assets/images/icons/map-pin.svg">
-          <h6>Location: {{user_location_name}}</h6>
+          <h4>Location: {{user_location_name}}</h4>
           <input class = "user-loc-des" type="text">
         </div>
 

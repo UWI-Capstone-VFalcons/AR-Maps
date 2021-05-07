@@ -7,6 +7,9 @@
     <div class="top">
       <img src="../assets/images/illustrations/navigate.svg">
     </div>
+    <div class="help">
+      <img src="../assets/images/illustrations/help.png" alt="Help Icon">
+    </div>
     <div class="bottom">
       <h1>Turn on your location</h1>
       <p>Get simple, user-friendly and interactive directions <br>
@@ -17,6 +20,7 @@
         >Find my destination</button> 
       </div>
     </div>
+    
   </div>
 </template>
 

@@ -1,7 +1,10 @@
 /* ======================================= */
 /*           General CSS                    */
 /* ======================================= */
-
+:root{
+    --main-blue: rgb(44, 105, 198,0.63);
+    --smoky-white: rgb(245, 245, 245);
+}
 
 *{
 	margin:0;
@@ -49,7 +52,7 @@ body{
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    background-color: rgb(44, 105, 198,0.63);
+    background-color: var(--main-blue);
     border-radius: 1.5rem 1.5rem 0rem 0rem ;
     /* padding: 1rem; */
     position: absolute;
@@ -68,7 +71,7 @@ body{
 }
 
 .router-link-exact-active .nav-el{
-    background-color: rgb(44, 105, 198,0.63);  
+    background-color:  var(--main-blue);  
 }
 
 .nav-el img{
@@ -84,14 +87,14 @@ body{
 /* ======================================= */
 
 #home{
-    height: 80vh;
+    height: 90vh;
     position: relative;
 }
 
 #app-bar{
     height: 10vh;
     width: 100%;
-    background-color: rgb(44, 105, 198,0.63);
+    background-color:  var(--main-blue);
     border-radius: 0rem 0rem 1.5rem 1.5rem ;
     margin-bottom: 4rem;
     top: 0;
@@ -100,7 +103,7 @@ body{
 #v-title{
     text-align: center;
     padding:  1.5rem;
-    color: whitesmoke;
+    color: var(--smoky-white);
 }
 
 #home .top{
@@ -113,7 +116,7 @@ body{
 }
 
 #home .bottom{
-    width: 30%;
+    width: 40%;
     margin: auto;
     text-align: center;
 }
@@ -125,6 +128,18 @@ body{
 #home .bottom .btn-holder .btn{
     padding: 0.5rem 5rem;
     border-radius: 2rem;
+}
+
+#home .help{
+    position: absolute;
+    bottom: 2rem;
+   
+    margin-left: 65%;
+}
+
+#home img{
+    height: 3rem;
+    width: 3rem;
 }
 
 /* ======================================= */
@@ -252,42 +267,70 @@ body{
 /* ======================================= */
 
 #g-map-header{
-    background-color: rgb(44, 105, 198,0.63);
-    height: 10vh;
+    background-color: var(--main-blue);
+    height: 11vh;
     width: 100%;
     position: absolute;
-    z-index: 10;
+    z-index: 1;
     padding-top: 1rem;
     border-radius: 10rem;
-    /* top: 0; */
-    /* text-align: center; */
+    text-align: center;
     border-radius: 0rem 0rem 2rem 2rem ;
+    color: var(--smoky-white);
+    font-size: 1.5rem;
+    overflow: hidden;
 }
 
 
 #g-map-header .user-location{
-    height: 1rem;
-    width: 35%;
-    margin: auto;
+    height: 1.5rem;
+    /* width: 35%; */
+    /* margin: auto; */
     display: flex;
-    /* justify-content: center; */
+    /* padding: 1rem; */
+    justify-content: center;
     /* padding-top: 1rem; */
     /* align-items: center; */
 }
-
-.user-loc-des{
-    border-radius: 0.8rem;
+/* 
+.user-location h4, .user-loc-des{
+    display: inline-block;
 }
 
-.loc-svg{
+#g-map-header .user-location h4{
+    color: whitesmoke;
+} */
+
+.user-loc-des input[type=text]{
+    width: 1rem;
+    color: whitesmoke;
+    border: 2px red solid;
+
+}
+
+#g-map-header .user-location .user-loc-des{
+    border-radius: 0.5rem;
+}
+
+#g-map-header .user-destination{
+    height: 1.8rem;
+    /* width: 35%; */
+    margin: 1rem;
+    display: flex;
+    justify-content: center;
+    /* padding-top: 1rem; */
+}
+
+#dd-test > *{
+    color: whitesmoke;
+}
+
+/* #g-map-header .user-destination .loc-svg{
     height: 1rem;
     width: 1rem; 
-}
+} */
 
-.user-destination{
-    width: 35%;
-    margin: auto;
-}
+
 
 
 /* ======================================= */
