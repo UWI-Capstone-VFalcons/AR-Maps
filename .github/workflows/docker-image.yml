@@ -3,6 +3,8 @@ name: Docker Image CI
 on: 
   push:
     branches:
+      - ar_implementation
+      - sprint4
       - none
 
 jobs:

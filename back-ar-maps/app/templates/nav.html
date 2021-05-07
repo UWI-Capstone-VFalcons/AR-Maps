@@ -1,10 +1,9 @@
-
   <div id="overlay" class="container-fluid center">
-    <form action="{{ url_for('ar_find') }}" method="GET" enctype="multipart/form-data" class="center">
+    <form id="searchForm" action="{{ url_for('ar') }}" method="GET" enctype="multipart/form-data" class="center">
       {{ form.csrf_token }}
-          <div class="form-element form-row">
-            <div class="col w-100 d-inline-flex ">
-              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" version="1.1" width="25" height="25" x="0" y="0" viewBox="50 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g>
+          <div class="form-group form-row">
+            <div class="col w-50 d-inline-flex mx-auto m-1">
+              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" version="1.1" width="35" height="35" x="0" y="0" viewBox="50 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class="pt-1"><g>
                 <g xmlns="http://www.w3.org/2000/svg">
                   <g>
                     <path d="M256,0C156.748,0,76,80.748,76,180c0,33.534,9.289,66.26,26.869,94.652l142.885,230.257    c2.737,4.411,7.559,7.091,12.745,7.091c0.04,0,0.079,0,0.119,0c5.231-0.041,10.063-2.804,12.75-7.292L410.611,272.22    C427.221,244.428,436,212.539,436,180C436,80.748,355.252,0,256,0z M384.866,256.818L258.272,468.186l-129.905-209.34    C113.734,235.214,105.8,207.95,105.8,180c0-82.71,67.49-150.2,150.2-150.2S406.1,97.29,406.1,180    C406.1,207.121,398.689,233.688,384.866,256.818z" fill="#ffffff" data-original="#000000"/>
@@ -46,13 +45,13 @@
                 <g xmlns="http://www.w3.org/2000/svg">
                 </g>
                 </g></svg>            
-                <h3 class="form-text">{{ form.myLocation.label }} : &nbsp; </h3>
-                {{ form.myLocation }}
+                {{ form.myLocation.label(class="pt-1 h4") }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h4>:</h4>
+                {{ form.myLocation(class="form-control") }}
             </div>
           </div>
-          <div class="form-element form-row">
-            <div class="col w-50 d-inline-flex">
-              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" version="1.1" width="25" height="25" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve"><g>
+          <div class="form-group form-row">
+            <div class="col w-50 d-inline-flex mx-auto m-1">
+              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" version="1.1" width="35" height="35" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class="pt-1"><g>
                 <g xmlns="http://www.w3.org/2000/svg">
                   <g>
                     <path d="M256,0C156.748,0,76,80.748,76,180c0,33.534,9.289,66.26,26.869,94.652l142.885,230.257    c2.737,4.411,7.559,7.091,12.745,7.091c0.04,0,0.079,0,0.119,0c5.231-0.041,10.063-2.804,12.75-7.292L410.611,272.22    C427.221,244.428,436,212.539,436,180C436,80.748,355.252,0,256,0z M384.866,256.818L258.272,468.186l-129.905-209.34    C113.734,235.214,105.8,207.95,105.8,180c0-82.71,67.49-150.2,150.2-150.2S406.1,97.29,406.1,180    C406.1,207.121,398.689,233.688,384.866,256.818z" fill="#ffffff" data-original="#000000"/>
@@ -94,8 +93,8 @@
                 <g xmlns="http://www.w3.org/2000/svg">
                 </g>
                 </g></svg>            
-              <h3 class="form-text">{{ form.myDestination.label }} : &nbsp;</h3>
-                {{ form.myDestination(placeholder="Enter Destination") }}
+                {{ form.myDestination.label(class="pt-1 h4") }} &nbsp;&nbsp;<h4>:</h4>
+                {{ form.myDestination(placeholder="Enter Destination", class="form-control") }}
             </div>
           </div>
           <div class="form-element form-row">

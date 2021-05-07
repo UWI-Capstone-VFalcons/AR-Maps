@@ -23,14 +23,14 @@ def defHome():
 @app.route('/navv', methods=['GET'])
 def ar():
     """Render camera with ar experience  <19/3/2021 N.Bedassie>"""
+    # currentLocation = fetchCurrentLocation()
     form = FindARDestinationForm()
     if form.validate_on_submit() and request.method == 'GET':
-        myLocation = request.form["myLocation"]
         myDestination = request.form["myDestination"]
        
         locationBuilding = Building.query.filter_by(name=myLocation).first()
         destinationBuilding = Building.query.filter_by(name=myDestination).first()
-
+        
         return render_template("map.html", form=form, locationBuilding=locationBuilding,destinationBuilding=destinationBuilding)
     buildings = db.session.query(Building).all()
     form.myDestination.choices = [(b.id, b.name) for b in buildings]
@@ -213,17 +213,6 @@ def get_location_name(cur_latitude, cur_longitude):
     Destinations
 """
 
-def get_dist(coord_a, coord_b):
-    """
-    Parameters
-        ----------
-        coord_a : tuple/list
-            the first pair of latitude and longitude (17.98321, -76.13138) or [17.13183, -77.13176]
-        coord_b : tuple/list
-            the second pair of latitube and longitude (17.98321, -76.13138) or [17.13183, -77.13176] 
-    """
-    return math.sqrt((coord_a[0] - coord_b[0])**2 + (coord_a[1] - coord_b[1])**2)
-
 @app.route('/api/destinations', methods=['GET'])
 def get_all_destinations():
 
@@ -392,6 +381,56 @@ def get_shortest_path_overhead(cur_latitude, cur_longitude, destination_id):
             shortest_path_response["metrix"] = metrix
 
         return successResponse(shortest_path_response)
+    except:
+        return errorResponse("Error occured, report to the admin")
+    return errorResponse("Invalid Request, destination not valid")
+
+@app.route('/api/shortest_paths/ar/<destination_id>/<cur_latitude>/<cur_longitude>', methods=['GET'])
+def get_shortest_path_ar(cur_latitude, cur_longitude, destination_id):
+    """
+        Get each path in the route e.g.[1,2,3]
+        Starting point would be first point
+        Case 1:
+            When you are outside of Scitech,
+            Get total distance and time -> Phillip
+            In JSON, return the starting point.
+            then Jump to Case 2.
+        Case 2:    
+            For each path inside of Scitech, 
+            Write a function that will take distance between 3D objects and a path
+            Create evenly spaced GPS points between them. (based on the distance points)
+            Use it to generate each point for each path.
+            Wrap in JSON and return it.
+    """
+    if(not isNum(cur_latitude) or not isNum(cur_longitude) or not isNum(destination_id)):
+        return errorResponse("All parameters must be numeric")
+
+    # convert the variables 
+    cur_longitude = float(cur_longitude)
+    cur_latitude = float(cur_latitude)
+    cur_coordinate = (cur_latitude, cur_longitude)
+    
+    try:
+        route = shortestRoute(cur_coordinate, destination_id) 
+        # returns tuple with 4 values (starting_path, use_starting_point, best_starting_point, shortest route)
+        
+        dest = Building.query.get(destination_id)
+        dest_coord = (float(dest.latitude), float(dest.longitude))
+        meta = None
+        if route[1]: # get distance and time
+            meta = estimateDistanceAndTime(cur_coordinate, dest_coord, route[2], route[3])
+        paths = []
+        positions = [] # 3D objects placed 2 meters apart(just randomly chosen)
+        for pid in route[3][1]:
+            paths.append(Path.query.get(pid))
+        for path in paths:
+            start = Node.query.filter_by(id=path.start).first()
+            end = Node.query.filter_by(id=path.end).first()
+            result = getPositions([(start.latitude_1, start.longitude_1), (start.latitude_2,start.longitude_2)], [(end.latitude_1, end.longitude_1),(end.latitude_2, end.longitude_2)])
+            positions.append(result)
+        if(meta):
+            return successResponse({"route": route, "positions":positions, "meta": meta})
+        return successResponse({"route": route, "positions":positions})
     except:
         return errorResponse("Error occured, report to the admin")
     return errorResponse("Invalid Request, destination not valid")
