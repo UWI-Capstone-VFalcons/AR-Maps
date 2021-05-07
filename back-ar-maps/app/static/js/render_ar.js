@@ -61,7 +61,7 @@ function dynamicallyLoadPlaces(position) {
         console.log(jsonResponse);
         console.log(jsonResponse.data.positions[0][1][0][1]);
 
-        const assets = document.querySelector('a-assets');
+        const scene = document.querySelector('arrow-asset');
 
         coordinates = jsonResponse.data.positions[0][1];
         coordinates.forEach(coordinate => {

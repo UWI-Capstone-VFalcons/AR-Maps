@@ -20,49 +20,21 @@
 {% include 'nav.html' %}
 
 {% block main %}
-    <a-scene
-        renderer="logarithmicDepthBuffer: true;"
-        embedded
-        loading-screen="enabled: false;"
-        arjs="sourceType: webcam; debugUIEnabled: false;"
-    >
-        {% for building in buildings %}
+
+            <a-scene 
+                    vr-mode-ui='enabled: false' 
+                    embedded
+                    arjs='sourceType: webcam; sourceWidth:1280; sourceHeight:960; displayWidth: 1280; displayHeight: 960; debugUIEnabled: false;'>
+                <a-camera gps-camera="minDistance: 40;" rotation-reader></a-camera>
+            </a-scene>
+
             <a-assets>
                 <a-asset-item
-                    id="building-{{building.id}}"
-                    src="{{ url_for('static', filename='3d_models/sign.gltf')}}"
-                ></a-asset-item>
-            </a-assets>
-
-            <a-entity
-                look-at="[gps-camera]"
-                gltf-model="#building-{{building.id}}"
-                scale="1 1 1"
-                text="value: {{building.name}}; color:black; side:double; width: 5;"
-                animation="property: rotation; to: 0 360 0; loop: true; dur: 10000"
-                gps-entity-place="latitude: {{building.latitude}}; longitude: {{building.longitude}};"
-            >
-            </a-entity>
-
-        {% endfor %}
-        {% for node in nodes %}
-            <a-assets>
-                <a-asset-item
-                    id="node-{{node.id}}"
+                    id="arrow-asset"
                     src="{{ url_for('static', filename='3d_models/arrow.glb')}}"
                 ></a-asset-item>
             </a-assets>
-            <a-entity
-                look-at="{{node.look_at}}"
-                gltf-model="#node-{{node.id}}"
-                scale="0.25 0.25 0.25"
-                gps-entity-place="latitude: {{node.latitude}}; longitude: {{node.longitude}};"
-            >
-            </a-entity>
-        {% endfor %}
 
-        <a-camera gps-camera="minDistance: 40;" rotation-reader></a-camera>
-    </a-scene>
 {% endblock %}
 
 {% include 'bottom.html' %}
