@@ -1,21 +1,18 @@
 window.onload = () => {
-    let places = dynamicallyLoadPlaces();
-  //  renderPlaces(places);
-};
-
-//json returns root- has indexes of paths, postion- long and lat, meta - distance and time
-
 // getting places from APIs
+
 function dynamicallyLoadPlaces() {
+
     fetch('/api/shortest_paths/ar/1/18.005621/-76.748550',{
         method:'GET',
         headers:{
             Accept: 'application/json',
             //'Content-Type': 'multipart/form-data',
             'X-CSRFToken': token
-        },
-        credentials: 'same-origin'
+        }
+        // credentials: 'same-origin'
     })
+    
     .then(function (response) {
         if (!response.ok) {
             throw Error(response.statusText);
@@ -32,6 +29,13 @@ function dynamicallyLoadPlaces() {
     })              
 
 }
+    dynamicallyLoadPlaces();
+
+  //  renderPlaces(places);
+};
+
+//json returns root- has indexes of paths, postion- long and lat, meta - distance and time
+
 
 // window.onload = () => {
 //     const scene = document.querySelector('a-scene');

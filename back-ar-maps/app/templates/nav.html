@@ -1,6 +1,5 @@
-
   <div id="overlay" class="container-fluid center">
-    <form action="{{ url_for('ar') }}" method="GET" enctype="multipart/form-data" class="center">
+    <form id="searchForm" action="{{ url_for('ar') }}" method="GET" enctype="multipart/form-data" class="center">
       {{ form.csrf_token }}
           <div class="form-element form-row">
             <div class="col w-100 d-inline-flex ">

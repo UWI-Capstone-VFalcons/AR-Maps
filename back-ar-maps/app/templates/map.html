@@ -13,13 +13,15 @@
     </script>
     {% endblock %}
 
-{% block javascript %}
-    <script src="/back-ar-maps/app/static/js/load_locations.js"></script>
+{% block js %}
+    <script src="{{ url_for('static', filename='js/render_ar.js')}}" ></script>
 {% endblock %}
 
 {% include 'nav.html' %}
 
 {% block main %}
+<body style='margin: 0; overflow: hidden;'>
+
     <a-scene
         renderer="logarithmicDepthBuffer: true;"
         embedded
