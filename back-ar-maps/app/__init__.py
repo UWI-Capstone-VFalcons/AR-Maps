@@ -43,7 +43,7 @@ csrf = CSRFProtect(app)  # used for forms and database
 qrcode = QRcode(app)
 
 # enable CORS
-CORS(app, resources={r'/*': {'origins': '*'}})
+CORS(app)
 
 # Google API Keys
 Google_API_Key = "AIzaSyB5QmIo_yG56_KI-WC91I1mmsyZ9cOZF9s"
