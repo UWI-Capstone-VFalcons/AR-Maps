@@ -367,6 +367,7 @@ def get_shortest_path_overhead(cur_latitude, cur_longitude, destination_id):
         return errorResponse("Error occured, report to the admin")
     return errorResponse("Invalid Request, destination not valid")
 
+
 @app.route('/api/shortest_paths/ar/<destination_id>/<cur_latitude>/<cur_longitude>', methods=['GET'])
 def get_shortest_path_ar(cur_latitude, cur_longitude, destination_id):
     """
