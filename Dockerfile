@@ -37,7 +37,6 @@ RUN apk add --virtual .build-deps \
     apk add --virtual .rundeps $runDeps
 
 RUN geos-config --cflags
-RUN apt-get install libgeos-dev
 RUN pip install geos
 RUN pip install -r requirements.txt
 RUN pip install gunicorn
