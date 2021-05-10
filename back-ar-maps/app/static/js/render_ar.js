@@ -68,7 +68,9 @@ function dynamicallyLoadDirections(position) {
     .then(function (jsonResponse) {
         // show success message
         console.log(jsonResponse);
-        console.log(jsonResponse.data.positions[0][1][0][1]);
+        // console.log(jsonResponse.data.positions[0][1][0][1]);
+
+        clearLocations();
 
         let scene = document.querySelector('a-scene');
 
@@ -150,7 +152,7 @@ function dynamicallyLoadDirections(position) {
             scene.appendChild(building_entity);
 
             if (latitude === position.coords.latitude && longitude === position.coords.longitude) {
-                alert('Congratulation, you reach the target');
+                alert('Congratulation, you reach the destination');
                 navigator.geolocation.clearWatch(watchID);
               }
         })
@@ -240,7 +242,6 @@ watchID = getPath();
 let button = document.getElementsByClassName("searchBtn")[0];
 button.addEventListener('click',()=>{
     watchID = getPath();
-    clearLocations();
 })
 
 }

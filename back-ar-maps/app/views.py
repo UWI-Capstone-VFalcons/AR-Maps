@@ -1,4 +1,4 @@
-import os, datetime, sys
+import os, datetime, sys, traceback
 from flask import abort, jsonify, request, send_file, render_template, redirect, url_for, flash
 from werkzeug.utils import secure_filename
 import json, math, requests
@@ -410,24 +410,32 @@ def get_shortest_path_ar(cur_latitude, cur_longitude, destination_id):
         dest_coord = (float(dest.latitude), float(dest.longitude))
         meta = None
         if route[1]: # get distance and time
-            meta = estimateDistanceAndTime(cur_coordinate, dest_coord, route[2], route[3])
+            meta = estimateDistanceAndTime(cur_coordinate, dest_coord, route[2], route[3][1])
+            print(meta)
         paths = []
         positions = [] # 3D objects placed 2 meters apart(just randomly chosen)
         for pid in route[3][1]:
             paths.append(Path.query.get(pid))
-            print(paths)
         for path in paths:
             start = Node.query.filter_by(id=path.start).first()
             end = Node.query.filter_by(id=path.end).first()
             result = getPositions([(start.latitude_1, start.longitude_1), (start.latitude_2,start.longitude_2)], [(end.latitude_1, end.longitude_1),(end.latitude_2, end.longitude_2)])
             positions.append(result)
+            # print(result, path, paths)
         if(meta):
-            return successResponse({"route": route, "positions":positions, "meta": meta})
-        return successResponse({"route": route, "positions":positions})
-    except:
+            return successResponse({"positions":positions, "meta": meta})
+        return successResponse({"positions":positions})
+    except Exception:
+        print("Exception in user code:")
+        print("-"*60)
+        traceback.print_exc(file=sys.stdout)
+        print("-"*60)
         return errorResponse("Error occured, report to the admin")
     return errorResponse("Invalid Request, destination not valid")
 
+@app.route('/api/zone/<cur_latitude>/<cur_longitude>', methods=['GET'])
+def zone(cur_latitude, cur_longitude):
+    return 
 
 # Jsonify the response and add it under the data field
 def successResponse(message):
