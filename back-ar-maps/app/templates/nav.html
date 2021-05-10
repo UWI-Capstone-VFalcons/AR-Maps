@@ -2,103 +2,52 @@
     <form id="searchForm" action="{{ url_for('ar') }}" method="GET" enctype="multipart/form-data" class="center">
       {{ form.csrf_token }}
           <div class="form-group form-row">
-            <div class="col w-50 d-inline-flex mx-auto m-1">
-              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" version="1.1" width="35" height="35" x="0" y="0" viewBox="50 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class="pt-1"><g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                  <g>
-                    <path d="M256,0C156.748,0,76,80.748,76,180c0,33.534,9.289,66.26,26.869,94.652l142.885,230.257    c2.737,4.411,7.559,7.091,12.745,7.091c0.04,0,0.079,0,0.119,0c5.231-0.041,10.063-2.804,12.75-7.292L410.611,272.22    C427.221,244.428,436,212.539,436,180C436,80.748,355.252,0,256,0z M384.866,256.818L258.272,468.186l-129.905-209.34    C113.734,235.214,105.8,207.95,105.8,180c0-82.71,67.49-150.2,150.2-150.2S406.1,97.29,406.1,180    C406.1,207.121,398.689,233.688,384.866,256.818z" fill="#ffffff" data-original="#000000"/>
+            <div class="col w-100 d-inline-flex mx-auto m-1">
+              <svg width="45" height="45" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g filter="url(#filter0_d)">
+                  <path d="M19.3414 20.1607C22.4274 15.3183 22.0394 15.9224 22.1284 15.7962C23.2519 14.2115 23.8457 12.3464 23.8457 10.4023C23.8457 5.24691 19.6622 1 14.5 1C9.35465 1 5.1543 5.23853 5.1543 10.4023C5.1543 12.3451 5.76058 14.2591 6.92092 15.8651L9.65847 20.1607C6.73157 20.6105 1.75586 21.9509 1.75586 24.9023C1.75586 25.9782 2.45809 27.5115 5.80351 28.7063C8.13948 29.5405 11.2279 30 14.5 30C20.6186 30 27.2441 28.274 27.2441 24.9023C27.2441 21.9504 22.2743 20.6114 19.3414 20.1607ZM8.34027 14.9305C8.33093 14.9159 8.32119 14.9016 8.31099 14.8875C7.34544 13.5592 6.85352 11.9849 6.85352 10.4023C6.85352 6.15328 10.2749 2.69922 14.5 2.69922C18.7163 2.69922 22.1465 6.15481 22.1465 10.4023C22.1465 11.9875 21.6638 13.5083 20.7505 14.8017C20.6687 14.9096 21.0957 14.2463 14.5 24.5959L8.34027 14.9305ZM14.5 28.3008C7.81675 28.3008 3.45508 26.3363 3.45508 24.9023C3.45508 23.9385 5.69623 22.3538 10.6625 21.7361L13.7835 26.6334C13.9395 26.8782 14.2097 27.0264 14.4999 27.0264C14.7902 27.0264 15.0605 26.8781 15.2164 26.6334L18.3373 21.7361C23.3037 22.3538 25.5449 23.9385 25.5449 24.9023C25.5449 26.3241 21.2225 28.3008 14.5 28.3008Z" fill="white"/>
+                  <path d="M14.5 6.1543C12.1576 6.1543 10.252 8.05997 10.252 10.4023C10.252 12.7447 12.1576 14.6504 14.5 14.6504C16.8424 14.6504 18.748 12.7447 18.748 10.4023C18.748 8.05997 16.8424 6.1543 14.5 6.1543ZM14.5 12.9512C13.0946 12.9512 11.9512 11.8078 11.9512 10.4023C11.9512 8.99692 13.0946 7.85352 14.5 7.85352C15.9054 7.85352 17.0488 8.99692 17.0488 10.4023C17.0488 11.8078 15.9054 12.9512 14.5 12.9512Z" fill="white"/>
                   </g>
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                  <g>
-                    <path d="M256,90c-49.626,0-90,40.374-90,90c0,49.309,39.717,90,90,90c50.903,0,90-41.233,90-90C346,130.374,305.626,90,256,90z     M256,240.2c-33.257,0-60.2-27.033-60.2-60.2c0-33.084,27.116-60.2,60.2-60.2s60.1,27.116,60.1,60.2    C316.1,212.683,289.784,240.2,256,240.2z" fill="#ffffff" data-original="#000000" />
-                  </g>
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                </g></svg>            
-                {{ form.myLocation.label(class="pt-1 h4") }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h4>:</h4>
-                {{ form.myLocation(class="form-control") }}
+                  <defs>
+                  <filter id="filter0_d" x="-1" y="0" width="33" height="33" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                  <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                  <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+                  <feOffset dx="1" dy="1"/>
+                  <feGaussianBlur stdDeviation="1"/>
+                  <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.43 0"/>
+                  <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+                  <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+                  </filter>
+                  </defs>
+                  </svg>
+                         
+                {{ form.myLocation.label(class="pt-1 h4 font-weight-bold") }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h4>:&nbsp;</h4>
+                {{ form.myLocation(class="form-control text-dark font-weight-bold") }}
             </div>
           </div>
           <div class="form-group form-row">
-            <div class="col w-50 d-inline-flex mx-auto m-1">
-              <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" version="1.1" width="35" height="35" x="0" y="0" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512" xml:space="preserve" class="pt-1"><g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                  <g>
-                    <path d="M256,0C156.748,0,76,80.748,76,180c0,33.534,9.289,66.26,26.869,94.652l142.885,230.257    c2.737,4.411,7.559,7.091,12.745,7.091c0.04,0,0.079,0,0.119,0c5.231-0.041,10.063-2.804,12.75-7.292L410.611,272.22    C427.221,244.428,436,212.539,436,180C436,80.748,355.252,0,256,0z M384.866,256.818L258.272,468.186l-129.905-209.34    C113.734,235.214,105.8,207.95,105.8,180c0-82.71,67.49-150.2,150.2-150.2S406.1,97.29,406.1,180    C406.1,207.121,398.689,233.688,384.866,256.818z" fill="#ffffff" data-original="#000000"/>
+            <div class="col w-100 d-inline-flex mx-auto m-1">
+                <svg width="45" height="45" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <g filter="url(#filter0_d)">
+                  <path d="M19.3414 20.1607C22.4274 15.3183 22.0394 15.9224 22.1284 15.7962C23.2519 14.2115 23.8457 12.3464 23.8457 10.4023C23.8457 5.24691 19.6622 1 14.5 1C9.35465 1 5.1543 5.23853 5.1543 10.4023C5.1543 12.3451 5.76058 14.2591 6.92092 15.8651L9.65847 20.1607C6.73157 20.6105 1.75586 21.9509 1.75586 24.9023C1.75586 25.9782 2.45809 27.5115 5.80351 28.7063C8.13948 29.5405 11.2279 30 14.5 30C20.6186 30 27.2441 28.274 27.2441 24.9023C27.2441 21.9504 22.2743 20.6114 19.3414 20.1607ZM8.34027 14.9305C8.33093 14.9159 8.32119 14.9016 8.31099 14.8875C7.34544 13.5592 6.85352 11.9849 6.85352 10.4023C6.85352 6.15328 10.2749 2.69922 14.5 2.69922C18.7163 2.69922 22.1465 6.15481 22.1465 10.4023C22.1465 11.9875 21.6638 13.5083 20.7505 14.8017C20.6687 14.9096 21.0957 14.2463 14.5 24.5959L8.34027 14.9305ZM14.5 28.3008C7.81675 28.3008 3.45508 26.3363 3.45508 24.9023C3.45508 23.9385 5.69623 22.3538 10.6625 21.7361L13.7835 26.6334C13.9395 26.8782 14.2097 27.0264 14.4999 27.0264C14.7902 27.0264 15.0605 26.8781 15.2164 26.6334L18.3373 21.7361C23.3037 22.3538 25.5449 23.9385 25.5449 24.9023C25.5449 26.3241 21.2225 28.3008 14.5 28.3008Z" fill="white"/>
+                  <path d="M14.5 6.1543C12.1576 6.1543 10.252 8.05997 10.252 10.4023C10.252 12.7447 12.1576 14.6504 14.5 14.6504C16.8424 14.6504 18.748 12.7447 18.748 10.4023C18.748 8.05997 16.8424 6.1543 14.5 6.1543ZM14.5 12.9512C13.0946 12.9512 11.9512 11.8078 11.9512 10.4023C11.9512 8.99692 13.0946 7.85352 14.5 7.85352C15.9054 7.85352 17.0488 8.99692 17.0488 10.4023C17.0488 11.8078 15.9054 12.9512 14.5 12.9512Z" fill="white"/>
                   </g>
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                  <g>
-                    <path d="M256,90c-49.626,0-90,40.374-90,90c0,49.309,39.717,90,90,90c50.903,0,90-41.233,90-90C346,130.374,305.626,90,256,90z     M256,240.2c-33.257,0-60.2-27.033-60.2-60.2c0-33.084,27.116-60.2,60.2-60.2s60.1,27.116,60.1,60.2    C316.1,212.683,289.784,240.2,256,240.2z" fill="#ffffff" data-original="#000000"/>
-                  </g>
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                <g xmlns="http://www.w3.org/2000/svg">
-                </g>
-                </g></svg>            
-                {{ form.myDestination.label(class="pt-1 h4") }} &nbsp;&nbsp;<h4>:</h4>
-                {{ form.myDestination(placeholder="Enter Destination", class="form-control") }}
+                  <defs>
+                  <filter id="filter0_d" x="-1" y="0" width="33" height="33" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                  <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                  <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+                  <feOffset dx="1" dy="1"/>
+                  <feGaussianBlur stdDeviation="1"/>
+                  <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.43 0"/>
+                  <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+                  <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+                  </filter>
+                  </defs>
+                  </svg>
+                          
+                {{ form.myDestination.label(class="pt-1 h4 font-weight-bold") }} &nbsp;<h4>:&nbsp;</h4>
+                {{ form.myDestination(placeholder="Enter Destination", class="form-control text-secondary font-weight-bold") }}
             </div>
-          </div>
-          <div class="form-element form-row">
-            <div class="col w-100"><button type="button" class="searchBtn">Search</button></div>
           </div>
     </form>
   </div>
