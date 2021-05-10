@@ -1,8 +1,18 @@
 window.onload = () => {
 
+var watchID;
+
 function getLocation() {
     if(navigator.geolocation) {
         navigator.geolocation.watchPosition(setCurrentLocationName);
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+
+function getPath(){
+    if(navigator.geolocation) {
+        navigator.geolocation.watchPosition(dynamicallyLoadDirections);
     } else {
         alert("Geolocation is not supported by this browser.");
     }
@@ -40,10 +50,10 @@ function setCurrentLocationName(position){
     })
 }
 
-function dynamicallyLoadDirections(currentLocation, destination) {
-
+function dynamicallyLoadDirections(position) {
+    let destination = document.getElementById('myDestination').value;
     // Building paths
-    fetch(`/api/shortest_paths/ar/${destination}/${currentLocation[0]}/${currentLocation[1]}`,{
+    fetch(`/api/shortest_paths/ar/${destination}/${position.coords.latitude}/${position.coords.longitude}`,{
         method:'GET',
         headers:{
             Accept: 'application/json'  
@@ -87,7 +97,7 @@ function dynamicallyLoadDirections(currentLocation, destination) {
                 node_entity.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
                 node_entity.setAttribute('scale', '0.25 0.25 0.25');
                 node_entity.setAttribute('gltf-model', `#node-${i}-${id}`);
-                if(i == 0 && id == 0){
+                if(i == 0 && id == 0 || look_at === 'camera'){
                     node_entity.setAttribute('look-at', '[gps-camera]');
                 } else {
                     node_entity.setAttribute('look-at',`#node-${i}-${look_at}`);
@@ -138,6 +148,11 @@ function dynamicallyLoadDirections(currentLocation, destination) {
             building_entity.setAttribute('animation','property: rotation; to: 0 360 0; loop: true; dur: 10000');
             building_entity.setAttribute('text',`value: ${name}; color:black; side:double; width: 5;`);
             scene.appendChild(building_entity);
+
+            if (latitude === position.coords.latitude && longitude === position.coords.longitude) {
+                alert('Congratulation, you reach the target');
+                navigator.geolocation.clearWatch(watchID);
+              }
         })
         .catch (function(error){
             // show error message
@@ -212,9 +227,21 @@ function loadPlacesNearMe() {
 
 };
 
+function clearLocations(){
+    document.querySelectorAll("a-entity").forEach(e => e.remove());
+    document.querySelectorAll("a-asset-item").forEach(e => e.remove());
+    document.querySelectorAll("a-assets").forEach(e => e.remove());
+}
+
 getLocation();
-loadPlacesNearMe();
-dynamicallyLoadDirections([18.005621, -76.748550], 1);
+//loadPlacesNearMe();
+watchID = getPath();
+
+let button = document.getElementsByClassName("searchBtn")[0];
+button.addEventListener('click',()=>{
+    watchID = getPath();
+    clearLocations();
+})
 
 }
 
