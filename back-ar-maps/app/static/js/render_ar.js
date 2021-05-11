@@ -1,5 +1,70 @@
 window.onload = () => {
+    // navigator.mediaDevices.enumerateDevices().then(function(devices) {
+    //     var userMediaConstraints = {
+    //         audio: false,
+    //         video: {
+    //             facingMode: 'environment',
+    //             width: {
+    //                 ideal: this.parameters.sourceWidth,
+    //                 min: 1024,
+    //                 max: 1920
+    //             },
+    //             height: {
+    //                 ideal: this.parameters.sourceHeight,
+    //                 min: 776,
+    //                 max: 1080
+    //             }
+    //         }
+    //     }
 
+
+    //     if (null !== this.parameters.deviceId) {
+    //         userMediaConstraints.video.deviceId = {
+    //             exact: _this.parameters.deviceId
+    //         };
+    //     }
+    //     // get a device which satisfy the constraints
+    //     navigator.mediaDevices.getUserMedia(userMediaConstraints).then(function success(stream) {
+    //         // set the .src of the domElement
+    //         domElement.srcObject = stream;
+    //         var event = new CustomEvent('camera-init', {stream: stream});
+    //         window.dispatchEvent(event);
+    //         // to start the video, when it is possible to start it only on userevent. like in android
+    //         document.body.addEventListener('click', function(){
+    //             domElement.play();
+    //         });
+    //         // domElement.play();
+    //                     // TODO listen to loadedmetadata instead
+    //         // wait until the video stream is ready
+    //         var interval = setInterval(function() {
+    //             if (!domElement.videoWidth)	return;
+    //             onReady()
+    //             clearInterval(interval)
+    //         }, 1000/50);
+
+    //         // CUSTOM CODE START
+    //         var backCam2 = devices.filter(d=>{
+    //             return d.label && d.label == "camera2 0, facing back";
+    //             })
+    //             if (backCam2.length) {
+    //             userMediaConstraints.video.deviceId = backCam2[0].deviceId
+    //             }
+    //             // CUSTOM CODE END
+    
+
+    //     }).catch(function(error) {
+    //         onError({
+    //             name: error.name,
+    //             message: error.message
+    //         });
+    //     });
+    //     }).catch(function(error) {
+    //         console.log(error.message);
+    //     onError({
+    //         message: error.message
+    //     });
+    // });
+    
     var watchID;
 
     function getLocation() {
@@ -249,6 +314,8 @@ window.onload = () => {
     })
 
     document.querySelector('div.a-enter-vr').remove()
+    document.querySelector('div.a-enter-ar').remove()
+
 
 }
 
