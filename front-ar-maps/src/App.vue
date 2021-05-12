@@ -17,19 +17,19 @@
       </router-link>
       <router-link to="/map">
         <div class="nav-el">
-          <img src="./assets/images/icons/map-pin.svg" alt="home"/>
+          <img src="./assets/images/icons/map-pin.svg" alt="map"/>
         </div>
       </router-link>
       <router-link to="/scan">
         <div class="nav-el">
-          <img src="./assets/images/icons/qr-code.svg" alt="home"/>
+          <img src="./assets/images/icons/qr-code.svg" alt="qr"/>
         </div>
       </router-link>
+      <router-link to="/ar">
         <div class="nav-el">
-          <a href="./nav">
-            <img src="./assets/images/icons/ar-view.svg" alt="home"/>
-          </a>
+          <img src="./assets/images/icons/ar-view.svg" alt="ar"/>
         </div>
+      </router-link>
     </div>
   </div>
 </template>

@@ -47,6 +47,9 @@ CREATE TABLE `buildings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
+-- used to insert location data
+-- insert into buildings (building_id, name, b_type, info, lattitude, longitude, address1, address2, address3, image_url) values (13,'Aunty Jackie Shop', 'Shop', 'Aunty Jackie Food and Supplies Shop', 18.005167, 76.749480, 'Faculty of Science and Technology', 'UWI Mona', 'Kingston', 'static/images/buildings/aunty_jackie_stall.jpg');
+insert into node (node_id, latitude, longitude) values (20,'18.005283', '76.749345');
 
 --
 -- Table structure for table `events`
