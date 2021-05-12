@@ -135,6 +135,8 @@ window.onload = () => {
             console.log(jsonResponse);
             // console.log(jsonResponse.data.positions[0][1][0][1]);
 
+            let meta = jsonResponse.data.meta;
+
             clearLocations();
 
             let scene = document.querySelector('a-scene');
@@ -162,7 +164,7 @@ window.onload = () => {
 
                     let node_entity = document.createElement('a-entity');
                     node_entity.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
-                    node_entity.setAttribute('scale', '0.25 0.25 0.25');
+                    node_entity.setAttribute('scale', '0.5 0.5 0.5');
                     node_entity.setAttribute('gltf-model', `#node-${i}-${id}`);
                     if(i == 0 && id == 0 || look_at === 'camera'){
                         node_entity.setAttribute('look-at', '[gps-camera]');
@@ -209,11 +211,15 @@ window.onload = () => {
 
                 let building_entity = document.createElement('a-entity');
                 building_entity.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
-                building_entity.setAttribute('scale', '1 1 1');
+                building_entity.setAttribute('scale', '1.5 1.5 1.5');
                 building_entity.setAttribute('gltf-model', `#building-${id}`);
                 building_entity.setAttribute('look-at', '[gps-camera]');
                 building_entity.setAttribute('animation','property: rotation; to: 0 360 0; loop: true; dur: 10000');
-                building_entity.setAttribute('text',`value: ${name}; color:black; side:double; width: 5;`);
+                if(meta !== undefined){
+                    building_entity.setAttribute('text',`value: ${name} ${meta.time} mins (${meta.distance}m) away ; color:black; side:double; width: 5;`);
+                } else {
+                    building_entity.setAttribute('text',`value: ${name}; color:black; side:double; width: 5;`);
+                }
                 scene.appendChild(building_entity);
 
                 if (latitude === position.coords.latitude && longitude === position.coords.longitude) {
