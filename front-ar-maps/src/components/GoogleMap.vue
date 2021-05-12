@@ -9,16 +9,26 @@
     <div id="user-destination">
       <div >
         <label for="">Destination:</label>
-        <select name="destinations" id="dd-dest"  v-model="destination_id">
-          <option selected :value="null" disabled >Select Destination Here</option>
+        <select name="destinations" id="dd-dest"  v-model="destination">
+          <option selected :value="[null, null]" disabled >Select Destination Here</option>
           <option v-for="(building, index) in all_buildings" 
           :key="index" 
-          :value="building.building_id">
+          :value="[building.building_id, building.building_name]">
             {{building.building_name }} 
           </option>
         </select>
         <button @click="findPath">Find Path</button>
       </div>
+    </div>
+
+
+    <div id="map-bottom-metrix">
+      <bottom-metric
+        v-if="istracking"
+        :distance="nav_metrix.distance"
+        :time="nav_metrix.time" 
+        :destination="destinationName"
+      />
     </div>
 
     <GmapMap
@@ -101,6 +111,7 @@
 
     </GmapMap>
 
+
   </div>
 </template>
 
@@ -108,13 +119,14 @@
 import axios from 'axios';
 import {gmapApi} from 'vue2-google-maps';
 import DirectionsRenderer from '../map_components/DirectionRenderer';
+import BottomMetrix from '../map_components/BottomMetrix'
 
 
 export default {
   name: 'GoogleMap',
-  components: {DirectionsRenderer},
-  computed: {
-    google: gmapApi
+  components: {
+    DirectionsRenderer,
+    'bottom-metric': BottomMetric,
   },
   data(){
     return{
@@ -139,9 +151,8 @@ export default {
         lng: -76.748542
       },
       google_route_options: {
-        markerOptions:{
-          visible:false,
-        },
+        suppressMarkers:true,
+        preserveViewport:true,
         polylineOptions:{
           strokeColor: "#FF00FF",
           strokeOpacity: 0.8,
@@ -149,7 +160,7 @@ export default {
           fillColor: "#FF00FF",
           fillOpacity: 0.35,
         },
-        toggle:false
+        toggle:false,
       },
       // database cached variables
       all_buildings:[],
@@ -184,10 +195,20 @@ export default {
       },
       location_avialable: false,
       // navigation variables
-      destination_id:null,
+      destination:[null, null],
       user_location_name:"",
+      nav_metrix:{
+        distance: 0,
+        time: 0,
+      },
       istracking: false,
     }
+  },
+  computed: {
+    google: gmapApi,
+    destinationName(){ return this.destination[1] != null? this.destination[1]:'None';},
+    destination_id(){return this.destination[0];},
+
   },
   created(){
     // continously set the location data as it change
@@ -203,7 +224,7 @@ export default {
     this.setLocationName();
 
     // test fake walk
-    // this.testFakeWalk(-0.00005,-0.00005,5000)
+    // this.testFakeWalk(-0.00040,-0.00040,5000)
 
   },
   
@@ -277,11 +298,14 @@ export default {
 
           // activate google direction renderer if the person is outside scit tech
           if(this.best_route_data.use_starting_point == true){
-            console.log("here3")
             this.starting_point_coord.lat = this.best_route_data.starting_point_latitude;
             this.starting_point_coord.lng = this.best_route_data.starting_point_longitude;
             this.google_route_options.toggle = true;
           }
+
+          // Set the metrix information
+          this.nav_metrix.distance = this.best_route_data.metrix.distance;
+          this.nav_metrix.time = this.best_route_data.metrix.time;
 
           // turn on tracking
           this.istracking = true;
@@ -429,9 +453,7 @@ export default {
         this.userCoordinates.lng = point.y;
 
         this.setLocationName();
-        console.log("here1");
         if(this.istracking==true){
-          console.log("here2");
           this.findPath();
         }
       }, delay);

@@ -5,17 +5,10 @@ export default MapElementFactory({
 
     ctr: () => google.maps.DirectionsRenderer, // eslint-disable-line
 
-    events: ['directions_changed'],
+    events: [],
 
     // create your watchers in `afterCreate()`.
     mappedProps: { 
-        routeIndex: { type: Number }, 
-        // options: { type: Object },  
-        panel: { }, 
-        directions: { type: Object }, 
-        //// If you have a property that comes with a `_changed` event,
-        //// you can specify `twoWay` to automatically bind the event, e.g. Map's `zoom`:
-        // zoom: {type: Number, twoWay: true}
     },
 
     props: {
@@ -34,33 +27,42 @@ export default MapElementFactory({
     // Actions to perform after creating the object instance.
     afterCreate(directionsRendererInstance) {
         let directionsService = new google.maps.DirectionsService(); // eslint-disable-line
-      
-        this.$watch(
-        () => [this.origin, this.destination, this.travelMode, this.options, this.toggle],
-        () => {
-            let { origin, destination, travelMode, options, toggle } = this;
-            if (!origin || !destination || !travelMode || !options || !toggle)  return;
 
-            if(toggle == true){
-                directionsService.route(
-                {
-                    origin,
-                    destination,
-                    travelMode
-                },
-                (response, status) => {
-                    if (status == "OK"){
-                        directionsRendererInstance.setDirections(response);
-                        directionsRendererInstance.setOptions(options);
-                    }else{
-                        return;
-                    }
+        this.$watch(
+            // check if any of the variables change
+            () => [this.origin,this.destination,this.toggle,this.options],
+            () => {
+                console.log("direction route changed");
+                // set the variables internally
+                let { origin, destination, travelMode, options, toggle } = this;
+
+                // check if the routing service is needed
+                if(toggle == true){
+                    // draw the route on the map if the routing service is needed
+                    directionsService.route(
+                    {
+                        origin: origin,
+                        destination: destination,
+                        travelMode: travelMode,
+                        unitSystem: google.maps.UnitSystem.METRIC // eslint-disable-line
+                    },
+                    (response, status) => {
+                        if (status == "OK"){
+                            directionsRendererInstance.setDirections(response);
+                            directionsRendererInstance.setOptions(options);
+                        }else{
+                            console.log(status);
+                        }
+                    });
                 }
-                );
-            }else{
-                directionsRendererInstance.unbindAll();
+
+            },
+            {
+                // ensure to check if there was any change inside of the variable 
+                // and run the function on the inital start
+                deep:true,
+                immediate:true,
             }
-        } 
         );
     }
 });
