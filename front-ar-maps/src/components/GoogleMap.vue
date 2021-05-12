@@ -119,7 +119,7 @@
 import axios from 'axios';
 import {gmapApi} from 'vue2-google-maps';
 import DirectionsRenderer from '../map_components/DirectionRenderer';
-import BottomMetric from '../map_components/BottomMetrix'
+import BottomMetric from '../map_components/BottomMetric'
 
 
 export default {
