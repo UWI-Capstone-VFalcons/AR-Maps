@@ -249,15 +249,17 @@ h1,h2,h3{
   flex-direction: column;
   color: white;
   height: 5rem;
-  
+  padding: 0;
+  margin: 0;
 }
 
 .help-top h6{
   cursor: pointer;
+  padding-top: 5px;
 }
 
 .help-top img{
-  width: 4rem;
+  width: 3rem;
   height: 4rem;
   justify-content: end;
 }
