@@ -437,7 +437,7 @@ def get_shortest_path_ar(cur_latitude, cur_longitude, destination_id):
     return errorResponse("Invalid Request, destination not valid")
 
 @app.route('/api/zone/<cur_latitude>/<cur_longitude>', methods=['GET'])
-def zone(cur_latitude, cur_longitude):
+def get_zone(cur_latitude, cur_longitude):
     return 
 
 # Jsonify the response and add it under the data field
