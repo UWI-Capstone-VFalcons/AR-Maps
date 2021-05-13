@@ -341,6 +341,7 @@ def get_shortest_path_overhead(cur_latitude, cur_longitude, destination_id):
     cur_longitude = float(cur_longitude)
     cur_latitude = float(cur_latitude)
     cur_coordinate = (cur_latitude, cur_longitude)
+    shortest_path_response = {}
 
     try:
         destination_id = int(destination_id)
@@ -348,8 +349,8 @@ def get_shortest_path_overhead(cur_latitude, cur_longitude, destination_id):
         dest_coord = (float(building.latitude),float(building.longitude))
 
         shortestPathDetail = shortestRoute(cur_coordinate, destination_id)
-
-        metrix = estimateDistanceAndTime(cur_coordinate, dest_coord, shortestPathDetail[2], shortestPathDetail[3][1])
+        
+        metrics = estimateDistanceAndTime(cur_coordinate, dest_coord, shortestPathDetail[2], shortestPathDetail[3][1])
 
         # create dictionary for ouput
         shortest_path_response = {
@@ -357,6 +358,8 @@ def get_shortest_path_overhead(cur_latitude, cur_longitude, destination_id):
             "use_starting_point": shortestPathDetail[1],
             "route": shortestPathDetail[3][1]
         }
+
+        # add starting point if neessary
         if(shortestPathDetail[1]):
             starting_point = shortestPathDetail[2]
             starting_point_lat = float(starting_point.latitude)
@@ -364,9 +367,15 @@ def get_shortest_path_overhead(cur_latitude, cur_longitude, destination_id):
             shortest_path_response["starting_point_latitude"] = starting_point_lat
             shortest_path_response["starting_point_longitude"] = starting_point_lng
 
-        if not metrix == None:
-            shortest_path_response["metrix"] = metrix
+        # add metrics
+        if not metrics == None:
+            shortest_path_response["metrics"] = metrics
 
+        # add boolean if user reach their destintion
+        if(checkCurrentAndDestination(cur_coordinate, destination_id)):
+            shortest_path_response["reach_destination"] = True
+        else:
+            shortest_path_response["reach_destination"] = False
         return successResponse(shortest_path_response)
     except:
         return errorResponse("Error occured, report to the admin")
