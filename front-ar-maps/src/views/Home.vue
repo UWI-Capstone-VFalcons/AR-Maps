@@ -8,7 +8,7 @@
       <img src="../assets/images/illustrations/navigate.svg">
     </div>
     <div class="help">
-      <img src="../assets/images/illustrations/help.png" alt="Help Icon">
+      <img @click="toHelp" src="../assets/images/illustrations/help.png" alt="Help Icon">
     </div>
     <div class="bottom">
       <h1>Turn on your location</h1>
@@ -44,7 +44,10 @@ export default {
   methods:{
     toMaps: function(){
       router.push({ name: 'Map'});
+    },
 
+    toHelp: function(){
+      router.push({ name: 'Help'});
     },
   },
 }
