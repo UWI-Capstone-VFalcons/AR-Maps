@@ -1,16 +1,22 @@
 # from app import db
+from math import dist
 from app.helper import *
 from app.views import *
 
 if __name__ == '__main__':
-#    a = generateShortestRoute(1,3,1)
-#    print(a)
+   # a = checkCurrentAndDestination((18.005019529041988, -76.74933235613977), 1)
+   # building = Building.query.get(1)
+   # dest_coord = (float(building.latitude),float(building.longitude))
+   # a = estimateDistanceAndTime(
+   #    (18.00520017651841,-76.74941982751545), 
+   #    dest_coord, 
+   #    (18.00561828188547, -76.748552446822),
+   #    [])
+   # b = dist(
+   #    (18.002903738473425, -76.74732416609262),
+   #    (17.999546906527225, -76.74373170926685))
 
-#    b = shortestRoute((18.005653, -76.748327),4)
-#    print(b)
-
-    c = getPositions([(18.005667, -76.748556),(18.005619, -76.748535)],[(18.005377,-76.749178), (18.005335, -76.749152)])
-    print(c)
-    # sp = Starting_Point.query.get(1)
-    # a = estimateDistanceAndTime((18.005151, -76.749463),(1,2),sp, [1,2,3])
-    # print(a)
+   # c = get_shortest_path_overhead(18.00520017651841,-76.74941982751545, 1)
+   # print(a)
+   # print(b)
+   # print(c)

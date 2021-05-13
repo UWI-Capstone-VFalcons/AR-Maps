@@ -56,6 +56,7 @@
             @location_change="setLocation"
             @destinations_change="setDestination"
             @nav_metrics_change="setNavMetrics"
+            @reachDestination="alertReachDestination"
             />
         </div>
 
@@ -124,6 +125,7 @@ export default {
         setLocation(location){this.user_location_name = location},
         setDestination(destins){this.all_buildings = destins},
         setNavMetrics(navMetrics){this.nav_metrics = navMetrics},
+        alertReachDestination(){this.reachDestination = true;},
         toggleTracking(){
             if(!this.istracking && this.destination[0] != null){
                 this.istracking=true;  
@@ -143,6 +145,7 @@ export default {
             this.formClasses.splice(this.formClasses.indexOf("gone"),1);
             this.btnClasses.splice(this.btnClasses.indexOf("stop-btn"),1);
         }
+
     }
 
 }

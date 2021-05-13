@@ -144,8 +144,8 @@ export default {
       // google maps 
       // user variables
       userCoordinates:{
-        lat: 18.005656, 
-        lng: -76.747472,  
+        lat: 18.00520017651841, 
+        lng: -76.74941982751545, 
         accuracy:0
       },
       userMarker:{
@@ -286,9 +286,15 @@ export default {
           }
 
           // Set the metrix information
-          this.nav_metrics.distance = this.best_route_data.metrix.distance;
-          this.nav_metrics.time = this.best_route_data.metrix.time;
+          this.nav_metrics.distance = this.best_route_data.metrics.distance;
+          this.nav_metrics.time = this.best_route_data.metrics.time;
           this.$emit('nav_metrics_change', this.nav_metrics);
+
+          // check if the user is at their destination 
+          // and send a notification if they are
+          if(this.best_route_data.reach_destination){
+            this.$emit("reachDestination");
+          }
 
         })
         .catch((error) => {
