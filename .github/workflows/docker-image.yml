@@ -3,7 +3,7 @@ name: Docker Image CI
 on: 
   push:
     branches:
-      - None
+      - sprint5
       
   pull_request:
     branches:
