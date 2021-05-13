@@ -3,7 +3,7 @@
 
   <div id="app-bar" class='help-top'>
     <div class='help-top-sub'>
-      <h6>Swipe to go Back</h6>
+      <h6 @click="toHome">Go Back</h6>
       <img src="../assets/images/illustrations/help.png" alt="Help Icon">
     </div>
     
@@ -99,7 +99,10 @@
       
 </template>
 
+
 <script>
+import router from '@/router';
+
 export default {
   data() {
     return {
@@ -133,7 +136,12 @@ export default {
 });
 
 
-}
+},
+methods:{
+    toHome: function(){
+      router.push({ name: 'Home'});
+    },
+  },
 
 }
 </script>
@@ -240,19 +248,18 @@ h1,h2,h3{
   display: flex;
   flex-direction: column;
   color: white;
+  height: 5rem;
   
 }
-/* 
+
 .help-top h6{
-  position: absolute;
-  color: white;
-  top:1%;
-  left: 30%;
-} */
+  cursor: pointer;
+}
 
 .help-top img{
-  width: 5rem;
-  height: 5rem;
+  width: 4rem;
+  height: 4rem;
+  justify-content: end;
 }
 
 .help-svg{
