@@ -1,44 +1,14 @@
 <template>
   <div> 
-        <!-- <h6>// https://www.youtube.com/watch?v=KARBEHUyooM</h6> -->
-    <div id="user-location">
-      <img src="../assets/images/icons/map-pin.svg">
-      <h6>Location: {{user_location_name}}</h6>
-    </div>
-
-    <div id="user-destination">
-      <div >
-        <label for="">Destination:</label>
-        <select name="destinations" id="dd-dest"  v-model="destination">
-          <option selected :value="[null, null]" disabled >Select Destination Here</option>
-          <option v-for="(building, index) in all_buildings" 
-          :key="index" 
-          :value="[building.building_id, building.building_name]">
-            {{building.building_name }} 
-          </option>
-        </select>
-        <button @click="findPath">Find Path</button>
-      </div>
-    </div>
-
-
-    <div id="map-bottom-metrix">
-      <bottom-metric
-        v-if="istracking"
-        :distance="nav_metrix.distance"
-        :time="nav_metrix.time" 
-        :destination="destinationName"
-      />
-    </div>
-
     <GmapMap
       :center="userCoordinates"
       :zoom="zoom_level"
+      :options="map_options"
       style="width: 100%; height: 100vh;"
     >
       <!-- Draw all the paths that are not travelled on -->
       <gmap-polygon
-        :key="'plg'+index"
+        :key="'path_'+index"
         v-for="(plg, index) in paths_polygon"
         :editable="plg.editable"
         :draggable="plg.draggable"
@@ -46,9 +16,9 @@
         :path="plg.path"
       />  
 
-      <!-- Draw all the route the user should follow -->
+      <!-- Draw all the custom routes-->
       <gmap-polygon
-        :key="'plg_r'+index_r"
+        :key="'route_'+index_r"
         v-for="(plg_r, index_r) in paths_route_polygon"
         :editable="plg_r.editable"
         :draggable="plg_r.draggable"
@@ -63,18 +33,9 @@
         :destination="starting_point_coord"
         :options="google_route_options"
         :toggle="google_route_options.toggle"
-      
       />
 
-      <!-- Draw circle around user showing accuracy of reading -->
-      <GmapCircle
-        :key="'uc'+userMarker.key"
-        :center="userCoordinates"
-        :radius="(userCoordinates.accuracy+1)/1000"
-        :options="userMarker.circle.options"
-      />
-
-      <!-- Marker Window if it is clicked -->
+      <!-- Info Window if marker it is clicked -->
       <GmapInfoWindow
       :options="infoWindow.options"
       :position="infoWindow.position"
@@ -86,7 +47,7 @@
 
       <!-- Building Markers -->
       <GmapMarker
-        :key="'m'+index"
+        :key="'building_'+index"
         v-for="(m, index) in markers"
         :position="m.position"
         :title="m.title"
@@ -98,9 +59,18 @@
         @click="openInfoWindowTemplate(index)"
       />
 
+      <!-- Draw circle around user showing accuracy of user reading -->
+      <GmapCircle
+        :key="'accuracy_'+userMarker.key"
+        :center="userCoordinates"
+        :radius="(userCoordinates.accuracy+1)/1000"
+        :options="userMarker.circle.options"
+      />
+
       <!-- User Marker -->
       <GmapMarker
-        :key="'m'+userMarker.key"
+        v-if="location_avialable"
+        :key="'user_'+userMarker.key"
         :position="userCoordinates"
         :title="userMarker.title"
         :icon="userMarker.icon"
@@ -108,30 +78,36 @@
         :clickable="false"
         :draggable="false"
       />
-
     </GmapMap>
-
-
   </div>
 </template>
 
 <script>
 import axios from 'axios';
-import {gmapApi} from 'vue2-google-maps';
 import DirectionsRenderer from '../map_components/DirectionRenderer';
-import BottomMetric from '../map_components/BottomMetric'
 
 
 export default {
   name: 'GoogleMap',
+
   components: {
     DirectionsRenderer,
-    'bottom-metric': BottomMetric,
   },
+
+  props:{
+    destination_id: {Number},
+    destinationName: {String},
+    istracking: {Boolean},
+  },
+
   data(){
     return{
-      // Google map variables
-      zoom_level:19,
+      // Google map 
+      // construction variables
+      zoom_level:18,
+      map_options:{
+        disableDefaultUI:true
+      },
       markers:[],
       paths_polygon:[],
       infoWindow:{
@@ -143,7 +119,9 @@ export default {
         open:false,
         template:'',
       },
-      // google map direction variables
+
+      // google map route 
+      // direction variables
       paths_route_polygon:[],
       travel_mode:"WALKING",
       starting_point_coord:{
@@ -162,11 +140,8 @@ export default {
         },
         toggle:false,
       },
-      // database cached variables
-      all_buildings:[],
-      all_paths:[],
-      best_route_data:{},
-      route_paths:[],
+
+      // google maps 
       // user variables
       userCoordinates:{
         lat: 18.005656, 
@@ -193,23 +168,23 @@ export default {
           },  
         }
       },
-      location_avialable: false,
-      // navigation variables
-      destination:[null, null],
-      user_location_name:"",
-      nav_metrix:{
+      location_avialable: true,      
+
+      // navigation variables cache
+      user_location_name: {String},
+      nav_metrics:{
         distance: 0,
         time: 0,
       },
-      istracking: false,
+
+      // database cached variables
+      all_buildings:[],
+      all_paths:[],
+      best_route_data:{},
+      route_paths:[],      
     }
   },
-  computed: {
-    google: gmapApi,
-    destinationName(){ return this.destination[1] != null? this.destination[1]:'None';},
-    destination_id(){return this.destination[0];},
 
-  },
   created(){
     // continously set the location data as it change
     // this.watchUserCoordinates(); 
@@ -242,7 +217,16 @@ export default {
         this.markers[from-1].animation = 0
       }
       this.markers[to-1].animation = 1
-    }
+    },
+
+    istracking:function(){
+      if(this.istracking==true){
+        this.findPath();
+      }else{
+        this.google_route_options.toggle = false;
+        this.paths_route_polygon = [];
+      }
+    } 
   },
 
   methods:{
@@ -254,8 +238,6 @@ export default {
           //clear any previous path
           this.paths_route_polygon = []
           this.route_paths = []
-           // turn off tracking
-          this.istracking = false; 
 
           // console.log(res.data.data);
           this.best_route_data = res.data.data
@@ -304,11 +286,10 @@ export default {
           }
 
           // Set the metrix information
-          this.nav_metrix.distance = this.best_route_data.metrix.distance;
-          this.nav_metrix.time = this.best_route_data.metrix.time;
+          this.nav_metrics.distance = this.best_route_data.metrix.distance;
+          this.nav_metrics.time = this.best_route_data.metrix.time;
+          this.$emit('nav_metrics_change', this.nav_metrics);
 
-          // turn on tracking
-          this.istracking = true;
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -317,6 +298,7 @@ export default {
     },
 
     watchUserCoordinates(){
+      // get the users current location from device
       if ("geolocation" in navigator){
         navigator.geolocation.watchPosition(position => {
           this.userCoordinates = {
@@ -341,9 +323,12 @@ export default {
       axios.get(path)
         .then((res) => {
           // console.log(res);
+          // check if there was an error 
           if(typeof res.data.error === 'undefined'){
             if(typeof res.data.data.name !== 'undefined'){
+              // save the name if its valid
               this.user_location_name = res.data.data.name;
+              this.$emit('location_change', this.user_location_name);
             }
           }else{
             console.log(res.data.error);
@@ -360,7 +345,8 @@ export default {
       axios.get(path)
         .then((res) => {
           this.all_buildings = res.data.data;
-
+          this.$emit('destinations_change', this.all_buildings);
+          
           // run a loop on the json list and create a
           // marker for each building
           if(this.all_buildings.length > 0){
@@ -377,10 +363,7 @@ export default {
                   url: require('../assets/images/icons/map/building.png'),
                   // size: {width: 60, height: 90, f: 'px', b: 'px',},
                   scaledSize: {width: 28, height: 28, f: 'px', b: 'px',},
-                  // labelOrigin: {lat:this.all_buildings[i].building_latittude , lng:this.all_buildings[i].building_longitude},
-                  // labelOrigin: {x:this.all_buildings[i].building_latittude-0.001, y:this.all_buildings[i].building_longitude-0.001},
                   labelOrigin: {x:75, y:35},
-
                 },
                 animation: 0
               })
@@ -426,7 +409,6 @@ export default {
               ],
             });
           }
-
         })
         .catch((error) => {
           // eslint-disable-next-line
@@ -436,6 +418,7 @@ export default {
     },
     
     openInfoWindowTemplate(index) {
+      // open the window for a marker when clicked
       const building = this.all_buildings[index];
       this.infoWindow.position = { lat: building.building_latittude, lng: building.building_longitude }
       this.infoWindow.template = `<b>${building.building_name}</b><br>${building.building_address1}<br>${building.building_address2} ${building.building_address3}<br>`
@@ -443,7 +426,8 @@ export default {
     },
 
     testFakeWalk(x=1, y=1, delay=1000){
-      // let cur_cord = this.userCoordinates;
+      // test walking in app
+      // debugging purposes
       this.polling = setInterval(() => {
         let point = new this.google.maps.Point(
         this.userCoordinates.lat + x,

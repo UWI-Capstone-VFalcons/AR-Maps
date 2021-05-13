@@ -32,7 +32,7 @@ export default MapElementFactory({
             // check if any of the variables change
             () => [this.origin,this.destination,this.toggle,this.options],
             () => {
-                console.log("direction route changed");
+                // console.log("direction route changed");
                 // set the variables internally
                 let { origin, destination, travelMode, options, toggle } = this;
 
@@ -54,6 +54,10 @@ export default MapElementFactory({
                             console.log(status);
                         }
                     });
+                }else{
+                    directionsRendererInstance.set('directions', null);
+                    // console.log("direction off");
+
                 }
 
             },

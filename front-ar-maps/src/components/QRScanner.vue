@@ -73,3 +73,54 @@ export default {
 
 }
 </script>
+<style>
+#qrscanner{
+    width: 100%;
+    height: 100%;
+    background-color: grey;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#scanner{
+    display: block;
+}
+.qrcode-stream-overlay{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#qr-overlay{
+    height: 70%;
+    width: 70%;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#qr-overlay p{
+    width: fit-content;
+    color: grey;
+    background-color: white;
+    padding: 0.2rem 0.5rem;
+    font-weight: bold;
+    border-radius: 0.4rem;
+}
+
+#qr-box{ 
+    width: 90%;
+    height: 90%;
+    border: 0.4rem dashed blue ;
+    border-radius: 0.4rem;
+    /* position: relative; */
+    z-index: 10;
+}
+
+.full_cam{
+    width:  auto !important;
+    height: auto !important;
+}
+</style>

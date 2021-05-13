@@ -2,7 +2,7 @@ import os, datetime, sys, traceback
 from flask import abort, jsonify, request, send_file, render_template, redirect, url_for, flash
 from werkzeug.utils import secure_filename
 import json, math, requests
-from app import app, db, qrcode, Google_API_Key
+from app import app, qrcode, Google_API_Key, image_folder
 from app.models import *
 from app.forms import *
 from app.helper import *
@@ -71,13 +71,13 @@ def building_qr(building_id):
             'building_address1': building.address1,
             'building_address2': building.address2,
             'building_address3': building.address3,
-            'building_image': building.image_url,
+            'building_image': image_folder+building.image_url,
             'building_latittude': building.latitude,
             'building_longitude':building.longitude,
             'building_info': building.info 
         }
 
-        qrcode_data = json.dumps(qrcode_data)
+        qrcode_data = json.dumps(qrcode_data, cls=DecimalEncoder)
 
         return send_file(qrcode(qrcode_data,  box_size=20, border=3, mode="raw"), mimetype="image/png")
     return errorResponse("no such building found")
