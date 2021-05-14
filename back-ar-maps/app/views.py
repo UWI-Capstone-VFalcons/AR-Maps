@@ -2,7 +2,7 @@ import os, datetime, sys, traceback
 from flask import abort, jsonify, request, send_file, render_template, redirect, url_for, flash
 from werkzeug.utils import secure_filename
 import json, math, requests
-from app import app, qrcode, Google_API_Key, image_folder
+from app import app, qrcode, Google_API_Key, image_folder, csrf
 from app.models import *
 from app.forms import *
 from app.helper import *
@@ -20,17 +20,28 @@ from app.my_encoders import *
 def defHome():
     return redirect(url_for("home"))
 
-@app.route('/nav', methods=['GET'])
+@app.route('/nav', methods=['GET','POST'])
 def ar():
     """Render camera with ar experience  <19/3/2021 N.Bedassie>"""
+    # check if the response is a post request
+    # send the data if it is
+    data={}
+    if request.method == 'POST':
+        data=request.form["data"]
+
+    #  continue adding form for everything else 
     form = FindARDestinationForm()
     buildings = Building.query.all()
     form.myDestination.choices = [(b.id, b.name) for b in buildings]
-    return render_template("map.html",form=form, buildings=buildings)
+    return render_template("map.html",form=form, buildings=buildings, data=data)
 
-@app.route('/nav/OD/orientation', methods=['GET'])
-def od_orientation():
-    return render_template("od_orientation.html")
+@app.route('/nav/OD/detect', methods=['GET','POST'])
+def od_orientation():  
+    data = {}
+    # check if its a post request and send the data
+    if request.method == 'POST':
+        data=request.form["data"]
+    return render_template("od_orientation.html", data=data)
 
 """
     API EndPOints
@@ -189,17 +200,6 @@ def get_location_name(cur_latitude, cur_longitude):
     Destinations
 """
 
-def get_dist(coord_a, coord_b):
-    """
-    Parameters
-        ----------
-        coord_a : tuple/list
-            the first pair of latitude and longitude (17.98321, -76.13138) or [17.13183, -77.13176]
-        coord_b : tuple/list
-            the second pair of latitube and longitude (17.98321, -76.13138) or [17.13183, -77.13176] 
-    """
-    return math.sqrt((coord_a[0] - coord_b[0])**2 + (coord_a[1] - coord_b[1])**2)
-
 @app.route('/api/destinations', methods=['GET'])
 def get_all_destinations():
 
@@ -301,6 +301,22 @@ def get_destinations_estimates(cur_latitude, cur_longitude, des_building_id, sta
     except:
         return errorResponse("Fail to connect to API or Error occured")
     return successResponse("no metrix available")
+
+@app.route('/api/arrive/destinations/(<cur_latitude>,<cur_longitude>)/<des_building_id>', methods=['GET'])
+def get_reach_destination(cur_latitude, cur_longitude, des_building_id):
+    if(not isNum(cur_latitude) or not isNum(cur_longitude) or not isNum(des_building_id)): return errorResponse("Invalid parameters")
+    
+    cur_longitude = float(cur_longitude)
+    cur_latitude = float(cur_latitude)
+    cur_coord = (cur_latitude,cur_longitude)
+
+    des_building_id = int(des_building_id)
+    try:
+        response = checkCurrentAndDestination(cur_coord, des_building_id)
+        return successResponse(response)
+    except:
+        return errorResponse("Error occured, report to the admin")
+    return errorResponse("Something went wrong!")
 
 """
     Paths
@@ -436,6 +452,9 @@ def get_shortest_path_ar(cur_latitude, cur_longitude, destination_id):
         return errorResponse("Error occured, report to the admin")
     return errorResponse("Invalid Request, destination not valid")
 
+"""
+    Zone
+"""
 @app.route('/api/zone/<cur_latitude>/<cur_longitude>', methods=['GET'])
 def get_zone(cur_latitude, cur_longitude):
     # return 
@@ -454,7 +473,7 @@ def get_zone(cur_latitude, cur_longitude):
     try:
         map_area = getMapArea(cur_coordinate)
         if(map_area):
-            zone = getMapZone(cur_coordinate, map_area)
+            zone = getMapZone(cur_coordinate, map_area.id)
             if(zone == None):
                 return errorResponse("User is not in a zone")
         else:
@@ -473,21 +492,25 @@ def get_zone(cur_latitude, cur_longitude):
         return errorResponse("Error occured, report to the admin")
     return errorResponse("Invalid Request, destination not valid")
 
+
+"""
+    responses
+"""
 # Jsonify the response and add it under the data field
 def successResponse(message):
     return jsonify({'data':message}), 200
     
 # jsonify the response message with a error title
 def errorResponse(message):
-    return json.dumps({'error':message})
+    return jsonify({'error':message})
 
 
 # if __name__ == '__main__':
 #     app.run(debug=True, host="0.0.0.0", port="5000")
 
 """
-1) get the zone user is in while they move - b
-2) check if the zone changes from the previous zone
+1) * get the zone user is in while they move - b 
+2) * check if the zone changes from the previous zone
 3) prompt the user with a button to calibrate the GPS -p
     - with a mini floating button
     - should not be obstructive

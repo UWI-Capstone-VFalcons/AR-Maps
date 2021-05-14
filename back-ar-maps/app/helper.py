@@ -46,6 +46,18 @@ def dist(coord_a, coord_b):
     # calculate the distane in meters
     return (distance_radians * r_earth)* val_error
 
+# get straight line distance
+def get_dist_straight(coord_a, coord_b):
+    """
+    Parameters
+        ----------
+        coord_a : tuple/list
+            the first pair of latitude and longitude (17.98321, -76.13138) or [17.13183, -77.13176]
+        coord_b : tuple/list
+            the second pair of latitube and longitude (17.98321, -76.13138) or [17.13183, -77.13176] 
+    """
+    return math.sqrt((coord_a[0] - coord_b[0])**2 + (coord_a[1] - coord_b[1])**2)
+
 # check if a location is inside a map area and return the area ID
 # coordinate is in the form (lat, longitude)
 def getMapArea(coordinate):
@@ -712,11 +724,11 @@ def checkCurrentAndDestination(cur_coord, dest_id):
 
 # check if a location is inside a map zone and return the zone ID
 # coordinate is in the form (lat, longitude)
-def getMapZone(coordinate, mapArea):
+def getMapZone(coordinate, mapArea_id):
     latitude = float(coordinate[0])
     longitude = float(coordinate[1])
 
-    map_zones  = MapZone.query.filter_by(map_area=mapArea).all()
+    map_zones  = MapZone.query.filter_by(map_area=mapArea_id).all()
 
     for map_zone in map_zones:
 

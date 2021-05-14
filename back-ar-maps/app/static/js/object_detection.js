@@ -75,6 +75,7 @@ async function detection() {
       console.log(result);
       // document.getElementById('console').innerText = `
       // prediction: ${result[0].class}, probability: ${result[0].score}`;
+      processDetection(result);
       webcam.stop()
       break;
     }
@@ -88,4 +89,9 @@ async function detection() {
   }
 }
 
+// run this function whenever a object is detected
+function processDetection(result){
+  console.log(post_data);
+}
+processDetection(1)
 detection();

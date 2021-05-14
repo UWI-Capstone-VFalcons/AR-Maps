@@ -13,6 +13,10 @@
 {% include 'header.html' %}
 
 {% block main %}
+<form id="hiddenForm" action="{{ url_for('ar') }}" method="POST" enctype="multipart/form-data" class=".d-none">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="Test" value="{Hello}">
+</form>
 <div id="camera_feed">
     <div class="containerr" >
 
@@ -27,5 +31,9 @@
 {% include 'bottom.html' %}
 
 {% block js %}
+<script>
+    // console.log("Post Data: ",{{ data|tojson }});
+    var post_data = JSON.parse({{ data|tojson }});
+</script>
 <script src="{{ url_for('static', filename='js/object_detection.js') }}" ></script>
 {% endblock%}

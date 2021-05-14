@@ -1,7 +1,7 @@
 window.onload = () => {
     
     var watchID;
-    var zone;
+    var mapZone;
 
     function getLocation() {
         if(navigator.geolocation) {
@@ -179,11 +179,36 @@ window.onload = () => {
                 }
                 scene.appendChild(building_entity);
 
-                // 
-                if (latitude === position.coords.latitude && longitude === position.coords.longitude) {
-                    alert('Congratulation, you reach the destination');
-                    navigator.geolocation.clearWatch(watchID);
-                }
+                // check if the user reach their destination 
+                // prompt the user that they have reached
+                fetch(`/api/arrive/destinations/(${position.coords.latitude},${position.coords.longitude})/${destination}`,{
+                    method: 'GET',
+                    headers:{
+                        Accept: 'application/json'  
+                    }
+                })
+                .then(function (response) {
+                    if (!response.ok) {
+                        throw Error(response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(function (res) {
+                    // show success message
+                    console.log("check destination reach",res);
+
+                    // display that the user reach their destination 
+                    // and clear the screen 
+                    let  reachDestin = res.data;
+                    if(reachDestin){
+                        alert('Congratulation, you reach the destination');
+                        navigator.geolocation.clearWatch(watchID);
+                    }
+                })
+                .catch (function(error){
+                    // show error message
+                    console.log(error);
+                }); 
             })
             .catch (function(error){
                 // show error message
@@ -198,7 +223,8 @@ window.onload = () => {
     };
 
     function getCurrentZone(position){
-        fetch(`/api/zone/${position.coords.latitude}/${position.coords.longitude}`,{
+        fetch(`/api/zone/18.00544435857576/-76.74894343154872`,{
+        // fetch(`/api/zone/${position.coords.latitude}/${position.coords.longitude}`,{
             method: 'GET',
             headers:{
                 Accept: 'application/json'  
@@ -213,10 +239,19 @@ window.onload = () => {
         .then(function (res) {
             // show success message
             console.log(res);
-            // Do stuff with Object Detection here!!!
-            let current_zone = res.data.zone_id;
-            if(zone !== current_zone){
-                // show button to redirect
+            // check to see if its not inside a map area!
+            if(typeof res.error === 'undefined'){
+                if(typeof res.data.zone_id !== 'undefined'){
+                    let current_zone = res.data.zone_id;
+                    if(mapZone !== current_zone){
+                        // pop up the button
+                        mapZone = current_zone
+                        jsonString = JSON.stringify(res.data)
+                        console.log(jsonString);
+                        document.getElementById("post-data-field").value = jsonString
+                        // show the button to user
+                    }
+                }
             }
         })
         .catch (function(error){
@@ -293,10 +328,9 @@ window.onload = () => {
     }
 
     // Call the functions 
-
     getLocation();
     loadPlacesNearMe();
-    //watchID = getPath();
+    watchID = getPath();
     getZone();
 
     let dest = document.getElementById('myDestination');
@@ -309,8 +343,16 @@ window.onload = () => {
         console.log(watchID);
     })
 
-    document.querySelector('div.a-enter-vr').remove()
-    document.querySelector('div.a-enter-ar').remove()
+    // removed with vr-mode-ui="enabled: false"
+    // document.querySelector('div.a-enter-vr').remove()
+    // document.querySelector('div.a-enter-ar').remove()
+
+    let t_btn = document.getElementById("tbtn");
+    t_btn.onclick = function(){
+        console.log("btn pressed")
+        document.getElementById("hiddenForm").submit();
+    };
+
 
 
 }

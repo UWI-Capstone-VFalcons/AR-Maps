@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_wtf.csrf import CSRFProtect 
+from flask_wtf.csrf import CSRFProtect
 from flask_sqlalchemy import SQLAlchemy
 from flask_qrcode import QRcode
 from flask_cors import CORS
@@ -37,6 +37,7 @@ app.config.from_object(__name__)
 
 # Setup db variable and CSRf token
 db = SQLAlchemy(app)
+
 csrf = CSRFProtect(app)  # used for forms and database
 
 # qrcode setup
