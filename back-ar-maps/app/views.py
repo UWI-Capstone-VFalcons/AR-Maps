@@ -25,7 +25,13 @@ def ar():
     """Render camera with ar experience  <19/3/2021 N.Bedassie>"""
     # check if the response is a post request
     # send the data if it is
-    data={}
+    data={
+        "destination":1,
+        "gps_error":{
+            "lat":0,
+            "lng":0
+            }
+    }
     if request.method == 'POST':
         data=request.form["data"]
 

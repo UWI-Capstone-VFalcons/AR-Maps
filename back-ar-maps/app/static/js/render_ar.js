@@ -2,6 +2,7 @@ window.onload = () => {
     
     var watchID;
     var mapZone = NaN;
+    var GPS_ERROR = [0,0];
 
     function getLocation() {
         if(navigator.geolocation) {
@@ -249,10 +250,22 @@ window.onload = () => {
                     if(mapZone !== current_zone){
                         // pop up the button
                         mapZone = current_zone
-                        jsonString = JSON.stringify(res.data)
+                        zone_and_objects = res.data
+                        
+                        // add destination to the post message
+                        let destination = document.getElementById('myDestination').value;
+                        zone_and_objects.destination = destination
+
+                        jsonString = JSON.stringify(zone_and_objects)
                         console.log(jsonString);
                         document.getElementById("post-data-field").value = jsonString
+                        
                         // show the button to user
+                        let calibrate_btn = document.getElementById("calibrate-btn");
+                        calibrate_btn.onclick = function(){
+                            console.log("calibrate btn pressed")
+                            document.getElementById("hiddenForm").submit();
+                        };
                         $('#odCalibrate').modal('show')
                     }
                 }
@@ -331,12 +344,33 @@ window.onload = () => {
         document.querySelectorAll("a-assets").forEach(e => e.remove());
     }
 
-    // Call the functions 
+    function setDestinationAndError(){
+        // set the destination value and error 
+        // if it was previously set
+        // console.log(post_data)
+        if(typeof post_data !== 'undefined'){
+            // set the destination
+            if(typeof post_data.destination !== 'undefined'){
+                destination_val = post_data.destination;
+                document.getElementById('myDestination').value = destination_val
+            }
+
+            // set GPS error
+            if(typeof post_data.gps_error !== 'undefined'){
+                GPS_ERROR = post_data.gps_error;
+                console.log("GPS ERROR-",GPS_ERROR)
+            }
+        }
+    }
+
+    // Order that the functions should run
+    setDestinationAndError()
     getLocation();
     loadPlacesNearMe();
     watchID = getPath();
     getZone();
 
+    // rerender the map when the destination is changes
     let dest = document.getElementById('myDestination');
     dest.addEventListener('change',()=>{
         if(watchID){
@@ -350,14 +384,6 @@ window.onload = () => {
     // removed with vr-mode-ui="enabled: false"
     // document.querySelector('div.a-enter-vr').remove()
     // document.querySelector('div.a-enter-ar').remove()
-
-    let t_btn = document.getElementById("tbtn");
-    t_btn.onclick = function(){
-        console.log("btn pressed")
-        document.getElementById("hiddenForm").submit();
-    };
-
-
 
 }
 
