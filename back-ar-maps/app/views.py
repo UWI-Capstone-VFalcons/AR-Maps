@@ -463,12 +463,12 @@ def errorResponse(message):
 3) prompt the user with a button to calibrate the GPS -p
     - with a mini floating button
     - should not be obstructive
-3) go to the object detection screen
-4) prompt user to detect object
+4) go to the object detection screen
+5) prompt user to detect object
     - show the possible objects to detect at the
-5) after an object is detected calculate error between the current gps data and object data
+6) after an object is detected calculate error between the current gps data and object data
     - get the location data for the object
     - calculate error
-6) return to the ar screen
-7) rerender the direction with the error
+7) return to the ar screen
+8) rerender the direction with the error
 """

@@ -137,11 +137,16 @@ window.onload = () => {
 
             let meta = jsonResponse.data.meta;
 
+            // clear all the locations before readding anything
             clearLocations();
 
+            // connect the ar scence
             let scene = document.querySelector('a-scene');
 
+            // get all the positions for the 3d objects
+            // create then add them to the scene
             let paths = jsonResponse.data.positions;
+            
             var i = 0;
             paths.forEach(pos => {
                 coordinates = pos[1];
@@ -154,6 +159,7 @@ window.onload = () => {
                     console.log(latitude);
                     console.log(longitude);
                     
+                    // create the 3d models to direct users
                     let node_asset = document.createElement('a-assets');
                     let node_model = document.createElement('a-asset-item');
                     node_model.setAttribute('id', `node-${i}-${id}`);
@@ -161,7 +167,7 @@ window.onload = () => {
                     node_asset.appendChild(node_model);
                     scene.appendChild(node_asset);
 
-
+                    // create the trackaable objects
                     let node_entity = document.createElement('a-entity');
                     node_entity.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
                     node_entity.setAttribute('scale', '0.5 0.5 0.5');
@@ -177,7 +183,7 @@ window.onload = () => {
                 i += 1;
             })
 
-            // Finally add destination to map
+            // Finally add destination object to the map
             fetch(`/api/building/${destination}`, {
                 method:'GET',
                 headers:{
@@ -195,12 +201,14 @@ window.onload = () => {
 
                 let scene = document.querySelector('a-scene');
 
+                // extract th building information
                 let building = res.data;
                 let latitude = building.building_latittude;
                 let longitude = building.building_longitude;
                 let name = building.building_name
                 let id = building.building_id
 
+                // create 3d object for the building 
                 let building_asset = document.createElement('a-assets');
                 let building_model = document.createElement('a-asset-item');
                 building_model.setAttribute('id', `building-${id}`);
@@ -208,13 +216,16 @@ window.onload = () => {
                 building_asset.appendChild(building_model);
                 scene.appendChild(building_asset);
 
-
+                // create trackable objects
                 let building_entity = document.createElement('a-entity');
                 building_entity.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
                 building_entity.setAttribute('scale', '1.5 1.5 1.5');
                 building_entity.setAttribute('gltf-model', `#building-${id}`);
                 building_entity.setAttribute('look-at', '[gps-camera]');
                 building_entity.setAttribute('animation','property: rotation; to: 0 360 0; loop: true; dur: 10000');
+
+                // Add metrics information and 
+                // name of the building to the scene
                 if(meta !== undefined){
                     building_entity.setAttribute('text',`value: ${name} ${meta.time} mins (${meta.distance}m) away ; color:black; side:double; width: 5;`);
                 } else {
@@ -222,6 +233,7 @@ window.onload = () => {
                 }
                 scene.appendChild(building_entity);
 
+                // 
                 if (latitude === position.coords.latitude && longitude === position.coords.longitude) {
                     alert('Congratulation, you reach the destination');
                     navigator.geolocation.clearWatch(watchID);
@@ -305,6 +317,8 @@ window.onload = () => {
         document.querySelectorAll("a-asset-item").forEach(e => e.remove());
         document.querySelectorAll("a-assets").forEach(e => e.remove());
     }
+
+    // Call the functions 
 
     getLocation();
     //loadPlacesNearMe();
