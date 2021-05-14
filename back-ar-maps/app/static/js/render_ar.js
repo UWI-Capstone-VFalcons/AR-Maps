@@ -1,71 +1,7 @@
 window.onload = () => {
-    // navigator.mediaDevices.enumerateDevices().then(function(devices) {
-    //     var userMediaConstraints = {
-    //         audio: false,
-    //         video: {
-    //             facingMode: 'environment',
-    //             width: {
-    //                 ideal: this.parameters.sourceWidth,
-    //                 min: 1024,
-    //                 max: 1920
-    //             },
-    //             height: {
-    //                 ideal: this.parameters.sourceHeight,
-    //                 min: 776,
-    //                 max: 1080
-    //             }
-    //         }
-    //     }
-
-
-    //     if (null !== this.parameters.deviceId) {
-    //         userMediaConstraints.video.deviceId = {
-    //             exact: _this.parameters.deviceId
-    //         };
-    //     }
-    //     // get a device which satisfy the constraints
-    //     navigator.mediaDevices.getUserMedia(userMediaConstraints).then(function success(stream) {
-    //         // set the .src of the domElement
-    //         domElement.srcObject = stream;
-    //         var event = new CustomEvent('camera-init', {stream: stream});
-    //         window.dispatchEvent(event);
-    //         // to start the video, when it is possible to start it only on userevent. like in android
-    //         document.body.addEventListener('click', function(){
-    //             domElement.play();
-    //         });
-    //         // domElement.play();
-    //                     // TODO listen to loadedmetadata instead
-    //         // wait until the video stream is ready
-    //         var interval = setInterval(function() {
-    //             if (!domElement.videoWidth)	return;
-    //             onReady()
-    //             clearInterval(interval)
-    //         }, 1000/50);
-
-    //         // CUSTOM CODE START
-    //         var backCam2 = devices.filter(d=>{
-    //             return d.label && d.label == "camera2 0, facing back";
-    //             })
-    //             if (backCam2.length) {
-    //             userMediaConstraints.video.deviceId = backCam2[0].deviceId
-    //             }
-    //             // CUSTOM CODE END
-    
-
-    //     }).catch(function(error) {
-    //         onError({
-    //             name: error.name,
-    //             message: error.message
-    //         });
-    //     });
-    //     }).catch(function(error) {
-    //         console.log(error.message);
-    //     onError({
-    //         message: error.message
-    //     });
-    // });
     
     var watchID;
+    var zone;
 
     function getLocation() {
         if(navigator.geolocation) {
@@ -75,9 +11,19 @@ window.onload = () => {
         }
     }
 
+    // reacticely get the path to the users destination
     function getPath(){
         if(navigator.geolocation) {
             return navigator.geolocation.watchPosition(dynamicallyLoadDirections);
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+    }
+
+    // watch the map zone the user is in
+    function getZone(){
+        if(navigator.geolocation) {
+            return navigator.geolocation.watchPosition(getCurrentZone);
         } else {
             alert("Geolocation is not supported by this browser.");
         }
@@ -251,6 +197,34 @@ window.onload = () => {
 
     };
 
+    function getCurrentZone(position){
+        fetch(`/api/zone/${position.coords.latitude}/${position.coords.longitude}`,{
+            method: 'GET',
+            headers:{
+                Accept: 'application/json'  
+            }
+        })
+        .then(function (response) {
+            if (!response.ok) {
+                throw Error(response.statusText);
+            }
+            return response.json();
+        })
+        .then(function (res) {
+            // show success message
+            console.log(res);
+            // Do stuff with Object Detection here!!!
+            let current_zone = res.data.zone_id;
+            if(zone !== current_zone){
+                // show button to redirect
+            }
+        })
+        .catch (function(error){
+            // show error message
+            console.log(error);
+        }) 
+    }
+
     function loadPlacesNearMe() {
 
         // fetch(`/api/closest/destination/${position.coords.latitude},${position.coords.longitude}`,{
@@ -321,14 +295,16 @@ window.onload = () => {
     // Call the functions 
 
     getLocation();
-    //loadPlacesNearMe();
-    watchID = getPath();
+    loadPlacesNearMe();
+    //watchID = getPath();
+    getZone();
 
     let dest = document.getElementById('myDestination');
     dest.addEventListener('change',()=>{
-        navigator.geolocation.clearWatch(watchID);
+        if(watchID){
+            navigator.geolocation.clearWatch(watchID);
+        }
         console.log(dest.value);
-        console.log(watchID);
         watchID = getPath();
         console.log(watchID);
     })

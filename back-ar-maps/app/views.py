@@ -439,15 +439,43 @@ def get_shortest_path_ar(cur_latitude, cur_longitude, destination_id):
 @app.route('/api/zone/<cur_latitude>/<cur_longitude>', methods=['GET'])
 def get_zone(cur_latitude, cur_longitude):
     # return 
-    #   - the mapzone id that the user is in currently
-    #   - object ids and name  in the form of a list of
+    #   - the mapzone id and name that the user is in currently
+    #   - object ids, name, latitude and longitude in the form of a list of
     #        dictionaries eg[{"object_name":--,"object_id:--", "object_lat": ---, "object_lng":---}, {"object_name":--,"object_id:--"}]
-    #  eg return resutlt {"zone_id":---, [list of objects above]}
-    return 
+    #  eg return resutlt {"zone_id":---, "zone_name":---, [list of objects above]}
+    if not isNum(cur_latitude) or not isNum(cur_longitude):
+        return errorResponse("All parameters must be numeric")
+
+    # convert the variables 
+    cur_longitude = float(cur_longitude)
+    cur_latitude = float(cur_latitude)
+    cur_coordinate = (cur_latitude, cur_longitude)
+
+    try:
+        map_area = getMapArea(cur_coordinate)
+        if(map_area):
+            zone = getMapZone(cur_coordinate, map_area)
+            if(zone == None):
+                return errorResponse("User is not in a zone")
+        else:
+            return errorResponse("User outside of map area")
+        objs = OD_Objects.query.filter_by(map_zone=zone.id).all()
+        objects = [{"object_name":obj.name,
+                    "object_id":obj.id,
+                    "object_lat":obj.latitude,
+                    "object_lng":obj.longitude} for obj in objs]
+        return successResponse({"zone_id":zone.id, "zone_name":zone.name, "objects":objects})
+    except Exception:
+        print("Exception in user code:")
+        print("-"*60)
+        traceback.print_exc(file=sys.stdout)
+        print("-"*60)
+        return errorResponse("Error occured, report to the admin")
+    return errorResponse("Invalid Request, destination not valid")
 
 # Jsonify the response and add it under the data field
 def successResponse(message):
-    return jsonify({'data':message})
+    return jsonify({'data':message}), 200
     
 # jsonify the response message with a error title
 def errorResponse(message):
