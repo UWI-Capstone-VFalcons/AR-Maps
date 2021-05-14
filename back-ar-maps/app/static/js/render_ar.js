@@ -128,6 +128,7 @@ window.onload = () => {
                         node_entity.setAttribute('look-at', '[gps-camera]');
                     } else {
                         node_entity.setAttribute('look-at',`#node-${i}-${look_at}`);
+                        console.log(`#node-${i}-${look_at}`);
                     }
                     scene.appendChild(node_entity);
 
