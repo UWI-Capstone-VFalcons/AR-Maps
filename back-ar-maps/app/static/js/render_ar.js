@@ -119,7 +119,7 @@ window.onload = () => {
                     node_asset.appendChild(node_model);
                     scene.appendChild(node_asset);
 
-                    // create the trackaable objects
+                    // create the trackable objects
                     let node_entity = document.createElement('a-entity');
                     node_entity.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
                     node_entity.setAttribute('scale', '2 2 2');
@@ -323,7 +323,7 @@ window.onload = () => {
                 const placeText = document.createElement('a-link');
                 placeText.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
                 placeText.setAttribute('title', coordinate.building_name);
-                placeText.setAttribute('scale', '8 8 8');
+                placeText.setAttribute('scale', '0.5 0.5 0.5');
     
                 placeText.addEventListener('loaded', () => {
                     window.dispatchEvent(new CustomEvent('gps-entity-place-loaded'))
