@@ -432,7 +432,7 @@ def shortestRoute(user_coord, building_id):
     return None
 
 def getPositions(start, end):
-    interval = 0.000019 # about two meters
+    interval = 0.000039 # about three meters
     positions = []
     start = [(float(start[0][0]), float(start[0][1])), (float(start[1][0]), float(start[1][1]))]
     end = [(float(end[0][0]), float(end[0][1])),(float(end[1][0]), float(end[1][1]))]
