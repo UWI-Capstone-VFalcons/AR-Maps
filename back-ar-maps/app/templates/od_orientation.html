@@ -15,7 +15,7 @@
 {% block main %}
 <form id="hiddenForm" action="{{ url_for('ar') }}" method="POST" enctype="multipart/form-data" class=".d-none">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <input type="hidden" name="Test" value="{Hello}">
+    <input type="hidden" id="post-data-field" name="data" value="{}">
 </form>
 <div id="camera_feed">
     <div class="containerr" >

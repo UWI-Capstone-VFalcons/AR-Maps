@@ -36,7 +36,7 @@ async function detectObjects(image){
     score = detections[6].dataSync()[i];
 
     // only return objects that get a god confidence score
-    if(score >= 0.95){
+    if(score >= 0.9){
       box = detections[0].arraySync()[0][i];
       o_class = detections[5].dataSync()[i];
       o_class = MODEL_CLASSES[o_class-1]["name"];
@@ -72,12 +72,14 @@ async function detection() {
     const result = await detectObjects(img);
 
     if(result.length > 0){
-      console.log(result);
+      // console.log(result);
       // document.getElementById('console').innerText = `
       // prediction: ${result[0].class}, probability: ${result[0].score}`;
-      processDetection(result);
-      webcam.stop()
-      break;
+      let object_detected = processDetection(result);
+      if(object_detected){
+        webcam.stop()
+        break;
+      }
     }
     
     // Dispose the tensor to release the memory.
@@ -91,45 +93,78 @@ async function detection() {
 
 // run this function whenever a object is detected
 function processDetection(result){
-  console.log(post_data);
-  // get object lat and long
-  let lat = 0;
-  let lng = 0;
-  //fetch object json
-  fetch(`/api/obj/${result[0].class.id}`,{
-    method: 'GET',
-    headers:{
-      Accept: 'application/json' 
-    }
-  })
-  .then(function (response) {
-    if(response.status == 404 || response.status == 500){
-        response.json().then((data) => {
-          console.log(data.error);
-        });
-    } else if (response.ok) {
-      let res = response.json();
-      // collect coordinates
-      lat = res.data.object.latitude;
-      lng = res.data.object.longitude;
+  // all the data coming from post request
+  if(typeof post_data !== 'undefined'){
+    // check if the object detected is valid
+    // that is to check if its in the zone
+    if(typeof post_data.objects !== 'undefined'){
+      // console.log(post_data);
+      let detected_object_name = result[0].class;
 
-      //get current position
-      if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition((position)=>{
-          // fing the difference between the longitude and latitude
-          let lat_dif = Math.abs(position.coords.latitude - lat);
-          let lng_dif = Math.abs(position.coords.longitude - lng);
-          // use it
-        })
-      } else {
-        alert("Geolocation is not supported by this browser.")
-      }
+      let zone_objects = post_data.objects;
+      zone_objects.forEach(detectable_object => {
+        if(detectable_object.object_digital_name == detected_object_name){
+          console.log(result)
+          // if the object matches calculate the error 
+          // and return the error, zone, destination to 
+          // the AR screen 
+
+          // get object lat and long
+          let obJ_lat = detectable_object.object_lat;
+          let obj_lng = detectable_object.object_lng;
+
+          // /get current position
+          if(navigator.geolocation){
+            navigator.geolocation.getCurrentPosition((position)=>{
+              // fing the difference between the longitude and latitude
+              let lat_dif = Math.abs(position.coords.latitude - obJ_lat);
+              let lng_dif = Math.abs(position.coords.longitude - obj_lng);
+              
+              // return te calculated error 
+              // with the supporting information
+              var result = {
+                destination: post_data.destination,
+                gps_error:{
+                  lat:lat_dif,
+                  lng:lng_dif
+                },
+                zone_id:post_data.zone_id
+              }
+              // console.log(result)
+
+              jsonString = JSON.stringify(result)
+              // console.log(jsonString);
+              document.getElementById("post-data-field").value = jsonString
+              
+              // trigger redirection
+              document.getElementById("hiddenForm").submit();
+
+              return true
+
+            })
+          } else {
+            alert("Geolocation is not supported by this browser.")
+          }
+
+        }
+      });
     }
-  })
-  .catch (function(error){
-      // show error message
-      console.log(error);
-  }) 
+  }
+  return false;
 }
-processDetection(1)
+
+// object example
+// var object_result = [
+//   {
+//       "box": [
+//           0.014361947774887085,
+//           0.004940152168273926,
+//           0.9824674129486084,
+//           1
+//       ],
+//       "score": 0.9105483293533325,
+//       "class": "18.0053657_-76.7491452_physicssign"
+//   }
+// ]
+// processDetection(object_result)
 detection();

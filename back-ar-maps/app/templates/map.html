@@ -17,8 +17,8 @@
 
 {% block js %}
     <script>
-        var post_data = {{ data|tojson }};
-        // console.log(post_data);
+        var post_data =  JSON.parse({{ data|tojson }});
+        console.log(post_data);
     </script>
     <script src="{{ url_for('static', filename='js/render_ar.js')}}" ></script>
 {% endblock %}
@@ -29,7 +29,7 @@
     <form id="hiddenForm" action="{{ url_for('od_orientation') }}" method="POST" enctype="multipart/form-data" class=".d-none">
         {{ form.csrf_token }}
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <input type="hidden" id="post-data-field" name="data" value='{ "name":"John", "age":30, "city":"New York"}'>
+        <input type="hidden" id="post-data-field" name="data" value='{}'>
     </form>
     <a-scene
         vr-mode-ui="enabled: false"

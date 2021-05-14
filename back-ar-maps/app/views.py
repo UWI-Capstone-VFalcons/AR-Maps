@@ -25,16 +25,19 @@ def ar():
     """Render camera with ar experience  <19/3/2021 N.Bedassie>"""
     # check if the response is a post request
     # send the data if it is
-    data={
-        "destination":1,
-        "gps_error":{
-            "lat":0,
-            "lng":0
-            }
-    }
     if request.method == 'POST':
-        data=request.form["data"]
-
+        data = request.form["data"]
+    else:
+        data={
+            "destination":1,
+            "gps_error":{
+                "lat":0,
+                "lng":0
+                },
+            "zone_id":None
+        }
+        data = json.dumps(data)
+        
     #  continue adding form for everything else 
     form = FindARDestinationForm()
     buildings = Building.query.all()
@@ -486,6 +489,7 @@ def get_zone(cur_latitude, cur_longitude):
             return errorResponse2("User outside of map area", 404)
         objs = OD_Objects.query.filter_by(map_zone=zone.id).all()
         objects = [{"object_name":obj.name,
+                    "object_digital_name":obj.object_name,
                     "object_id":obj.id,
                     "object_lat":obj.latitude,
                     "object_lng":obj.longitude} for obj in objs]

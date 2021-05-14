@@ -255,6 +255,7 @@ window.onload = () => {
                         // add destination to the post message
                         let destination = document.getElementById('myDestination').value;
                         zone_and_objects.destination = destination
+                        zone_and_objects.zone_id = mapZone
 
                         jsonString = JSON.stringify(zone_and_objects)
                         console.log(jsonString);
@@ -344,7 +345,7 @@ window.onload = () => {
         document.querySelectorAll("a-assets").forEach(e => e.remove());
     }
 
-    function setDestinationAndError(){
+    function setDestinationZoneAndError(){
         // set the destination value and error 
         // if it was previously set
         // console.log(post_data)
@@ -360,11 +361,16 @@ window.onload = () => {
                 GPS_ERROR = post_data.gps_error;
                 console.log("GPS ERROR-",GPS_ERROR)
             }
+
+            // set the zone
+            if(typeof post_data.zone_id !== 'undefined'){
+                mapZone = post_data.zone_id
+            }
         }
     }
 
     // Order that the functions should run
-    setDestinationAndError()
+    setDestinationZoneAndError()
     getLocation();
     loadPlacesNearMe();
     watchID = getPath();
