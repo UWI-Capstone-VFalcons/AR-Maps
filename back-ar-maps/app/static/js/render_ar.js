@@ -2,7 +2,7 @@ window.onload = () => {
     
     var watchID;
     var mapZone = NaN;
-    var GPS_ERROR = [0,0];
+    var GPS_ERROR = {lat:0,lng:0};
 
     function getLocation() {
         if(navigator.geolocation) {
@@ -224,8 +224,8 @@ window.onload = () => {
     };
 
     function getCurrentZone(position){
-        fetch(`/api/zone/18.00544435857576/-76.74894343154872`,{
-        // fetch(`/api/zone/${position.coords.latitude}/${position.coords.longitude}`,{
+        // fetch(`/api/zone/18.00544435857576/-76.74894343154872`,{
+        fetch(`/api/zone/${position.coords.latitude}/${position.coords.longitude}`,{
             method: 'GET',
             headers:{
                 Accept: 'application/json'  
@@ -255,12 +255,14 @@ window.onload = () => {
                         // add destination to the post message
                         let destination = document.getElementById('myDestination').value;
                         zone_and_objects.destination = destination
-                        zone_and_objects.zone_id = mapZone
+                        zone_and_objects.zone_id = mapZone;
+                        zone_and_objects.gps_error= GPS_ERROR;
+                        console.log(zone_and_objects);
 
                         jsonString = JSON.stringify(zone_and_objects)
-                        console.log(jsonString);
                         document.getElementById("post-data-field").value = jsonString
-                        
+                        console.log(jsonString);
+
                         // show the button to user
                         let calibrate_btn = document.getElementById("calibrate-btn");
                         calibrate_btn.onclick = function(){

@@ -36,7 +36,7 @@ async function detectObjects(image){
     score = detections[6].dataSync()[i];
 
     // only return objects that get a god confidence score
-    if(score >= 0.9){
+    if(score >= 0.7){
       box = detections[0].arraySync()[0][i];
       o_class = detections[5].dataSync()[i];
       o_class = MODEL_CLASSES[o_class-1]["name"];
@@ -117,8 +117,10 @@ function processDetection(result){
           if(navigator.geolocation){
             navigator.geolocation.getCurrentPosition((position)=>{
               // fing the difference between the longitude and latitude
-              let lat_dif = Math.abs(position.coords.latitude - obJ_lat);
-              let lng_dif = Math.abs(position.coords.longitude - obj_lng);
+              // let lat_dif = Math.abs(position.coords.latitude - obJ_lat);
+              // let lng_dif = Math.abs(position.coords.longitude - obj_lng);
+              let lat_dif = position.coords.latitude - obJ_lat;
+              let lng_dif = position.coords.longitude - obj_lng;
               
               // return te calculated error 
               // with the supporting information
@@ -153,6 +155,63 @@ function processDetection(result){
   return false;
 }
 
+// add all the images that can be detected
+function addImageOptionsToScreen(){
+  if(typeof post_data !== 'undefined'){
+    if(typeof post_data.objects !== 'undefined'){
+      console.log(post_data);
+
+      // display the card
+      let bottom_bar = document.getElementById("botoom_option_bar");
+      bottom_bar.classList.remove("d-none");
+
+      // assign cancel button function
+      let cancel_btn = document.getElementById("od_cancel_btn");
+      cancel_btn.onclick = ()=>{
+        console.log("cancel button pressed");
+        // return te calculated error peviously 
+        // with the supporting information
+        var result = {
+          destination: post_data.destination,
+          gps_error: post_data.gps_error,
+          zone_id:post_data.zone_id
+        }
+        console.log(result)
+
+        jsonString = JSON.stringify(result)
+        // console.log(jsonString);
+        document.getElementById("post-data-field").value = jsonString
+        
+        // trigger redirection
+        // document.getElementById("hiddenForm").submit();
+      };
+
+      // add all the images detectable
+      let images_container = document.getElementById("od-options");
+      let zone_objects = post_data.objects;
+
+      // create a list of all the detecable strings
+      detectable_object_names = []
+      zone_objects.forEach( detectable_object=>{
+        detectable_object_names.push(detectable_object.object_digital_name)
+      });
+
+      console.log(detectable_object_names)
+
+      MODEL_CLASSES.forEach( object=>{
+        if(detectable_object_names.includes(object.name)){
+          const htmlImg = `
+          <div class="detectable_image">
+            <img src="${object.image}"/>
+          </div>
+          `;
+          images_container.innerHTML += htmlImg;
+        }
+      });
+    }
+  }
+}
+
 // object example
 // var object_result = [
 //   {
@@ -167,4 +226,5 @@ function processDetection(result){
 //   }
 // ]
 // processDetection(object_result)
+addImageOptionsToScreen()
 detection();

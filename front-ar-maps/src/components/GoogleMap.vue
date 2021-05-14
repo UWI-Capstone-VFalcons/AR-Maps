@@ -187,7 +187,7 @@ export default {
 
   created(){
     // continously set the location data as it change
-    // this.watchUserCoordinates(); 
+    this.watchUserCoordinates(); 
   
     // add all the buildings when the map is creatred
     this.addAllBuildiings();

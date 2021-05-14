@@ -13,10 +13,18 @@
 {% include 'header.html' %}
 
 {% block main %}
+
 <form id="hiddenForm" action="{{ url_for('ar') }}" method="POST" enctype="multipart/form-data" class=".d-none">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <input type="hidden" id="post-data-field" name="data" value="{}">
 </form>
+<div id="botoom_option_bar" class="d-none">
+    <h3>Find one of the objects below</h3>
+    <div id="od-options">
+    </div>
+    <button id="od_cancel_btn" class="btn btn-danger">Cancel Calibration</button>
+</div>
+
 <div id="camera_feed">
     <div class="containerr" >
 
