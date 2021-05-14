@@ -92,6 +92,44 @@ async function detection() {
 // run this function whenever a object is detected
 function processDetection(result){
   console.log(post_data);
+  // get object lat and long
+  let lat = 0;
+  let lng = 0;
+  //fetch object json
+  fetch(`/api/obj/${result[0].class.id}`,{
+    method: 'GET',
+    headers:{
+      Accept: 'application/json' 
+    }
+  })
+  .then(function (response) {
+    if(response.status == 404 || response.status == 500){
+        response.json().then((data) => {
+          console.log(data.error);
+        });
+    } else if (response.ok) {
+      let res = response.json();
+      // collect coordinates
+      lat = res.data.object.latitude;
+      lng = res.data.object.longitude;
+
+      //get current position
+      if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition((position)=>{
+          // fing the difference between the longitude and latitude
+          let lat_dif = Math.abs(position.coords.latitude - lat);
+          let lng_dif = Math.abs(position.coords.longitude - lng);
+          // use it
+        })
+      } else {
+        alert("Geolocation is not supported by this browser.")
+      }
+    }
+  })
+  .catch (function(error){
+      // show error message
+      console.log(error);
+  }) 
 }
 processDetection(1)
 detection();

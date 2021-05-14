@@ -1,7 +1,7 @@
 window.onload = () => {
     
     var watchID;
-    var mapZone;
+    var mapZone = NaN;
 
     function getLocation() {
         if(navigator.geolocation) {
@@ -231,10 +231,13 @@ window.onload = () => {
             }
         })
         .then(function (response) {
-            if (!response.ok) {
-                throw Error(response.statusText);
+            if(response.status == 404 || response.status == 500){
+                response.json().then((data) => {
+                console.log(data.error);
+                });
+            } else if (response.ok) {
+                return response.json();
             }
-            return response.json();
         })
         .then(function (res) {
             // show success message
@@ -250,6 +253,7 @@ window.onload = () => {
                         console.log(jsonString);
                         document.getElementById("post-data-field").value = jsonString
                         // show the button to user
+                        $('#odCalibrate').modal('show')
                     }
                 }
             }

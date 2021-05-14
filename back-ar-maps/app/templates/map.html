@@ -40,6 +40,26 @@
     >
         <a-camera gps-camera rotation-reader></a-camera>
     </a-scene>
+    <!-- <div id="odCalibrate" class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+          <div class="modal-content">
+            ...
+          </div>
+        </div>
+      </div> -->
+    <!-- Modal -->
+<div id="odCalibrate" class="modal fade left" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content center">
+        <div class="modal-body">
+            <div class="d-flex justify-content-around">
+                <button type="button" class="btn btn-success" data-dismiss="modal">Calibrate GPS</button>
+                <button type="button" onclick="$('#odCalibrate').modal('hide');" class="btn btn-danger">Ignore</button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
 
 {% include 'bottom.html' %}

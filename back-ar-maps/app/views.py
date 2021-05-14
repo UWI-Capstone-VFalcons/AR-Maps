@@ -475,9 +475,9 @@ def get_zone(cur_latitude, cur_longitude):
         if(map_area):
             zone = getMapZone(cur_coordinate, map_area.id)
             if(zone == None):
-                return errorResponse("User is not in a zone")
+                return errorResponse2("User is not in a zone", 404)
         else:
-            return errorResponse("User outside of map area")
+            return errorResponse2("User outside of map area", 404)
         objs = OD_Objects.query.filter_by(map_zone=zone.id).all()
         objects = [{"object_name":obj.name,
                     "object_id":obj.id,
@@ -490,7 +490,22 @@ def get_zone(cur_latitude, cur_longitude):
         traceback.print_exc(file=sys.stdout)
         print("-"*60)
         return errorResponse("Error occured, report to the admin")
-    return errorResponse("Invalid Request, destination not valid")
+    return errorResponse2("Invalid Request, destination not valid", 400)
+
+@app.route('/api/obj/<int:obj_id>', methods=['GET'])
+def od_object(obj_id):
+    obj = OD_Objects.query.filter_by(id=obj_id).first()
+    if obj:
+        object = {
+            "name": obj.name,
+            "id": obj.id,
+            "latitude": obj.latitude,
+            "longitude": obj.longitude,
+            "map_zone": obj.map_zone,
+            "building_id": obj.building_id
+        }
+        return successResponse({"object":object})
+    return errorResponse2("Object not Found", 404)
 
 
 """
@@ -504,6 +519,9 @@ def successResponse(message):
 def errorResponse(message):
     return jsonify({'error':message})
 
+# jsonify the response message with a error title and code
+def errorResponse2(message, code):
+    return json.dumps({'error':message}), code
 
 # if __name__ == '__main__':
 #     app.run(debug=True, host="0.0.0.0", port="5000")
