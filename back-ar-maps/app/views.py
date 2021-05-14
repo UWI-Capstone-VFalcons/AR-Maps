@@ -473,6 +473,21 @@ def get_zone(cur_latitude, cur_longitude):
         return errorResponse("Error occured, report to the admin")
     return errorResponse2("Invalid Request, destination not valid", 400)
 
+@app.route('/api/obj/<int:obj_id>', methods=['GET'])
+def od_object(obj_id):
+    obj = OD_Objects.query.filter_by(id=obj_id).first()
+    if obj:
+        object = {
+            "name": obj.name,
+            "id": obj.id,
+            "latitude": obj.latitude,
+            "longitude": obj.longitude,
+            "map_zone": obj.map_zone,
+            "building_id": obj.building_id
+        }
+        return successResponse({"object":object})
+    return errorResponse2("Object not Found", 404)
+
 # Jsonify the response and add it under the data field
 def successResponse(message):
     return jsonify({'data':message}), 200
