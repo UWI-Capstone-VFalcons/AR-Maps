@@ -202,9 +202,11 @@ window.onload = () => {
             // show success message
             console.log(res);
             // Do stuff with Object Detection here!!!
+            $('#odCalibrate').modal('show')
             let current_zone = res.data.zone_id;
             if(zone !== current_zone){
                 // show button to redirect
+                $('#odCalibrate').modal('show')
             }
         })
         .catch (function(error){

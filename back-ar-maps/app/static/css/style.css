@@ -166,3 +166,38 @@ body{
     font-size: small;
 }
 
+.modal-content{
+    position: fixed;
+    bottom: 7rem;
+    right: 0.0rem;
+    background-color: rgba(240, 240, 240, 0.7);
+    width: 90%;
+    margin-right: 5%;
+}
+
+.modal-backdrop {
+    background-color: rgba(0,0,0,.0001) !important;
+}
+
+.modal.left .modal-dialog
+{
+position: fixed;
+width: 90%;
+height: 100%;
+-webkit-transform: translate3d(0%, 0, 0);
+-ms-transform: translate3d(0%, 0, 0);
+-o-transform: translate3d(0%, 0, 0);
+transform: translate3d(0%, 0, 0);
+}
+
+
+.modal.left.fade .modal-dialog{
+left: -320px;
+-webkit-transition: opacity 0.3s linear, left 0.3s ease-out;
+-moz-transition: opacity 0.3s linear, left 0.3s ease-out;
+-o-transition: opacity 0.3s linear, left 0.3s ease-out;
+transition: opacity 0.3s linear, left 0.3s ease-out;
+}
+.modal.left.fade.show .modal-dialog{
+left: 0.9rem;
+}
