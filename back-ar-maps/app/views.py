@@ -41,8 +41,8 @@ def ar():
     #  continue adding form for everything else 
     form = FindARDestinationForm()
     buildings = Building.query.all()
-    form.myDestination.choices = [('--','--')]
-    form.myDestination.choices += [(b.id, b.name) for b in buildings]
+    form.myDestination.choices = [('--','None')]
+    form.myDestination.choices.extend([(b.id, b.name) for b in buildings])
     return render_template("map.html",form=form, buildings=buildings, data=data)
 
 @app.route('/nav/OD/detect', methods=['GET','POST'])

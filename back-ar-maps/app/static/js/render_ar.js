@@ -103,8 +103,8 @@ window.onload = () => {
                         If my current location is less than the object location, 
                         then add the difference.
                     */
-                    let latitude = coordinate[0] - GPS_ERROR[0];
-                    let longitude = coordinate[1] - GPS_ERROR[1];
+                    let latitude = coordinate[0] - GPS_ERROR.lat;
+                    let longitude = coordinate[1] - GPS_ERROR.lng;
                     let id = coordinate[2];
                     let look_at = coordinate[3]
 
