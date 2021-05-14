@@ -451,3 +451,19 @@ def errorResponse(message):
 
 # if __name__ == '__main__':
 #     app.run(debug=True, host="0.0.0.0", port="5000")
+
+"""
+1) get the zone user is in while they move
+2) check if the zone changes from the previous zone
+3) prompt the user with a button to calibrate the GPS
+    - with a mini floating button
+    - should not be obstructive
+3) go to the object detection screen
+4) prompt user to detect object
+    - show the possible objects to detect at the
+5) after an object is detected calculate error between the current gps data and object data
+    - get the location data for the object
+    - calculate error
+6) return to the ar screen
+7) rerender the direction with the error
+"""
