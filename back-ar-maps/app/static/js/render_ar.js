@@ -193,19 +193,20 @@ window.onload = () => {
             }
         })
         .then(function (response) {
-            if (!response.ok) {
-                throw Error(response.statusText);
-            }
-            return response.json();
-        })
-        .then(function (res) {
-            // show success message
-            console.log(res);
-            // Do stuff with Object Detection here!!!
-            let current_zone = res.data.zone_id;
-            if(zone !== current_zone){
-                // show button to redirect
-                $('#odCalibrate').modal('show')
+            if(response.status == 404 || response.status == 500){
+                response.json().then((data) => {
+                  console.log(data.error);
+                });
+            } else if (response.ok) {
+                let res = response.json();
+                // show success message
+                console.log(res);
+                // Do stuff with Object Detection here!!!
+                let current_zone = res.data.zone_id;
+                if(zone !== current_zone){
+                    // show button to redirect
+                    $('#odCalibrate').modal('show')
+                }
             }
         })
         .catch (function(error){
