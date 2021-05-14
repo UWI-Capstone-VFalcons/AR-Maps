@@ -63,7 +63,7 @@ async function detection() {
 
   // Create an object from Tensorflow.js data API which could capture image 
   // from the web camera as Tensor.
-  const webcam = await tf.data.webcam(webcamElement);
+  const webcam = await tf.data.webcam(webcamElement, {facingMode:'environment'});
 
   while (true) {
     let img = await webcam.capture();
@@ -183,7 +183,7 @@ function addImageOptionsToScreen(){
         document.getElementById("post-data-field").value = jsonString
         
         // trigger redirection
-        // document.getElementById("hiddenForm").submit();
+        document.getElementById("hiddenForm").submit();
       };
 
       // add all the images detectable
