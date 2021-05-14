@@ -98,8 +98,13 @@ window.onload = () => {
             paths.forEach(pos => {
                 coordinates = pos[1];
                 coordinates.forEach(coordinate => {
-                    let latitude = coordinate[0];
-                    let longitude = coordinate[1];
+                    /*  If my current location is greater than the object location,
+                        then subtract the difference, 
+                        If my current location is less than the object location, 
+                        then add the difference.
+                    */
+                    let latitude = coordinate[0] - GPS_ERROR[0];
+                    let longitude = coordinate[1] - GPS_ERROR[1];
                     let id = coordinate[2];
                     let look_at = coordinate[3]
 
@@ -114,7 +119,7 @@ window.onload = () => {
                     node_asset.appendChild(node_model);
                     scene.appendChild(node_asset);
 
-                    // create the trackaable objects
+                    // create the trackable objects
                     let node_entity = document.createElement('a-entity');
                     node_entity.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
                     node_entity.setAttribute('scale', '0.5 0.5 0.5');
@@ -317,7 +322,7 @@ window.onload = () => {
                 const placeText = document.createElement('a-link');
                 placeText.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
                 placeText.setAttribute('title', coordinate.building_name);
-                placeText.setAttribute('scale', '15 15 15');
+                placeText.setAttribute('scale', '0.5 0.5 0.5');
     
                 placeText.addEventListener('loaded', () => {
                     window.dispatchEvent(new CustomEvent('gps-entity-place-loaded'))
@@ -345,6 +350,7 @@ window.onload = () => {
         document.querySelectorAll("a-entity").forEach(e => e.remove());
         document.querySelectorAll("a-asset-item").forEach(e => e.remove());
         document.querySelectorAll("a-assets").forEach(e => e.remove());
+        document.querySelectorAll("a-link").forEach(e => e.remove());
     }
 
     function setDestinationZoneAndError(){
@@ -375,7 +381,7 @@ window.onload = () => {
     setDestinationZoneAndError()
     getLocation();
     loadPlacesNearMe();
-    watchID = getPath();
+    // watchID = getPath();
     getZone();
 
     // rerender the map when the destination is changes
