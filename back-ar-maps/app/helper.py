@@ -709,3 +709,38 @@ def checkCurrentAndDestination(cur_coord, dest_id):
     except:
         pass
     return False
+
+# check if a location is inside a map zone and return the zone ID
+# coordinate is in the form (lat, longitude)
+def getMapZone(coordinate, mapArea):
+    latitude = float(coordinate[0])
+    longitude = float(coordinate[1])
+
+    map_zones  = MapZone.query.filter_by(map_area=mapArea).all()
+
+    for map_zone in map_zones:
+
+        map_zone.latitude_1 = float(map_zone.latitude_1)
+        map_zone.latitude_2 = float(map_zone.latitude_2)
+        map_zone.latitude_3 = float(map_zone.latitude_3)
+        map_zone.latitude_4 = float(map_zone.latitude_4)
+
+        map_zone.longitude_1 = float(map_zone.longitude_1)
+        map_zone.longitude_2 = float(map_zone.longitude_2)
+        map_zone.longitude_3 = float(map_zone.longitude_3)
+        map_zone.longitude_4 = float(map_zone.longitude_4)
+
+        map_zone_fence = [
+            (map_zone.latitude_1, map_zone.longitude_1),
+            (map_zone.latitude_2, map_zone.longitude_2),
+            (map_zone.latitude_3, map_zone.longitude_3),
+            (map_zone.latitude_4, map_zone.longitude_4)
+        ]
+
+        map_zone_polygon = Polygon(map_zone_fence)
+
+        coordinate_point = Point(latitude, longitude)
+
+        if(coordinate_point.within(map_zone_polygon)):
+            return map_zone
+    return None
