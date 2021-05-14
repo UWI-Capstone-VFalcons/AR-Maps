@@ -438,6 +438,11 @@ def get_shortest_path_ar(cur_latitude, cur_longitude, destination_id):
 
 @app.route('/api/zone/<cur_latitude>/<cur_longitude>', methods=['GET'])
 def get_zone(cur_latitude, cur_longitude):
+    # return 
+    #   - the mapzone id that the user is in currently
+    #   - object ids and name  in the form of a list of
+    #        dictionaries eg[{"object_name":--,"object_id:--", "object_lat": ---, "object_lng":---}, {"object_name":--,"object_id:--"}]
+    #  eg return resutlt {"zone_id":---, [list of objects above]}
     return 
 
 # Jsonify the response and add it under the data field
@@ -453,9 +458,9 @@ def errorResponse(message):
 #     app.run(debug=True, host="0.0.0.0", port="5000")
 
 """
-1) get the zone user is in while they move
+1) get the zone user is in while they move - b
 2) check if the zone changes from the previous zone
-3) prompt the user with a button to calibrate the GPS
+3) prompt the user with a button to calibrate the GPS -p
     - with a mini floating button
     - should not be obstructive
 3) go to the object detection screen
