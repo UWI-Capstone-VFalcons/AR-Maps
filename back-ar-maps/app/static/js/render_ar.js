@@ -98,8 +98,13 @@ window.onload = () => {
             paths.forEach(pos => {
                 coordinates = pos[1];
                 coordinates.forEach(coordinate => {
-                    let latitude = coordinate[0];
-                    let longitude = coordinate[1];
+                    /*  If my current location is greater than the object location,
+                        then subtract the difference, 
+                        If my current location is less than the object location, 
+                        then add the difference.
+                    */
+                    let latitude = coordinate[0] - GPS_ERROR[0];
+                    let longitude = coordinate[1] - GPS_ERROR[1];
                     let id = coordinate[2];
                     let look_at = coordinate[3]
 
@@ -343,6 +348,7 @@ window.onload = () => {
         document.querySelectorAll("a-entity").forEach(e => e.remove());
         document.querySelectorAll("a-asset-item").forEach(e => e.remove());
         document.querySelectorAll("a-assets").forEach(e => e.remove());
+        document.querySelectorAll("a-link").forEach(e => e.remove());
     }
 
     function setDestinationZoneAndError(){

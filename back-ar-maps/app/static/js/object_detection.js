@@ -117,8 +117,8 @@ function processDetection(result){
           if(navigator.geolocation){
             navigator.geolocation.getCurrentPosition((position)=>{
               // fing the difference between the longitude and latitude
-              let lat_dif = Math.abs(position.coords.latitude - obJ_lat);
-              let lng_dif = Math.abs(position.coords.longitude - obj_lng);
+              let lat_dif = position.coords.latitude - obJ_lat;
+              let lng_dif = position.coords.longitude - obj_lng;
               
               // return te calculated error 
               // with the supporting information
