@@ -381,7 +381,7 @@ window.onload = () => {
     setDestinationZoneAndError()
     getLocation();
     loadPlacesNearMe();
-    watchID = getPath();
+    // watchID = getPath();
     getZone();
 
     // rerender the map when the destination is changes
