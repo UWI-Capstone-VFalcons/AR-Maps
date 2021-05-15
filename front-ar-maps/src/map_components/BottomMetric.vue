@@ -96,8 +96,7 @@ export default {
     height:6rem;
     margin: 0px 5px;
     display: block;
-    background-color: white;
-    opacity: 40%;
+    background-color: rgba(255, 255, 255, 0.37);
     border-radius: 5px;
 }
 
