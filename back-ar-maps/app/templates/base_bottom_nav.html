@@ -1,0 +1,120 @@
+<div id="bottom" >
+  <div id="bottom_item">
+  </div>
+
+  <!-- Bottom Navigation bar -->
+  <div id="nav_group" class="base_bar">
+      <div class="nav-el">
+        <a href="/home">
+          <img src="{{ url_for('static', filename='icons/home.svg') }}" alt="home"/>
+          <p>Home</p>
+        </a>
+      </div>
+      <div class="nav-el">
+        <a href="/map">
+          <img src="{{ url_for('static', filename='icons/map-pin.svg') }}" alt="map"/>
+          <p>Map</p>
+        </a>
+      </div>
+      <div class="nav-el">
+        <a href="/scan">
+          <img src="{{ url_for('static', filename='icons/qr-code.svg') }}" alt="QR Scanner"/>
+          <p>Scan QR</p>
+        </a>
+      </div>
+      <div class="nav-el btn-active">
+        <img src="{{ url_for('static', filename='icons/ar-view.svg') }}" alt="AR Map"/>
+        <p>AR</p>
+      </div>
+  </div>
+</div>
+
+<style>
+  #bottom{
+    height:auto;
+    width: 100%;  
+    min-height: 5rem;
+    position: absolute;
+    z-index: 10;
+    bottom: 0;
+    left: 0;
+    display: table-cell;
+    vertical-align: bottom;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  #bottom_item{
+      height: auto;
+      width: 100%;
+      top: 0;
+      margin-bottom: 4.5rem;
+  }
+
+  #nav_group{
+      height: auto;
+      width: 100%;
+      min-height: 4.5rem;
+      position: absolute;
+      bottom: 0;
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;   
+      display: flex;
+      flex-direction: row;
+      justify-content:space-around;
+      align-items: center;
+  }
+
+  .nav-el{
+      width: 5rem;
+      height: auto;
+      margin: 0.5rem 1rem;
+      padding: 0.2rem;
+      border-radius: 0.5rem;
+      color: white;
+      text-align: center;
+      display: flex;
+      flex-flow: column;
+      align-items: center;
+  }
+
+  .nav-el:hover{
+    background-color: #3787FF; 
+  }
+
+  .nav-el.btn-active{
+      background-color: #3787FF;   
+  }
+
+  .nav-el img{
+      width: 3rem;
+      /* display: none; */
+      height: auto;
+      padding: 0.1rem;
+      -webkit-filter: drop-shadow( 1px 1px 1px rgba(27, 27, 27, 0.7));
+      filter: drop-shadow( 1px 1px 1px rgba(27, 27, 27, 0.7)); 
+  }
+
+  .nav-el a{
+    color: white;
+    text-decoration: none;
+  }
+
+  .nav-el p{
+      margin: 0;
+  }
+
+  @media (max-width: 480px) {
+      #nav_group{
+          min-height: 5rem;
+          justify-content: space-around;
+      }
+      .nav-el{
+          margin: 0 0rem;
+          padding: 0.3rem;
+      }
+      .nav-el img{
+        width: 2rem; 
+      }
+  }
+</style>

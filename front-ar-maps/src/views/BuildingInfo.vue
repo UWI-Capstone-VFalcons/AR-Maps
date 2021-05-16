@@ -88,6 +88,8 @@ export default {
 }
 </script>
 <style scoped>
+/* bi is used as a shortening for building info */
+
 #v-buildinginfo{
     height: 100%;
     width: 100%;
@@ -138,12 +140,17 @@ margin-bottom: 5px;
 
 .bi-detail h1{
     text-transform: capitalize;
-    padding-bottom: 1rem;
+    font-weight: bold;
 }
 
 .bi-address{
     color: grey;
     line-height: 0.4rem;
     margin-left: 1rem;
+}
+@media (max-width: 480px) {
+  .bi-detail h1{
+    font-size: x-large;
+  }
 }
 </style>
