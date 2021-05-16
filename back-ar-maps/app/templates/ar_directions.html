@@ -3,27 +3,23 @@
 {% block css %}
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block head_js %}
     <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
     <script src="https://unpkg.com/aframe-look-at-component@0.8.0/dist/aframe-look-at-component.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
     <script src="https://raw.githack.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
     <!-- <script src="https://rawgit.com/bryik/aframe-bmfont-text-component/master/dist/aframe-bmfont-text-component.js"></script> -->
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans&display=swap" rel="stylesheet">
     <script>
         THREEx.ArToolkitContext.baseURL = 'https://jeromeetienne.github.io/AR.js/three.js/'
     </script>
-{% endblock %}
+{% endblock%}
 
-{% block js %}
-    <script>
-        var post_data =  JSON.parse({{ data|tojson }});
-        console.log(post_data);
-    </script>
-    <script src="{{ url_for('static', filename='js/render_ar.js')}}" ></script>
-{% endblock %}
 
-{% include 'nav.html' %}
+{% include 'base_top_bar.html' %}
 
 {% block main %}
     <form id="hiddenForm" action="{{ url_for('od_orientation') }}" method="POST" enctype="multipart/form-data" class=".d-none">
@@ -32,6 +28,12 @@
         <input type="hidden" id="post-data-field" name="data" value='{}'>
     </form>
     <!-- vr-mode-ui="enabled: false" -->
+    <a-scene
+        renderer="logarithmicDepthBuffer: true;"
+        embedded
+        loading-screen="enabled: false;"
+        arjs="sourceType: webcam; debugUIEnabled: false;"
+    > -->
     <a-scene
         renderer="logarithmicDepthBuffer: true;"
         embedded
@@ -54,6 +56,52 @@
             </div>
         </div>
     </div>
+    
+    <!-- modal styling -->
+    <style>
+        .modal-content{
+            position: fixed;
+            bottom: 7rem;
+            right: 0.0rem;
+            background-color: rgba(240, 240, 240, 0.7);
+            width: 90%;
+            margin-right: 5%;
+        }
+
+        .modal-backdrop {
+            background-color: rgba(0,0,0,.0001) !important;
+        }
+
+        .modal.left .modal-dialog{
+            position: fixed;
+            width: 90%;
+            height: 100%;
+            -webkit-transform: translate3d(0%, 0, 0);
+            -ms-transform: translate3d(0%, 0, 0);
+            -o-transform: translate3d(0%, 0, 0);
+            transform: translate3d(0%, 0, 0);
+        }
+
+
+        .modal.left.fade .modal-dialog{
+            left: -320px;
+            -webkit-transition: opacity 0.3s linear, left 0.3s ease-out;
+            -moz-transition: opacity 0.3s linear, left 0.3s ease-out;
+            -o-transition: opacity 0.3s linear, left 0.3s ease-out;
+            transition: opacity 0.3s linear, left 0.3s ease-out;
+        }
+        .modal.left.fade.show .modal-dialog{
+            left: 0.9rem;
+        }
+    </style>
 {% endblock %}
 
-{% include 'bottom.html' %}
+{% include 'base_bottom_nav.html' %}
+
+{% block js %}
+    <script>
+        var post_data =  JSON.parse({{ data|tojson }});
+        console.log(post_data);
+    </script>
+    <script src="{{ url_for('static', filename='js/render_ar.js')}}" ></script>
+{% endblock %}

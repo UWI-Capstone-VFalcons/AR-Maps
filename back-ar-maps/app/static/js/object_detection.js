@@ -226,5 +226,15 @@ function addImageOptionsToScreen(){
 //   }
 // ]
 // processDetection(object_result)
-addImageOptionsToScreen()
-detection();
+
+window.onload = ()=>{
+  // set the title
+  let app_bar_title_container = document.getElementById("title_containter");
+  let app_bar_title = document.getElementById("v-title");
+  app_bar_title_container.classList.remove("gone")
+  app_bar_title.classList.remove("gone");
+  app_bar_title.innerHTML = "GPS Calibration"
+
+  addImageOptionsToScreen() 
+  detection();
+}

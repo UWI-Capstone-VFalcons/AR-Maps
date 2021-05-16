@@ -13,30 +13,7 @@
 <script>
 
 export default {
-    name: 'ARView',
-    Components: {        
-    },
-    
-    props: {
-
-    },
-    
-    data() {
-        return {};
-    },
-    
-    methods:{
-        
-    },
-
-    watch: {
-        
-    },
-
-    created(){
-        
-    },
-    
+    name: 'ARView',  
     mounted() {  
         window.location.replace(this.$host+'nav');
     },

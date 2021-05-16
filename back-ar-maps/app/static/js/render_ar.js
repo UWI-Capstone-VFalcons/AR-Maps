@@ -3,6 +3,7 @@ window.onload = () => {
     var watchID;
     var mapZone = NaN;
     var GPS_ERROR = {lat:0,lng:0};
+    var istracking = false;
 
     function getLocation() {
         if(navigator.geolocation) {
@@ -387,15 +388,35 @@ window.onload = () => {
 
     // rerender the map when the destination is changes
     let dest = document.getElementById('myDestination');
-    dest.addEventListener('change',()=>{
-        if(watchID){
-            navigator.geolocation.clearWatch(watchID);
-        }
-        console.log(dest.value);
-        watchID = getPath();
-        console.log(watchID);
-    })
 
+    let direction_btn = document.getElementById('trigger-btn');
+    direction_btn.addEventListener('click',()=>{
+        if(!istracking){
+            istracking = true;
+            direction_btn.classList.add("stop-btn");
+            direction_btn.innerHTML ="Stop Tracking";
+            let destin_form =  document.getElementsByClassName('form-group');
+            for (let i = 0; i < destin_form.length; i++) {
+                destin_form[i].classList.add("gone");
+            }
+
+            // start the tracking process
+            if(watchID){
+                navigator.geolocation.clearWatch(watchID);
+            }
+            console.log(dest.value);
+            watchID = getPath();
+            console.log(watchID);
+        }else{
+            istracking = false;
+            direction_btn.classList.remove("stop-btn");
+            direction_btn.innerHTML ="Get Direction";
+            let destin_form =  document.getElementsByClassName('form-group');
+            for (let i = 0; i < destin_form.length; i++) {
+                destin_form[i].classList.remove("gone");
+            }
+        }
+    })
     // removed with vr-mode-ui="enabled: false"
     // document.querySelector('div.a-enter-vr').remove()
     // document.querySelector('div.a-enter-ar').remove()

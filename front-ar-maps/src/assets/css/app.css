@@ -2,7 +2,15 @@
     --main-background-color: #2C69C6B3;
     --main-background-white: white;
     --main-dark-overlay-background: #0000009d; 
+    --main-blue: rgb(44, 105, 198,0.63);
+    --smoky-white: rgb(245, 245, 245);
+    --accordian-blue: rgb(44, 105, 198,0.47); 
 }
+
+body{
+	font-family: PoppiAvenir, Helvetica, Arialns, sans-serif;
+}
+
 .base_bar{
     display: block;
     background-color: var(--main-background-color);

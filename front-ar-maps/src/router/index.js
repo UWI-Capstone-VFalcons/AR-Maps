@@ -4,8 +4,8 @@ import Home from '../views/Home.vue';
 import QRScreen from '../views/Scanner.vue';
 import OverheadMap from '../views/OverheadMap.vue';
 import ARGuide from '../views/ARGuide.vue';
-import BuildingInfo from '../views/buildinginfo.vue';
-
+import BuildingInfo from '../views/BuildingInfo.vue';
+import HelpSection from '../views/HelpScreen.vue';
 
 
 
@@ -23,6 +23,12 @@ const routes = [
     name: 'Map',
     component: OverheadMap,
     meta: { title: 'Map' },
+  },
+  {
+    path: '/help',
+    name: 'Help',
+    component: HelpSection,
+    meta: { title: 'Help'},
   },
   {
     path: '/scan',
