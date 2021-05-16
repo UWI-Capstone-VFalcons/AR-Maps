@@ -8,7 +8,6 @@ import BuildingInfo from '../views/BuildingInfo.vue';
 import HelpSection from '../views/HelpScreen.vue';
 
 
-
 Vue.use(VueRouter);
 
 const routes = [

@@ -418,8 +418,8 @@ window.onload = () => {
         }
     })
     // removed with vr-mode-ui="enabled: false"
-    // document.querySelector('div.a-enter-vr').remove()
-    // document.querySelector('div.a-enter-ar').remove()
+    document.querySelector('div.a-enter-vr').remove()
+    document.querySelector('div.a-enter-ar').remove()
 
 }
 

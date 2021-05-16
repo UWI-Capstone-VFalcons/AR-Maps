@@ -46,3 +46,7 @@ body{
     padding: 3.5rem 0rem;
     background-color: whitesmoke;
 }
+
+div.a-enter-vr, div.a-enter-ar{
+    display: none !important;
+}
