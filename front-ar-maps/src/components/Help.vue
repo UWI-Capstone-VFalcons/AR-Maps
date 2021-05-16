@@ -110,9 +110,8 @@ export default {
         item.classList.toggle("open");
         // item.nextElementSibling.classList.toggle("open")
         console.log(event);
+      });
     });
-});
-
 
   },  
 }

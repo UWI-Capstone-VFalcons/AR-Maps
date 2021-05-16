@@ -5,19 +5,19 @@
   <!-- Bottom Navigation bar -->
   <div id="nav_group" class="base_bar">
       <div class="nav-el">
-        <a href="https://uwi-ar-maps.herokuapp.com/home"></a>
+        <a href="/home">
           <img src="{{ url_for('static', filename='icons/home.svg') }}" alt="home"/>
           <p>Home</p>
         </a>
       </div>
       <div class="nav-el">
-        <a href="https://uwi-ar-maps.herokuapp.com/map"></a>
+        <a href="/map">
           <img src="{{ url_for('static', filename='icons/map-pin.svg') }}" alt="map"/>
           <p>Map</p>
         </a>
       </div>
       <div class="nav-el">
-        <a href="https://uwi-ar-maps.herokuapp.com/scan"></a>
+        <a href="/scan">
           <img src="{{ url_for('static', filename='icons/qr-code.svg') }}" alt="QR Scanner"/>
           <p>Scan QR</p>
         </a>
@@ -93,6 +93,11 @@
       padding: 0.1rem;
       -webkit-filter: drop-shadow( 1px 1px 1px rgba(27, 27, 27, 0.7));
       filter: drop-shadow( 1px 1px 1px rgba(27, 27, 27, 0.7)); 
+  }
+
+  .nav-el a{
+    color: white;
+    text-decoration: none;
   }
 
   .nav-el p{
