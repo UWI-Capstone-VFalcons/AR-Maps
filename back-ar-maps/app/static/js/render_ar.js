@@ -3,6 +3,7 @@ window.onload = () => {
     var watchID;
     var mapZone = NaN;
     var GPS_ERROR = {lat:0,lng:0};
+    var istracking = false;
 
     function getLocation() {
         if(navigator.geolocation) {
@@ -103,8 +104,8 @@ window.onload = () => {
                         If my current location is less than the object location, 
                         then add the difference.
                     */
-                    let latitude = coordinate[0] - GPS_ERROR[0];
-                    let longitude = coordinate[1] - GPS_ERROR[1];
+                    let latitude = coordinate[0] - GPS_ERROR.lat;
+                    let longitude = coordinate[1] - GPS_ERROR.lng;
                     let id = coordinate[2];
                     let look_at = coordinate[3]
 
@@ -122,12 +123,13 @@ window.onload = () => {
                     // create the trackable objects
                     let node_entity = document.createElement('a-entity');
                     node_entity.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
-                    node_entity.setAttribute('scale', '0.5 0.5 0.5');
+                    node_entity.setAttribute('scale', '1.5 1.5 1.5');
                     node_entity.setAttribute('gltf-model', `#node-${i}-${id}`);
                     if(i == 0 && id == 0 || look_at === 'camera'){
                         node_entity.setAttribute('look-at', '[gps-camera]');
                     } else {
                         node_entity.setAttribute('look-at',`#node-${i}-${look_at}`);
+                        console.log(`#node-${i}-${look_at}`);
                     }
                     scene.appendChild(node_entity);
 
@@ -171,7 +173,7 @@ window.onload = () => {
                 // create trackable objects
                 let building_entity = document.createElement('a-entity');
                 building_entity.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
-                building_entity.setAttribute('scale', '1.5 1.5 1.5');
+                building_entity.setAttribute('scale', '2 2 2');
                 building_entity.setAttribute('gltf-model', `#building-${id}`);
                 building_entity.setAttribute('look-at', '[gps-camera]');
                 building_entity.setAttribute('animation','property: rotation; to: 0 360 0; loop: true; dur: 10000');
@@ -386,18 +388,38 @@ window.onload = () => {
 
     // rerender the map when the destination is changes
     let dest = document.getElementById('myDestination');
-    dest.addEventListener('change',()=>{
-        if(watchID){
-            navigator.geolocation.clearWatch(watchID);
-        }
-        console.log(dest.value);
-        watchID = getPath();
-        console.log(watchID);
-    })
 
+    let direction_btn = document.getElementById('trigger-btn');
+    direction_btn.addEventListener('click',()=>{
+        if(!istracking){
+            istracking = true;
+            direction_btn.classList.add("stop-btn");
+            direction_btn.innerHTML ="Stop Tracking";
+            let destin_form =  document.getElementsByClassName('form-group');
+            for (let i = 0; i < destin_form.length; i++) {
+                destin_form[i].classList.add("gone");
+            }
+
+            // start the tracking process
+            if(watchID){
+                navigator.geolocation.clearWatch(watchID);
+            }
+            console.log(dest.value);
+            watchID = getPath();
+            console.log(watchID);
+        }else{
+            istracking = false;
+            direction_btn.classList.remove("stop-btn");
+            direction_btn.innerHTML ="Get Direction";
+            let destin_form =  document.getElementsByClassName('form-group');
+            for (let i = 0; i < destin_form.length; i++) {
+                destin_form[i].classList.remove("gone");
+            }
+        }
+    })
     // removed with vr-mode-ui="enabled: false"
-    // document.querySelector('div.a-enter-vr').remove()
-    // document.querySelector('div.a-enter-ar').remove()
+    document.querySelector('div.a-enter-vr').remove()
+    document.querySelector('div.a-enter-ar').remove()
 
 }
 

@@ -1,0 +1,179 @@
+<div id="app-bar" class="base_bar">
+  <p id="back_message">
+    &#60;<!-- less than sign --> Tap to go back
+  </p>
+  <div id="title_containter" class="gone">
+      <h2 id="v-title">AR Maps</h2>
+  </div>
+  {% if form is defined %} 
+    <div id="top_container" class="">
+      <form class="form" action="{{ url_for('ar') }}" method="GET" enctype="multipart/form-data">
+        {{ form.csrf_token }}
+        <div class="form-group">
+            <label for="current_location" class="form-label col-lg-2 col-form-label" >
+                <img src="{{ url_for('static', filename='icons/map-pin.svg') }}">
+                {{ form.myLocation.label(class="font-weight-bold") }} &nbsp; &nbsp; &nbsp; &nbsp;
+            </label>
+            <div class="form-field col-lg-10">
+                {{ form.myLocation(class="form-control font-weight-bold", readonly=true) }}
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="select-dest" class="form-label col-lg-2 col-form-label" >
+                <img src="{{ url_for('static', filename='icons/map-pin.svg') }}">
+                {{ form.myDestination.label(class="font-weight-bold") }} &nbsp;
+            </label>
+            <div class="form-field col-lg-10">
+              {{ form.myDestination( placeholder="Enter Destination", class="form-control font-weight-bold") }}
+            </div>
+        </div>
+        <!-- button to start detection -->
+        <button id="trigger-btn" class="btn btn-primary" type="button" >
+          Get Direction
+        </button>
+      </form>
+    </div>
+  {% endif %}
+</div>
+<script>
+  let back_btn =  document.getElementById("back_message");
+  back_btn.onclick = function(){
+    window.history.back();
+  };
+</script>
+<style>
+  #app-bar{
+    height: auto;
+    width: 100%;   
+    min-height: 4.5rem;
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    margin-left: 0;
+    margin-right: 0;
+    color: white;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    padding-top: 1rem;
+  }
+
+  #title_containter{
+    display: flex;
+    flex-flow: row;
+    flex-wrap: nowrap;
+    justify-content: start;
+    align-items: center;
+  }
+
+  #title_containter img{
+    width: 3.5rem;
+    height: 3.5rem;
+    object-fit: cover;
+    margin: 0.5rem;
+  }
+
+  #v-title{
+    width: fit-content;
+    padding: 0.5rem 1rem;
+    color: whitesmoke;
+    font-weight: bold;
+  }
+
+  #top_container{
+    height: auto;
+    width: 100%;
+  }
+
+  #back_message{
+    text-align:start;
+    padding: 0rem 1rem;
+    padding-top: 0.5rem;
+    margin-bottom: 0px;
+  }
+
+  @media (max-width: 480px) {
+    #app-bar{
+      padding-top: 0.5rem;
+      min-height: 3rem;
+    }
+    #v-title{
+      font-size: 1.1rem;
+      padding: 0rem 1rem;
+    }
+
+    #back_message{
+      padding-top: 0rem;
+      font-size: 0.8rem;
+    }
+  }
+
+  /* Styling for the form*/
+  #map-view{
+    height: 100%;
+    width: 100%;
+  }
+
+  .form{
+    padding: 0.5rem;
+    text-align: center;
+  }
+
+  .form-group{
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    margin-bottom: 0px;
+    margin: 5px;
+  }
+
+  .form-label{
+    /* width: 55%; */
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0px;
+    padding: 0;
+  }
+
+  .form-label img{
+    width: 3rem;
+  }
+
+  .form-label p{
+    font-size: 1.2rem;
+    margin-bottom: 0px;
+  }
+
+  .form-field{
+    padding: 0;
+  }
+
+  .form-field input{
+  }
+
+  #trigger-btn{
+    margin: 0.2rem;
+  }
+
+  .gone{
+    display: none !important;
+  }
+
+  .stop-btn{
+    background-color: #b22222 !important;
+  }
+  @media (max-width: 480px) {
+    .form{
+      padding: 0.1rem;
+    }
+    .form-label img{
+      width: 2rem;
+    }
+    .form-label p{
+      font-size: 1rem;
+    }
+  }
+</style>

@@ -66,4 +66,9 @@ p{
 .working{
   background-color: #00ff00 !important;
 }
+@media (max-width: 480px) {
+  #servertest{
+    margin-top: .5rem;
+  } 
+}
 </style>

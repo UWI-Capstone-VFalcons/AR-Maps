@@ -3,7 +3,7 @@ name: Docker Image CI
 on: 
   push:
     branches:
-      - sprint5
+      - none
       
   pull_request:
     branches:
@@ -33,3 +33,4 @@ jobs:
 
       - name: run release
         run: ./release.sh
+        

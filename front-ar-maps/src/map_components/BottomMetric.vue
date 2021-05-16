@@ -33,7 +33,7 @@ export default {
     },
     computed:{
         setDistance(){
-            if(this.distance>= 1000){ return (this.distance/1000).toFixed(1)+" m"}
+            if(this.distance>= 1000){ return (this.distance/1000).toFixed(1)+" Km"}
             return (this.distance).toFixed(1)+" m"
         },
         setTime(){
@@ -74,7 +74,7 @@ export default {
 </script>
 <style scoped>
 #card{
-    height: 8rem;
+    height: auto;
     width: 100%;
     display: flex;
     flex-wrap: nowrap;
@@ -82,7 +82,7 @@ export default {
     transition: 1s;
 }
 #tab_btn{
-    height: 100%;
+    height: auto;
     width: 1rem;
     background-color:var(--main-background-color);
     border-top-left-radius: 15px;
@@ -93,15 +93,15 @@ export default {
 }
 .bar{
     width: 0.8rem; 
-    height:6rem;
+    height:80%;
     margin: 0px 5px;
     display: block;
-    background-color: white;
-    opacity: 40%;
+    background-color: rgba(255, 255, 255, 0.37);
     border-radius: 5px;
 }
 
 #content{
+    height: auto;
     width: 100%;
     background-color: var(--main-background-white);
     display: flex;
@@ -122,11 +122,15 @@ export default {
 
 #metrics{
     font-size: x-large;
+    word-wrap: normal;
+    margin-bottom: 0.5rem;
 }
 
 #place{
     font-size: medium;
     word-wrap: normal;
+    margin-bottom: 0.2rem;
+
 }
 
 /* animations */

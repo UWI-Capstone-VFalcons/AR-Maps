@@ -8,11 +8,7 @@ import './assets/css/app.scss';
 import * as VueGoogleMaps from 'vue2-google-maps'
 import VueGeolocation from 'vue-browser-geolocation'
 
-Vue.config.productionTip = false
 
-
-
- 
 Vue.use(VueGoogleMaps, {
   load: {
     key: 'AIzaSyB5QmIo_yG56_KI-WC91I1mmsyZ9cOZF9s',
@@ -23,7 +19,6 @@ Vue.use(VueGoogleMaps, {
 
 Vue.use(VueGeolocation)
 Vue.config.productionTip = false;
-Vue.config.ignoredElements = ['a-scene','a-assets','a-asset-item','a-entity','a-camera']
 
 // Set the default app title
 document.title =  'UWI AR Maps';

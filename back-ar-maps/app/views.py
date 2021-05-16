@@ -41,8 +41,8 @@ def ar():
     #  continue adding form for everything else 
     form = FindARDestinationForm()
     buildings = Building.query.all()
-    form.myDestination.choices = [(b.id, b.name) for b in buildings]
-    return render_template("map.html",form=form, buildings=buildings, data=data)
+    form.myDestination.choices = ([(b.id, b.name) for b in buildings])
+    return render_template("ar_directions.html",form=form, buildings=buildings, data=data)
 
 @app.route('/nav/OD/detect', methods=['GET','POST'])
 def od_orientation():  
@@ -59,7 +59,7 @@ def od_orientation():
 @app.route('/nav/to/<float:des_lat>/<float:des_long>', methods=['GET'])
 def ar_find():
     """Render camera with ar experience  <19/3/2021 N.Bedassie>"""
-    return render_template("map.html")
+    return render_template("ar_directions.html")
 
 
 """
