@@ -1,5 +1,5 @@
 # build
-FROM node:15.7.0-alpine3.10 as build-vue
+FROM node:15-alpine3.10 as build-vue
 WORKDIR /app
 ENV PATH /app/node_modules/.bin:$PATH
 COPY ./front-ar-maps/package*.json ./
