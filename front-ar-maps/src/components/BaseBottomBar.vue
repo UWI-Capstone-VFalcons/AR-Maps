@@ -1,21 +1,25 @@
 <template>
     <div id="bottom" >
-        <div id="botom_item">
+        <div id="bottom_item">
             <slot></slot>
         </div>
         <!-- Bottom Navigation bar -->
         <div id="nav_group" class="base_bar">
             <router-link to="/" class="nav-el">
                 <img src="../assets/images/icons/home.svg" alt="home"/>
+                <p>Home</p>
             </router-link>
             <router-link to="/map" class="nav-el">
                 <img src="../assets/images/icons/map-pin.svg" alt="map"/>
+                <p>Map</p>
             </router-link>
             <router-link to="/scan" class="nav-el">
                 <img src="../assets/images/icons/qr-code.svg" alt="QR Scanner"/>
+                <p>Scan QR</p>
             </router-link>
             <router-link to="/ar" class="nav-el">
                 <img src="../assets/images/icons/ar-view.svg" alt="AR Map"/>
+                <p>AR</p>
             </router-link>
         </div>
     </div>
@@ -39,7 +43,7 @@ export default {
     vertical-align: bottom;
 }
 
-#botom_item{
+#bottom_item{
     height: auto;
     width: 100%;
     top: 0;
@@ -56,17 +60,21 @@ export default {
     border-top-right-radius: 15px;   
     display: flex;
     flex-direction: row;
-    justify-content:center;
+    justify-content:space-around;
     align-items: center;
 }
 
 .nav-el{
-    width: 3.5rem;
-    height: 100%;
+    width: 5rem;
+    height: auto;
     margin: 0.5rem 1rem;
-    padding: 0.5rem;
-    display: block;
+    padding: 0.2rem;
     border-radius: 0.5rem;
+    color: white;
+    text-align: center;
+    display: flex;
+    flex-flow: column;
+    align-items: center;
 }
 
 .router-link-exact-active.nav-el{
@@ -74,10 +82,30 @@ export default {
 }
 
 .nav-el img{
-    width: 100%;
+    width: 3rem;
+    /* display: none; */
     height: auto;
+    padding: 0.1rem;
     -webkit-filter: drop-shadow( 1px 1px 1px rgba(27, 27, 27, 0.7));
     filter: drop-shadow( 1px 1px 1px rgba(27, 27, 27, 0.7)); 
+}
+
+.nav-el p{
+    margin: 0;
+}
+
+@media (max-width: 480px) {
+    #nav_group{
+        min-height: 5rem;
+        justify-content: space-around;
+    }
+    .nav-el{
+        margin: 0 0rem;
+        padding: 0.3rem;
+    }
+    .nav-el img{
+       width: 2rem; 
+    }
 }
 
 </style>

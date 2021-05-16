@@ -1,23 +1,11 @@
 <template>
-<div>
-
-  <div id="app-bar" class='help-top'>
-    <div class='help-top-sub'>
-      <h6 @click="toHome">Go Back</h6>
-      <img src="../assets/images/illustrations/help.png" alt="Help Icon">
-    </div>
-    
-    <h2 id="v-title">{{ title }}</h2>
-  </div>
-
-
-  <div class="help-middle">
-    <div>
+  <div id="main">
+    <div id="help-top">
       <img class='help-svg' src="../assets/svg/searching.svg" alt="Home Search">
     </div>
    
     <div class="accordian">
-      
+    
       <div class="accordian_item">
         <button class="accordian_question">
             Where do I find the building QR Codes?
@@ -94,21 +82,11 @@
         </div>
       </div>
     </div>  
-  </div>
-</div>
-      
+  </div>     
 </template>
-
-
 <script>
-import router from '@/router';
-
 export default {
-  data() {
-    return {
-      title: 'Frequently Asked Questions',
-    };
-  },
+  name:"Help_Section",
   mounted(){
     document.querySelectorAll('.accordian_question').forEach((item)=>{
     item.addEventListener('click',(event)=>{
@@ -136,29 +114,67 @@ export default {
 });
 
 
-},
-methods:{
-    toHome: function(){
-      router.push({ name: 'Home'});
-    },
-  },
-
+  },  
 }
+
 </script>
+<style scoped>
+@media (max-width: 480px) {
+  #main{
+    flex-flow: column;
+    flex-wrap: nowrap !important;
+    justify-content: unset !important;
+  }
+  #help-top{
+    width: 100%;
+    height: auto;
+    padding: 0.5rem 2rem;
+  }
 
-<style>
-  :root{
-    --accordian-blue: rgb(44, 105, 198,0.47); 
-}
-
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  #help-top img{
+    width: 100% !important;
+    height: auto !important;
+  }
 }
 
 h1,h2,h3{   
     margin-top: 0;
+}
+
+#main{
+  width: 100%;
+  height: 100%;
+  display:flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 1rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#help-top{
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* .help-top-sub{
+  display: flex;
+  flex-direction: column;
+  color: white;
+  height: 5rem;
+  padding: 0;
+  margin: 0;
+} */
+
+#help-top h6{
+  cursor: pointer;
+  padding-top: 5px;
+}
+
+#help-top img{
+  width: 35rem;
+  height: 35rem;
 }
 
 .accordian{
@@ -234,38 +250,4 @@ h1,h2,h3{
     transition: height .35s ease-in;
 }
 
-.help-top,
-.help-middle{
-  display:flex;
-}
-
-.help-top{
-  align-items: center;
-  justify-content: center;
-}
-
-.help-top-sub{
-  display: flex;
-  flex-direction: column;
-  color: white;
-  height: 5rem;
-  padding: 0;
-  margin: 0;
-}
-
-.help-top h6{
-  cursor: pointer;
-  padding-top: 5px;
-}
-
-.help-top img{
-  width: 3rem;
-  height: 4rem;
-  justify-content: end;
-}
-
-.help-svg{
-  width: 35rem;
-  height: 35rem;
-}
 </style>

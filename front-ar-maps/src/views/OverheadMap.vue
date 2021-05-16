@@ -40,11 +40,10 @@
                         </select>
                     </div>
                 </div>
-                <button :class="btnClasses" 
+                <button id="trigger-btn" :class="btnClasses" 
                     @click="toggleTracking">
                     {{buttonText}}
                 </button>
-
             </div>
         </base-top-bar> 
 
@@ -177,6 +176,7 @@ export default {
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
+    justify-content: center;
     margin-bottom: 0px;
     padding: 0;
 }
@@ -187,6 +187,7 @@ export default {
 
 .form-label p{
     font-size: 1.2rem;
+    margin-bottom: 0px;
 }
 
 .form-field{
@@ -196,6 +197,10 @@ export default {
 .form-field input{
 }
 
+#trigger-btn{
+    margin: 0.2rem;
+}
+
 
 .gone{
     display: none !important;
@@ -203,5 +208,16 @@ export default {
 
 .stop-btn{
     background-color: #b22222 !important;
+}
+@media (max-width: 480px) {
+    .form{
+        padding: 0.1rem;
+    }
+    .form-label img{
+        width: 2rem;
+    }
+    .form-label p{
+        font-size: 1rem;
+    }
 }
 </style>
