@@ -17,7 +17,7 @@
       />  
 
       <!-- Draw all the custom routes-->
-      <gmap-polygon
+      <gmap-polyline
         :key="'route_'+index_r"
         v-for="(plg_r, index_r) in paths_route_polygon"
         :editable="plg_r.editable"
@@ -63,7 +63,7 @@
       <GmapCircle
         :key="'accuracy_'+userMarker.key"
         :center="userCoordinates"
-        :radius="(userCoordinates.accuracy+1)/1000"
+        :radius="(userCoordinates.accuracy+1)/1"
         :options="userMarker.circle.options"
       />
 
@@ -132,11 +132,11 @@ export default {
         suppressMarkers:true,
         preserveViewport:true,
         polylineOptions:{
-          strokeColor: "#FF00FF",
-          strokeOpacity: 0.8,
+          strokeColor: "#2C69C6",
+          strokeOpacity: 0.5,
           strokeWeight: 2,
-          fillColor: "#FF00FF",
-          fillOpacity: 0.35,
+          fillColor: "#2C69C6",
+          fillOpacity: 0.3,
         },
         toggle:false,
       },
@@ -144,9 +144,9 @@ export default {
       // google maps 
       // user variables
       userCoordinates:{
-        lat: 18.00520017651841, 
-        lng: -76.74941982751545, 
-        accuracy:0
+        lat: 18.005635237391893, 
+        lng: -76.74745968933074, 
+        accuracy:10
       },
       userMarker:{
         key:"user",
@@ -159,11 +159,11 @@ export default {
         animation:2,
         circle:{
           options:{
-            strokeColor: "#FF0000",
+            strokeColor: "#5679A6",
             strokeOpacity: 0.2,
             strokeWeight: 2,
-            fillColor: "#FF0000",
-            fillOpacity: 0.35,
+            fillColor: "#5679A6",
+            fillOpacity: 0.30,
             visible:true,
           },  
         }
@@ -253,27 +253,23 @@ export default {
           for(var indx in this.route_paths){
             // var path_id = this.route_paths[indx].id;
             // var path_name = this.route_paths[indx].name;
-            var path_start_1 = {lat: this.route_paths[indx].start_latitude_1, lng: this.route_paths[indx].start_longitude_1};
-            var path_start_2 = {lat: this.route_paths[indx].start_latitude_2, lng: this.route_paths[indx].start_longitude_2};
-            var path_end_1 = {lat: this.route_paths[indx].end_latitude_1, lng: this.route_paths[indx].end_longitude_1};
-            var path_end_2 = {lat: this.route_paths[indx].end_latitude_2, lng: this.route_paths[indx].end_longitude_2};
+            var path_start = {
+              lat: (this.route_paths[indx].start_latitude_1+this.route_paths[indx].start_latitude_2)/2,
+              lng: (this.route_paths[indx].start_longitude_1+this.route_paths[indx].start_longitude_2)/2
+            };
+
+            var path_end = {
+              lat: (this.route_paths[indx].end_latitude_1 + this.route_paths[indx].end_latitude_2)/2, 
+              lng: (this.route_paths[indx].end_longitude_1 + this.route_paths[indx].end_longitude_2)/2
+            };
 
             this.paths_route_polygon.push({
               draggable: false,
               editable: false, 
-              options:{
-                strokeColor: "#FF00FF",
-                strokeOpacity: 0.8,
-                strokeWeight: 2,
-                fillColor: "#FF00FF",
-                fillOpacity: 0.35,
-              },
+              options:this.google_route_options.polylineOptions,
               path:[
-                path_start_1,
-                path_start_2,
-                path_end_2,
-                path_end_1,
-                path_start_1
+                path_start,
+                path_end,
               ],
             });
           }
@@ -368,8 +364,11 @@ export default {
                 markerIcon: {
                   url: require('../assets/images/icons/map/building.png'),
                   // size: {width: 60, height: 90, f: 'px', b: 'px',},
-                  scaledSize: {width: 28, height: 28, f: 'px', b: 'px',},
+                  scaledSize: {width: 28, height: 28},
+                  origin:{x: 0, y:0},
+                  anchor:{x: 0, y:0},
                   labelOrigin: {x:75, y:35},
+
                 },
                 animation: 0
               })
@@ -400,11 +399,11 @@ export default {
               draggable: false,
               editable: false, 
               options:{
-                strokeColor: "#FF0000",
-                strokeOpacity: 0.8,
+                strokeColor: "#FFF2AF",
+                strokeOpacity: 0.1, 
                 strokeWeight: 2,
-                fillColor: "#FF0000",
-                fillOpacity: 0.35,
+                fillColor: "#F6CF65",
+                fillOpacity: 0.5, 
               },
               path:[
                 path_start_1,
@@ -427,8 +426,20 @@ export default {
       // open the window for a marker when clicked
       const building = this.all_buildings[index];
       this.infoWindow.position = { lat: building.building_latittude, lng: building.building_longitude }
-      this.infoWindow.template = `<b>${building.building_name}</b><br>${building.building_address1}<br>${building.building_address2} ${building.building_address3}<br>`
+      this.infoWindow.template = `
+      <div>
+        <b>${building.building_name}</b>
+        <br>${building.building_address1}
+        <br>${building.building_address2}
+        <br>${building.building_address3}
+        <br><button class="btn btn-primary info-window-btn">Visit</button> 
+      </div>`
       this.infoWindow.open = true
+    },
+
+    startTracking(id){
+      console.log("button works");
+      this.$emit("destination_set",id);
     },
 
     testFakeWalk(x=1, y=1, delay=1000){
@@ -455,5 +466,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+.info-window-btn{
+    margin-top: 0.5rem;
+    font-size: small;
+}
 </style>

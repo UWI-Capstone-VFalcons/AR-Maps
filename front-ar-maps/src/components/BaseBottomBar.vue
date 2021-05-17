@@ -47,7 +47,7 @@ export default {
     height: auto;
     width: 100%;
     top: 0;
-    margin-bottom: 4.5rem;
+    margin-bottom: 6rem;
 }
 
 #nav_group{
@@ -95,6 +95,9 @@ export default {
 }
 
 @media (max-width: 480px) {
+    #bottom_item{
+        margin-bottom: 5.5rem;
+    }
     #nav_group{
         min-height: 5rem;
         justify-content: space-around;
