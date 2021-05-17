@@ -77,7 +77,13 @@ pytest -v
 or for specific tests
 
 pytest test-folder -v
+```
+### Generate coverage report
 
+```
+coverage run -m pytest
+
+coverage html --include=./tests/*
 ```
 ### To add heroku app remote 
 ```
