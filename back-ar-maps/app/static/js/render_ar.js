@@ -123,7 +123,7 @@ window.onload = () => {
                     // create the trackable objects
                     let node_entity = document.createElement('a-entity');
                     node_entity.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
-                    node_entity.setAttribute('scale', '1.5 1.5 1.5');
+                    node_entity.setAttribute('scale', '1 1 1');
                     node_entity.setAttribute('gltf-model', `#node-${i}-${id}`);
                     if(i == 0 && id == 0 || look_at === 'camera'){
                         node_entity.setAttribute('look-at', '[gps-camera]');
@@ -171,19 +171,21 @@ window.onload = () => {
                 scene.appendChild(building_asset);
 
                 // create trackable objects
-                let building_entity = document.createElement('a-entity');
+                let building_entity = document.createElement('a-link');
                 building_entity.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
-                building_entity.setAttribute('scale', '2 2 2');
-                building_entity.setAttribute('gltf-model', `#building-${id}`);
+                building_entity.setAttribute('scale', '.75 .75 .75');
+                // building_entity.setAttribute('gltf-model', `#building-${id}`);
                 building_entity.setAttribute('look-at', '[gps-camera]');
-                building_entity.setAttribute('animation','property: rotation; to: 0 360 0; loop: true; dur: 10000');
+                // building_entity.setAttribute('animation','property: rotation; to: 0 360 0; loop: true; dur: 10000');
 
                 // Add metrics information and 
                 // name of the building to the scene
                 if(meta !== undefined){
-                    building_entity.setAttribute('text',`value: ${name} ${meta.time} mins (${meta.distance}m) away ; color:black; side:double; width: 5;`);
+                    //building_entity.setAttribute('text',`value: ${name} ${meta.time} mins (${meta.distance}m) away ; color:black; side:double; width: 5;`);
+                    building_entity.setAttribute('title', `${name} ${meta.time} mins (${meta.distance}m) away`);
+
                 } else {
-                    building_entity.setAttribute('text',`value: ${name}; color:black; side:double; width: 5;`);
+                    building_entity.setAttribute('title',`${name}`);
                 }
                 scene.appendChild(building_entity);
 
