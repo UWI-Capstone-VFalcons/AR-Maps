@@ -56,11 +56,12 @@
             @destinations_change="setDestination"
             @nav_metrics_change="setNavMetrics"
             @reachDestination="alertReachDestination"
+            @destination_set="toggleTracking"
             />
         </div>
 
         <base-bottom-bar>
-            <div id="map-bottom-metrix">
+            <div id="map-bottom-metric">
                 <bottom-metric
                     :distance="nav_metrics.distance"
                     :time="nav_metrics.time" 
@@ -192,9 +193,6 @@ export default {
 
 .form-field{
     padding: 0;
-}
-
-.form-field input{
 }
 
 #trigger-btn{
