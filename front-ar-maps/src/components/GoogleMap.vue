@@ -132,11 +132,12 @@ export default {
         suppressMarkers:true,
         preserveViewport:true,
         polylineOptions:{
-          strokeColor: "#2C69C6",
+          strokeColor: "#FE3A33",
           strokeOpacity: 0.5,
           strokeWeight: 2,
-          fillColor: "#2C69C6",
+          fillColor: "#FE3A33",
           fillOpacity: 0.3,
+          zIndex:5
         },
         toggle:false,
       },
