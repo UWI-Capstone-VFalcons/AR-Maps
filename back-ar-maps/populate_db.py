@@ -193,6 +193,16 @@ addPath(
     connected_path=12,
     map_area_id=1)
 
+addPath(
+    name="Back of Sci-Tech Library",
+    start_node_coord1=(),
+    start_node_coord2=(),
+    end_node_coord1=(18.005826165195675, -76.7501316824734),
+    end_node_coord2=(18.005817111489886, -76.75019590237281),
+    use_connected_path_end_for_start=True,
+    connected_path=13,
+    map_area_id=1)
+
 # intersection joining the entrance behind library with spine
 addPath(
     name="Back of SLT 2",
@@ -325,6 +335,18 @@ addBuilding(
     connected_path=13,
     stop_node_coord1=(18.005492828634214, -76.74996558704959),
     stop_node_coord2=(18.005467896892632, -76.75002393082016))
+
+addBuilding(
+    name="Computing Department",
+    address1="2742+93",
+    address2="Kingston, Jamaica",
+    address3="",
+    b_type="Department",
+    info="The computing department",
+    coord=(18.00585941913931, -76.74997567515639),
+    connected_path=16,
+    stop_node_coord1=(18.005792717686898, -76.7501109770747),
+    stop_node_coord2=(18.005778817945043, -76.75015552959843))
 
 """
 add OD objects
