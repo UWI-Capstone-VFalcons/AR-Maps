@@ -401,7 +401,7 @@ addEvent(
     start_time=datetime.time(0,0,0),
     end_time=datetime.time(23,59,59),
     recurrent=True,
-    day_of_week=2,
+    day_of_week=1,
     specific_date=None,
     info="An event for the capstone demo")
 
@@ -411,7 +411,7 @@ addEvent(
     start_time=datetime.time(0,0,0),
     end_time=datetime.time(23,59,59),
     recurrent=True,
-    day_of_week=2,
+    day_of_week=1,
     specific_date=None,
     info="An event for the capstone demo")
 
@@ -421,6 +421,6 @@ addEvent(
     start_time=datetime.time(0,0,0),
     end_time=datetime.time(23,59,59),
     recurrent=True,
-    day_of_week=2,
+    day_of_week=1,
     specific_date=None,
     info="An event for the capstone demo")

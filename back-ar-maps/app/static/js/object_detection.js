@@ -36,7 +36,7 @@ async function detectObjects(image){
     score = detections[6].dataSync()[i];
 
     // only return objects that get a god confidence score
-    if(score >= 0.7){
+    if(score >= 0.45){
       box = detections[0].arraySync()[0][i];
       o_class = detections[5].dataSync()[i];
       o_class = MODEL_CLASSES[o_class-1]["name"];
