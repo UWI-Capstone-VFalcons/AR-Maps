@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: db730e1904cf
+Revision ID: 1091c5e0fd07
 Revises: 
-Create Date: 2021-05-18 03:27:04.756075
+Create Date: 2021-05-18 11:55:32.449106
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'db730e1904cf'
+revision = '1091c5e0fd07'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -99,9 +99,7 @@ def upgrade():
     sa.ForeignKeyConstraint(['end'], ['nodes.node_id'], ),
     sa.ForeignKeyConstraint(['map_area'], ['map_areas.map_area_id'], ),
     sa.ForeignKeyConstraint(['start'], ['nodes.node_id'], ),
-    sa.PrimaryKeyConstraint('path_id'),
-    sa.UniqueConstraint('name'),
-    sa.UniqueConstraint('name')
+    sa.PrimaryKeyConstraint('path_id')
     )
     op.create_table('starting_points',
     sa.Column('sp_id', sa.Integer(), nullable=False),

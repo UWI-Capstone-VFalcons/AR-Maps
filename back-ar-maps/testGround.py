@@ -2,6 +2,7 @@
 from math import dist
 from app.helper import *
 from app.views import *
+from app.database_object_modifiers import *
 
 if __name__ == '__main__':
    # a = checkCurrentAndDestination((18.005019529041988, -76.74933235613977), 1)
@@ -20,3 +21,14 @@ if __name__ == '__main__':
    # print(a)
    # print(b)
    # print(c)
+   # addPath(
+   #    name="Test4",
+   #    map_area_id=1,
+   #    connected_path=1,
+   #    use_connected_path_end_for_start=True,
+   #    end_node_coord1=(18.002903738473425, -76.74732416609262),
+   #    end_node_coord2=(18.002903738473425, -76.74732416609262))
+   addEvent(
+      building_id=1,
+      name="edsds")
+      

@@ -224,7 +224,30 @@ def checkPath(user_loc, map_area):
         i += 1
     return None
 
-# calculate and add path length to database
+# calculate path length for a specific path
+# giving the two nodes coordinates
+def calculatePathLength(start_node, end_node):
+    try:
+        # get the length of the two side of the paths
+        length_1 = dist(
+            [float(start_node.latitude_1), 
+            float(start_node.longitude_1)], 
+            [float(end_node.latitude_1),
+            float(end_node.longitude_1)])
+        length_2 = dist(
+            [float(start_node.latitude_2),
+            float(start_node.longitude_2)], 
+            [float(end_node.latitude_2),
+            float(end_node.longitude_2)])
+        # find the average of the two lengths 
+        # and set it as the path length
+        avg_length = abs((length_1 + length_2)/2)
+        return avg_length
+
+    except:
+        return 0
+
+# calculate and add path length to database for all paths in a map area
 def postPathLengths(map_area):
     """
         Populate paths with lengths in database
@@ -235,19 +258,7 @@ def postPathLengths(map_area):
         start = Node.query.filter_by(id=path.start).first()
         end = Node.query.filter_by(id=path.end).first()
         # get the length of the two side of the paths
-        length_1 = dist(
-            [float(start.latitude_1), 
-            float(start.longitude_1)], 
-            [float(end.latitude_1),
-            float(end.longitude_1)])
-        length_2 = dist(
-            [float(start.latitude_2),
-            float(start.longitude_2)], 
-            [float(end.latitude_2),
-            float(end.longitude_2)])
-        # find the average of the two lengths 
-        # and set it as the path length
-        avg_length = (length_1 + length_2)/2
+        avg_length = calculatePathLength(start, end)
         path.length = avg_length
         print(avg_length)
     # save the changes to the database

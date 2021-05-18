@@ -156,7 +156,7 @@ class MapZone(db.Model):
 class Path(db.Model):
     __tablename__ = 'paths'
     id = db.Column('path_id', db.Integer, primary_key=True)
-    name = db.Column(db.String(200), unique=True, nullable=False)
+    name = db.Column(db.String(200), nullable=False)
     description = db.Column(db.Text)
     map_area = db.Column(db.Integer, db.ForeignKey('map_areas.map_area_id'), nullable=False)
     start = db.Column(db.Integer, db.ForeignKey('nodes.node_id'), nullable=False)
