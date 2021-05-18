@@ -116,7 +116,7 @@ window.onload = () => {
                     let node_asset = document.createElement('a-assets');
                     let node_model = document.createElement('a-asset-item');
                     node_model.setAttribute('id', `node-${i}-${id}`);
-                    node_model.setAttribute('src', '/static/3d_models/arrow.glb');
+                    node_model.setAttribute('src', '/static/3d_models/arrow.gltf');
                     node_asset.appendChild(node_model);
                     scene.appendChild(node_asset);
 
