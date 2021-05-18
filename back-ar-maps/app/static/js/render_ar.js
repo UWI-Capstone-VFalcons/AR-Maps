@@ -123,7 +123,8 @@ window.onload = () => {
                     // create the trackable objects
                     let node_entity = document.createElement('a-entity');
                     node_entity.setAttribute('gps-entity-place', `latitude: ${latitude}; longitude: ${longitude};`);
-                    node_entity.setAttribute('scale', '1 1 1');
+                    node_entity.setAttribute('position','0 0 -1');
+                    node_entity.setAttribute('scale', '0.5 0.5 0.5');
                     node_entity.setAttribute('gltf-model', `#node-${i}-${id}`);
                     if(i == 0 && id == 0 || look_at === 'camera'){
                         node_entity.setAttribute('look-at', '[gps-camera]');
