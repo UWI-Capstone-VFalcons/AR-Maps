@@ -35,7 +35,7 @@
 import BaseTopBar from '@/components/BaseTopBar';
 import BaseBottomBar from '@/components/BaseBottomBar';
 import axios from 'axios';
-// import router from '@/router';
+import router from '@/router';
 
 export default {
     name:'BuildingInfo',
@@ -112,7 +112,7 @@ export default {
 
     created: function (){
         if(this.buildingObject.qrType != "building"){
-            // router.replace({ name: 'Scan'});
+            router.replace({ name: 'Scan'});
             // this.getEvents()
         }else{
             this.getEvents()
