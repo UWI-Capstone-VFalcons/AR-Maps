@@ -19,6 +19,11 @@
                     </div>
                     <p><b>Building Type:</b> {{b_type}}</p>
                     <p><b>Detail: </b> {{b_info}}</p>
+                    <p class="bi-event-t" v-if="b_event_available"><b>Current Event:</b></p>
+                    <div v-if="b_event_available"> 
+                        <p class="bi-event-detail">Name: {{b_event_name}}</p>
+                        <p class="bi-event-detail">Time: from {{b_event_start_time}}, to {{b_event_end_time}}</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -29,6 +34,7 @@
 <script>
 import BaseTopBar from '@/components/BaseTopBar';
 import BaseBottomBar from '@/components/BaseBottomBar';
+import axios from 'axios';
 import router from '@/router';
 
 export default {
@@ -73,16 +79,43 @@ export default {
             b_info: this.buildingObject.building_info,
             b_longitude: this.buildingObject.building_longitude,
             b_latitiude: this.buildingObject.building_latittude,
+            b_event_available: false,
+            b_event_name: "",
+            b_event_start_time: "",
+            b_event_end_time: "",
         }
        
     },
 
     methods: {
+        getEvents: function(){
+            const path = this.$host+'api/event/current/'+this.b_id;
+            axios.get(path)
+            .then((res) => {
+                let events = res.data.data;
+                if(events.length > 0){
+                    let cur_event = events[0]
+                    this.b_event_available = true
+                    this.b_event_name = cur_event.building_event_name
+                    this.b_event_start_time = cur_event.building_event_start_time
+                    this.b_event_end_time = cur_event.building_event_end_time
+                }else{
+                    this.b_event_available = false 
+                }
+            })
+            .catch((error) => {
+            // eslint-disable-next-line
+            console.error(error);
+            });
+        },
     },
 
     created: function (){
         if(this.buildingObject.qrType != "building"){
             router.replace({ name: 'Scan'});
+            // this.getEvents()
+        }else{
+            this.getEvents()
         }
     }   
 }
@@ -134,7 +167,7 @@ export default {
     width: fit-content;
 }
 
-.b-address-t{
+.b-address-t, .bi-event-t{
 margin-bottom: 5px;
 }
 
@@ -143,11 +176,13 @@ margin-bottom: 5px;
     font-weight: bold;
 }
 
-.bi-address{
+.bi-address, .bi-event-detail{
     color: grey;
     line-height: 0.4rem;
     margin-left: 1rem;
 }
+
+
 @media (max-width: 480px) {
   .bi-detail h1{
     font-size: x-large;

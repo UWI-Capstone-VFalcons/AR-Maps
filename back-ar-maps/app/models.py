@@ -1,4 +1,5 @@
 from . import db
+import datetime
 from werkzeug.security import generate_password_hash
 
 # The location / building database object
@@ -39,14 +40,23 @@ class Event(db.Model):
     __tablename__ = 'events'
     id = db.Column('event_id', db.Integer, primary_key=True)
     building_id = db.Column(db.Integer, db.ForeignKey('buildings.building_id'), nullable=False)
-    name = db.Column(db.String(200), unique=True, nullable=False)
-    dateTime = db.Column(db.DateTime, nullable=False)
-    info = db.Column(db.Text, nullable=False)
+    name = db.Column(db.String(200), nullable=False)
+    start_time = db.Column(db.Time, nullable=False)
+    end_time = db.Column(db.Time, nullable=False)
+    recurrent = db.Column(db.Boolean)
+    day_of_week = db.Column(db.Integer)
+    specific_date = db.Column(db.Date)
+    info = db.Column(db.Text)
 
-    def __init__(self, building_id, name, dateTime, info):
+    def __init__(self, building_id=None, name="Custom Event", start_time=datetime.time(0, 0, 0), end_time=datetime.time(23, 59, 59),
+     recurrent=True, day_of_week=1, specific_date=None, info="Some information about the custom event"):
         self.building_id = building_id
         self.name = name
-        self.dateTime = dateTime
+        self.start_time = start_time
+        self.end_time = end_time
+        self.recurrent = recurrent
+        self.day_of_week = day_of_week
+        self.specific_date = specific_date
         self.info = info
 
     def __repr__(self):

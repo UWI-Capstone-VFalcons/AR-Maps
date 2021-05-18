@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 1802901ebb8a
+Revision ID: db730e1904cf
 Revises: 
-Create Date: 2021-04-30 16:54:42.571231
+Create Date: 2021-05-18 03:27:04.756075
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '1802901ebb8a'
+revision = 'db730e1904cf'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -30,6 +30,7 @@ def upgrade():
     sa.Column('latitude', sa.Numeric(precision=9, scale=6), nullable=False),
     sa.Column('longitude', sa.Numeric(precision=9, scale=6), nullable=False),
     sa.PrimaryKeyConstraint('building_id'),
+    sa.UniqueConstraint('name'),
     sa.UniqueConstraint('name')
     )
     op.create_table('map_areas',
@@ -45,6 +46,7 @@ def upgrade():
     sa.Column('latitude_4', sa.Numeric(precision=9, scale=6), nullable=False),
     sa.Column('longitude_4', sa.Numeric(precision=9, scale=6), nullable=False),
     sa.PrimaryKeyConstraint('map_area_id'),
+    sa.UniqueConstraint('name'),
     sa.UniqueConstraint('name')
     )
     op.create_table('nodes',
@@ -60,11 +62,14 @@ def upgrade():
     sa.Column('event_id', sa.Integer(), nullable=False),
     sa.Column('building_id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=200), nullable=False),
-    sa.Column('dateTime', sa.DateTime(), nullable=False),
-    sa.Column('info', sa.Text(), nullable=False),
+    sa.Column('start_time', sa.Time(), nullable=False),
+    sa.Column('end_time', sa.Time(), nullable=False),
+    sa.Column('recurrent', sa.Boolean(), nullable=True),
+    sa.Column('day_of_week', sa.Integer(), nullable=True),
+    sa.Column('specific_date', sa.Date(), nullable=True),
+    sa.Column('info', sa.Text(), nullable=True),
     sa.ForeignKeyConstraint(['building_id'], ['buildings.building_id'], ),
-    sa.PrimaryKeyConstraint('event_id'),
-    sa.UniqueConstraint('name')
+    sa.PrimaryKeyConstraint('event_id')
     )
     op.create_table('map_zones',
     sa.Column('map_zone_id', sa.Integer(), nullable=False),
@@ -80,6 +85,7 @@ def upgrade():
     sa.Column('longitude_4', sa.Numeric(precision=9, scale=6), nullable=False),
     sa.ForeignKeyConstraint(['map_area'], ['map_areas.map_area_id'], ),
     sa.PrimaryKeyConstraint('map_zone_id'),
+    sa.UniqueConstraint('name'),
     sa.UniqueConstraint('name')
     )
     op.create_table('paths',
@@ -94,6 +100,7 @@ def upgrade():
     sa.ForeignKeyConstraint(['map_area'], ['map_areas.map_area_id'], ),
     sa.ForeignKeyConstraint(['start'], ['nodes.node_id'], ),
     sa.PrimaryKeyConstraint('path_id'),
+    sa.UniqueConstraint('name'),
     sa.UniqueConstraint('name')
     )
     op.create_table('starting_points',
@@ -104,6 +111,7 @@ def upgrade():
     sa.Column('longitude', sa.Numeric(precision=9, scale=6), nullable=False),
     sa.ForeignKeyConstraint(['map_area'], ['map_areas.map_area_id'], ),
     sa.PrimaryKeyConstraint('sp_id'),
+    sa.UniqueConstraint('name'),
     sa.UniqueConstraint('name')
     )
     op.create_table('object_detection_objects',
@@ -118,6 +126,8 @@ def upgrade():
     sa.ForeignKeyConstraint(['map_zone'], ['map_zones.map_zone_id'], ),
     sa.PrimaryKeyConstraint('object_id'),
     sa.UniqueConstraint('name'),
+    sa.UniqueConstraint('name'),
+    sa.UniqueConstraint('object_name'),
     sa.UniqueConstraint('object_name')
     )
     op.create_table('path_building_connections',

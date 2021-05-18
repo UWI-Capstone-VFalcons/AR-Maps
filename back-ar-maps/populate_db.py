@@ -421,3 +421,27 @@ db.session.add(odo9)
 
 # commit the insertions to the database
 db.session.commit()
+
+# add events
+e1 = Event(
+    building_id=1, 
+    name="COMP3901 Presentation",
+    day_of_week=1, 
+    info="An event for the capstone demo")
+e2 = Event(
+    building_id=2, 
+    name="COMP3901 Presentation",
+    day_of_week=1, 
+    info="An event for the capstone demo")
+e3 = Event(
+    building_id=3, 
+    name="COMP3901 Presentation",
+    day_of_week=1, 
+    info="An event for the capstone demo")
+
+db.session.add(e1)
+db.session.add(e2)
+db.session.add(e3)
+
+# commit the insertions to the database
+db.session.commit()

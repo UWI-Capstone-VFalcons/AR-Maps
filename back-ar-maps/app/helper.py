@@ -3,6 +3,7 @@ from app.models import *
 from shapely.geometry import Point, Polygon, MultiPoint
 from shapely.ops import nearest_points
 import math, requests
+from datetime import datetime
 
 # check any value enter if it is a number
 def isNum( number ):
@@ -756,3 +757,13 @@ def getMapZone(coordinate, mapArea_id):
         if(coordinate_point.within(map_zone_polygon)):
             return map_zone
     return None
+
+# check to ensure a time is in range
+# return a boolean if the time is
+#  in range of the start and end
+def time_in_range(start, end, time):
+    """Return true if x is in the range [start, end]"""
+    if start <= end:
+        return start <= time <= end
+    else:
+        return start <= time or time <= end

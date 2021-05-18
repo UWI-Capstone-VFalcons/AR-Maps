@@ -126,6 +126,45 @@ def get_building(building_id):
         return successResponse(qrcode_data)
     return errorResponse("no such building found")
 
+
+"""
+    Event
+"""
+@app.route('/api/event/current/<building_id>', methods=['GET'])
+def get_current_event(building_id):
+    if(not isNum(building_id)): return errorResponse("The building id must be a number")
+    try:
+        des_building_id = int(building_id)
+
+        response = []
+        
+        # get the current time 
+        now = datetime.now()
+
+        current_time = now.time()
+        today_date = now.date()
+        current_day_of_week = today_date.weekday()
+
+        current_events = Event.query.filter(Event.building_id == building_id ).all()
+
+        for event in current_events:
+            if(time_in_range(event.start_time, event.end_time, current_time) 
+                and ((event.recurrent == True and event.day_of_week == current_day_of_week))
+                    or (event.recurrent == False and event.specific_date == today_date)):
+                response.append({
+                    'building_id': building_id,
+                    'event_id': event.id,
+                    'building_event_name': event.name,
+                    'building_event_start_time': event.start_time.strftime("%I:%M:%p"),
+                    'building_event_end_time': event.end_time.strftime("%I:%M:%p"),
+                    'building_event_info': event.info
+                })
+                break
+        return successResponse(response)
+    except:
+        pass
+    return errorResponse("Error occured, report to the admin")
+
 """
     Current Location
 """
@@ -535,19 +574,3 @@ def errorResponse2(message, code):
 
 # if __name__ == '__main__':
 #     app.run(debug=True, host="0.0.0.0", port="5000")
-
-"""
-1) * get the zone user is in while they move - b 
-2) * check if the zone changes from the previous zone
-3) prompt the user with a button to calibrate the GPS -p
-    - with a mini floating button
-    - should not be obstructive
-4) go to the object detection screen
-5) prompt user to detect object
-    - show the possible objects to detect at the
-6) after an object is detected calculate error between the current gps data and object data
-    - get the location data for the object
-    - calculate error
-7) return to the ar screen
-8) rerender the direction with the error
-"""
